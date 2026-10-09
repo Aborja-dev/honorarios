@@ -1,0 +1,14 @@
+# Normaliza los fines de línea. Los archivos que se ejecutan o interpretan en contenedores Linux
+# deben terminar en LF aunque se editen en Windows (un CRLF en un script o en el Dockerfile los rompe).
+* text=auto
+*.sh text eol=lf
+Dockerfile text eol=lf
+.dockerignore text eol=lf
+nginx/*.conf text eol=lf
+yarn.lock text eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.woff binary
+*.woff2 binary

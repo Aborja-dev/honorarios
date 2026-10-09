@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Base SND React</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://www.snd.gob.mx" crossorigin />
+    <!-- Hoja del SND (gama guinda por defecto). TemaProvider modifica este href al cambiar de gama.
+         La URL base debe coincidir con la de SndConfig (src/core/sndConfig.ts). -->
+    <link id="snd-tema" rel="stylesheet" href="https://www.snd.gob.mx/snd/v1/snd-guinda.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

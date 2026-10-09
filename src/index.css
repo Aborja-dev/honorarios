@@ -1,0 +1,68 @@
+/*
+  Estilos globales del proyecto.
+  La identidad visual la aporta la hoja del SND (enlazada en index.html). Este archivo contiene
+  solo ajustes propios de la aplicación y correcciones sobre el comportamiento de esa hoja.
+*/
+:root {
+  /* Sombra tenue de avisos y notificaciones; la sombra que trae el SND es más marcada. */
+  --snd-sombra-tenue: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+/* Color de página en <html> y <body> transparente: la hoja del SND pinta el fondo en <body>,
+   lo que taparía la capa de textura (.fondo-textura, z-index negativo). */
+html {
+  background: var(--neutro200, #f9f9f9);
+}
+body {
+  background: transparent;
+}
+
+/* Título h1 en Patria (.h1b.patria, 3.5rem en el SND): en pantallas de ~390 px una palabra larga
+   excede el ancho de la caja y el texto se corta. En pantallas angostas se reduce a 2rem. */
+@media (max-width: 480px) {
+  h1.h1b.patria {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+}
+
+/* ---------- Estructura de página (App.tsx) ---------- */
+.wrapper {
+  /* La hoja del SND fija height: 100%; con min-height el pie baja cuando el contenido es largo. */
+  height: auto;
+  min-height: 100vh;
+  /* El wrapper reserva --bodyTop (75px) para la franja fija del encabezado. Si esa franja mide
+     menos (depende de la fuente cargada) quedaría un hueco que deja ver el fondo de la página
+     como una línea gris; por eso el área reservada se pinta del color de la franja. */
+  background: linear-gradient(var(--principal) 0 0) top / 100% var(--bodyTop) no-repeat;
+}
+
+main {
+  padding-block: 32px;
+}
+
+main:focus {
+  outline: none;
+}
+
+/*
+  Textura de fondo: textura oficial de Gobierno de México 2024-2030, versión blanca.
+  Es una imagen única (no un mosaico): se ajusta con cover y queda fija al desplazarse.
+  Va en una capa propia (z-index negativo) para atenuarla sin afectar el contenido; el SND pide
+  que la textura no reste legibilidad.
+  Variable: --textura-opacidad (0 = invisible, 1 = original).
+*/
+.fondo-textura {
+  --textura-opacidad: 0.7;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: url('/texturas/textura-blanca.svg') center top / cover no-repeat;
+  opacity: var(--textura-opacidad);
+  pointer-events: none;
+}

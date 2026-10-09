@@ -1,0 +1,19 @@
+# Archivos que no deben entrar al contexto de construcción de la imagen
+node_modules
+dist
+.angular
+out-tsc
+coverage
+.git
+.gitignore
+.gitattributes
+.gitlab
+.vscode
+.idea
+.claude
+.env
+.env.*
+Dockerfile
+.dockerignore
+README.md
+*.log

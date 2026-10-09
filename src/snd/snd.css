@@ -1,0 +1,218 @@
+/*
+  Estilos propios de los componentes del SND.
+  Complementan la hoja oficial (snd-guinda.css / snd-verde.css), que se enlaza desde index.html.
+  Cada sección corrige o completa un comportamiento que la hoja del SND v1.3.0 no cubre; el motivo
+  se indica en el comentario de la sección.
+*/
+
+/* ---------- SndIcono ---------- */
+.snd-icono {
+  display: inline-flex;
+  flex: none;
+}
+.snd-icono__svg,
+.snd-icono__svg svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+/* Íconos monocromos: color heredado. Muchos SVG definen fill o stroke fijos (a menudo oscuros)
+   en cada trazo, por lo que no basta con aplicar el color al <svg> raíz. Es el mismo criterio
+   que aplicaba snd.js. */
+.snd-icono:not(.snd-icono--original) .snd-icono__svg svg {
+  fill: currentColor;
+}
+.snd-icono:not(.snd-icono--original) .snd-icono__svg [fill]:not([fill='none']) {
+  fill: currentColor;
+}
+.snd-icono:not(.snd-icono--original) .snd-icono__svg [stroke]:not([stroke='none']) {
+  stroke: currentColor;
+}
+/* Logos de proporción fija (escudo): una medida la fija la clase del SND (alto o ancho)
+   y la otra se deduce de la proporción del SVG. */
+.snd-icono--alto .snd-icono__svg,
+.snd-icono--alto .snd-icono__svg svg {
+  height: 100%;
+  width: auto;
+}
+.snd-icono--ancho .snd-icono__svg,
+.snd-icono--ancho .snd-icono__svg svg {
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- SndMensaje ---------- */
+.snd-mensaje {
+  box-shadow: var(--snd-sombra-tenue);
+}
+.snd-mensaje.aviso--borde-no {
+  box-shadow: none;
+}
+
+/* ---------- SndPildora ---------- */
+/* La hoja v1.3.0 usa variables sin definir (--info, --alerta, --purple, --orange) y no define el
+   grosor del borde; aquí se completan con colores de la paleta. */
+.snd-pildora {
+  display: inline-block;
+}
+.snd-pildora.pildora {
+  border-width: 1px;
+  border-style: solid;
+}
+.snd-pildora .pildora__dot {
+  margin-right: 6px;
+}
+.snd-pildora.pildora--info {
+  border-color: var(--azul500);
+}
+.snd-pildora.pildora--alerta {
+  border-color: var(--dorado500);
+}
+.snd-pildora.pildora--purple {
+  border-color: var(--morado500);
+}
+.snd-pildora.pildora--purple .pildora__dot {
+  background: var(--morado500);
+}
+.snd-pildora.pildora--inactivo .pildora__dot {
+  background: var(--neutro700);
+}
+
+/* ---------- SndPildoraFiltro ---------- */
+/* El SND colorea la píldora con --btnColor*; se enlazan a la gama activa. */
+.snd-pildora-filtro {
+  display: inline-block;
+  --btnColor: var(--principal);
+  --btnColor100: var(--gama100);
+  --btnColor500: var(--gama700);
+}
+
+/* ---------- SndCargando ---------- */
+.snd-cargando {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+}
+
+/* ---------- SndTooltip ---------- */
+.snd-tooltip {
+  display: inline-block;
+}
+/* Escape descarta el mensaje aunque el cursor o el foco sigan encima (WCAG 1.4.13, "descartable"). */
+.tooltip--descartado .tooltip__burbuja {
+  display: none !important;
+}
+
+/* ---------- SndBuscador ---------- */
+/* La hoja snd-*.css v1.3.0 no incluye los estilos del campo (solo los de la hoja de la
+   documentación): caja con borde, input sin borde que ocupa el ancho y anillo de foco. */
+.snd-buscador {
+  display: block;
+  max-width: 100%;
+}
+.snd-buscador .form__inset {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: #fff;
+  /* Mismo borde y radio que los inputs de PrimeReact (snd-prime.css). */
+  border: 1px solid var(--neutro600);
+  border-radius: 8px;
+  outline: none;
+}
+.snd-buscador .form__inset input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  color: var(--neutro800);
+}
+.snd-buscador .form__inset input::placeholder {
+  color: var(--neutro600);
+  opacity: 1;
+}
+.snd-buscador .form__inset:has(input:focus-visible) {
+  border-color: var(--principal);
+}
+.snd-buscador .main-search:has(input:focus-visible) {
+  outline: 2px solid var(--principal);
+  outline-offset: 2px;
+}
+/* Variante general: compacta, para barras de filtros. */
+.snd-buscador .general-search {
+  margin: 0;
+  padding: 6px 12px 6px 8px;
+  border-radius: 8px;
+}
+.snd-buscador .general-search input {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+/* Variante principal: la sombra y el radio los define el SND; el botón ocupa todo el alto. */
+.snd-buscador .main-search {
+  border-radius: 3rem;
+  border: none;
+  padding-right: 0;
+}
+.snd-buscador .main-search input {
+  font-size: 1.25rem;
+}
+.snd-buscador .search-button {
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+  padding: 0 1.5rem;
+  margin: -6px 0;
+  color: #fff;
+}
+.snd-buscador .search-button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+
+/* Texto de los avisos (mensajes informativos y notificaciones): tono 500 del color de validación de
+   cada tipo, que es el que usa el SND para `info` (azul 500). La hoja del SND v1.3.0 deja en negro
+   (neutro 800) el texto de éxito, alerta y error. Contraste sobre el fondo 100 de cada tipo: 7.0 o más.
+   En Angular también evita que el toast herede los verdes y rojos de severidad de PrimeNG (#16A34A y
+   #DC2626, contraste 3.1 y 4.0). Íconos y enlaces siguen el color del texto. */
+.aviso--exito,
+.aviso--exito a {
+  color: var(--verde500);
+}
+.aviso--error,
+.aviso--error a {
+  color: var(--rojo500);
+}
+.aviso--alerta,
+.aviso--alerta a {
+  color: var(--amarillo500);
+}
+
+/* ---------- Notificaciones ---------- */
+/* Contenedor fijo debajo del encabezado: franja .mexico (--bodyTop: 75 px en escritorio, 56 px en
+   móvil) + barra de navegación (52 px) + 12 px de separación. */
+.snd-notificaciones {
+  position: fixed;
+  top: calc(var(--bodyTop, 75px) + 52px + 12px);
+  right: 16px;
+  z-index: 1102;
+  display: grid;
+  gap: 8px;
+  width: min(25rem, calc(100vw - 32px));
+  pointer-events: none;
+}
+.snd-notificacion {
+  pointer-events: auto;
+  width: 100%;
+  background-clip: padding-box;
+  box-shadow: var(--snd-sombra-tenue);
+}
+.snd-notificacion .aviso__cont {
+  width: auto;
+  flex: 1;
+  gap: 2px;
+}
