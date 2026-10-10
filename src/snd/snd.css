@@ -216,3 +216,34 @@
   flex: 1;
   gap: 2px;
 }
+
+/* Fundido de entrada y salida (200 ms), el mismo que usa <snd-toast /> en Angular. Solo opacidad:
+   sin desplazamiento. Con "reducir movimiento" activo el cambio es inmediato. */
+.snd-notificacion {
+  animation: snd-fundido-entra 200ms ease-out;
+}
+.snd-notificacion--sale {
+  animation: snd-fundido-sale 200ms ease-in forwards;
+}
+@keyframes snd-fundido-entra {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes snd-fundido-sale {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .snd-notificacion,
+  .snd-notificacion--sale {
+    animation-duration: 1ms;
+  }
+}

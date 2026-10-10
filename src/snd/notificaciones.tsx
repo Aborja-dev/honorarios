@@ -19,6 +19,8 @@ interface Notificacion {
   tipo: TipoNotificacion
   detalle: string
   titulo?: string
+  /** Verdadero mientras se reproduce el fundido de salida, justo antes de retirarla. */
+  saliendo?: boolean
 }
 
 /** Acciones para disparar notificaciones flotantes. Cada una recibe el detalle y, opcionalmente, un título. */
@@ -34,6 +36,9 @@ const NotificacionesContext = createContext<Notificaciones | null>(null)
 /** Milisegundos antes de que una notificación desaparezca. */
 const VIDA_MS = 5000
 
+/** Duración del fundido de salida; debe coincidir con `snd-fundido-sale` en `snd.css`. */
+const SALIDA_MS = 200
+
 interface ItemProps {
   notificacion: Notificacion
   onCerrar: (id: number) => void
@@ -42,17 +47,17 @@ interface ItemProps {
 /** Una notificación: marcado de `.aviso` del SND, botón de cerrar y temporizador que se pausa con el cursor encima. */
 function Item({ notificacion, onCerrar }: ItemProps) {
   const [pausado, setPausado] = useState(false)
-  const { id, tipo, titulo, detalle } = notificacion
+  const { id, tipo, titulo, detalle, saliendo } = notificacion
 
   useEffect(() => {
-    if (pausado) return
+    if (pausado || saliendo) return
     const temporizador = setTimeout(() => onCerrar(id), VIDA_MS)
     return () => clearTimeout(temporizador)
-  }, [pausado, id, onCerrar])
+  }, [pausado, saliendo, id, onCerrar])
 
   return (
     <div
-      className={`aviso aviso--${tipo} snd-notificacion`}
+      className={`aviso aviso--${tipo} snd-notificacion${saliendo ? ' snd-notificacion--sale' : ''}`}
       role={tipo === 'error' || tipo === 'alerta' ? 'alert' : 'status'}
       onMouseEnter={() => setPausado(true)}
       onMouseLeave={() => setPausado(false)}
@@ -75,7 +80,7 @@ function Item({ notificacion, onCerrar }: ItemProps) {
  *
  * Se coloca una sola vez en la raíz, dentro de `TemaProvider`. Renderiza un contenedor
  * `position: fixed` debajo del encabezado (ver `.snd-notificaciones` en `snd.css`), por lo que no
- * tapa el menú de usuario ni altera el flujo de la página. Cada notificación desaparece a los 5 s;
+ * tapa el menú de usuario ni altera el flujo de la página. Cada notificación aparece y desaparece con un fundido de 200 ms y se retira a los 5 s;
  * el temporizador se pausa mientras el cursor está encima.
  *
  * Implementación propia, sin dependencia de PrimeReact.
@@ -91,7 +96,11 @@ export function NotificacionesProvider({ children }: { children: ReactNode }) {
   const [lista, setLista] = useState<Notificacion[]>([])
   const contador = useRef(0)
 
-  const cerrar = useCallback((id: number) => setLista((l) => l.filter((n) => n.id !== id)), [])
+  // Primero se marca para reproducir el fundido de salida y luego se retira de la lista.
+  const cerrar = useCallback((id: number) => {
+    setLista((l) => l.map((n) => (n.id === id ? { ...n, saliendo: true } : n)))
+    setTimeout(() => setLista((l) => l.filter((n) => n.id !== id)), SALIDA_MS)
+  }, [])
   const agregar = useCallback((tipo: TipoNotificacion, detalle: string, titulo?: string) => {
     contador.current += 1
     const id = contador.current
