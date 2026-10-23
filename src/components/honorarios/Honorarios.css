@@ -1,0 +1,570 @@
+/*
+  Estilos de los componentes de dominio del Módulo de Honorarios.
+  Usa exclusivamente los tokens CSS del Sistema Nacional de Diseño (SND v1.3.0):
+  --principal, --gama100…950, --neutro100…800, --verde500, --azul500, --amarillo500, --rojo500, --dorado500.
+*/
+
+.bloque {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.bloque > * {
+  min-width: 0;
+}
+
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.fila--derecha {
+  justify-content: flex-end;
+}
+
+.pila {
+  display: grid;
+  gap: 12px;
+}
+
+.formulario {
+  display: grid;
+  gap: 16px;
+  max-width: 32rem;
+}
+
+.campo {
+  display: grid;
+  gap: 4px;
+}
+
+.requerido {
+  color: var(--rojo500);
+}
+
+.campo__error {
+  color: var(--rojo500);
+  font-size: 0.875rem;
+}
+
+.contenedor-tabla {
+  overflow-x: auto;
+  border: 1px solid var(--neutro400);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.p-stepper {
+  overflow-x: auto;
+}
+
+.honorarios-tablero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) 2px minmax(0, 1.15fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.honorarios-columna {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* Línea divisoria vertical entre el bloque izquierdo (Bienvenida/Cifras) y el derecho (Submódulos) */
+.honorarios-divisor {
+  align-self: stretch;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--gama300, var(--neutro400)) 12%,
+    var(--principal) 50%,
+    var(--gama300, var(--neutro400)) 88%,
+    transparent
+  );
+  border-radius: 2px;
+}
+
+/* ---------- Bloque de Bienvenida ---------- */
+.honorarios-bienvenida {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 28px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--gama900, #611232) 0%, var(--principal, #9B2247) 65%, var(--gama500, #A84565) 100%);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+}
+
+.honorarios-bienvenida__contenido {
+  display: grid;
+  gap: 8px;
+  z-index: 1;
+  max-width: 34rem;
+}
+
+.honorarios-bienvenida__etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 0.8125rem;
+}
+
+.honorarios-bienvenida__titulo {
+  color: #fff;
+  margin: 0;
+  line-height: 1.18;
+}
+
+.honorarios-bienvenida__texto {
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+}
+
+.honorarios-bienvenida__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.honorarios-bienvenida__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.22);
+  color: #fff;
+}
+
+.honorarios-bienvenida__ilustracion {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+
+/* ---------- Tarjetas Base del Tablero ---------- */
+.honorarios-tarjeta {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid var(--neutro400, #dddddd);
+  background: var(--neutro100, #ffffff);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+  min-width: 0;
+}
+
+.honorarios-tarjeta__encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.honorarios-tarjeta__titulo {
+  margin: 0;
+  color: var(--principal);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.875rem;
+}
+
+/* ---------- Cuadrícula de Cifras y Estadísticas (Izquierda) ---------- */
+.honorarios-cifras-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.honorarios-anillo-contenedor {
+  display: grid;
+  place-items: center;
+  padding-block: 6px;
+}
+
+.honorarios-anillo {
+  width: 154px;
+  height: 154px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.honorarios-anillo__interior {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--neutro100, #ffffff);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.honorarios-anillo__valor {
+  font-size: 1.85rem;
+  line-height: 1.1;
+  color: var(--principal);
+  margin: 0;
+}
+
+.honorarios-anillo__sub {
+  color: var(--neutro600);
+  margin-top: 2px;
+}
+
+.honorarios-control-rango {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.honorarios-control-rango__barra {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--neutro300);
+  position: relative;
+  overflow: hidden;
+}
+
+.honorarios-control-rango__progreso {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--principal);
+  transition: width 200ms ease;
+}
+
+/* Gráfico Circular de Estadísticas */
+.honorarios-pastel {
+  width: 154px;
+  height: 154px;
+  border-radius: 50%;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  place-items: center;
+  padding: 14px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  border: 4px solid var(--neutro200);
+}
+
+.honorarios-pastel__etiqueta {
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.honorarios-leyenda {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.honorarios-leyenda__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--neutro700);
+}
+
+.honorarios-leyenda__punto {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex: none;
+}
+
+/* Tarjetas inferiores de estado rápido */
+.honorarios-accesos-estado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding-top: 4px;
+}
+
+.honorarios-boton-icono {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid var(--neutro400);
+  background: var(--neutro200);
+  color: var(--neutro700);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.honorarios-boton-icono:hover {
+  border-color: var(--principal);
+  color: var(--principal);
+}
+
+.honorarios-boton-icono--activo {
+  background: var(--gama100);
+  border-color: var(--principal);
+  color: var(--principal);
+}
+
+/* ---------- Sección Derecha: Submódulos + Columna de Acciones Rápidas ---------- */
+.honorarios-encabezado-seccion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.honorarios-encabezado-seccion__titulo {
+  margin: 0;
+  color: var(--principal);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.honorarios-submodulos-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.honorarios-submodulos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.honorarios-submodulo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid var(--neutro400);
+  background: var(--neutro200, #f9f9f9);
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  cursor: pointer;
+}
+
+.honorarios-submodulo:hover {
+  border-color: var(--principal);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.honorarios-submodulo--activo {
+  background: var(--neutro100, #ffffff);
+  border: 2px solid var(--principal);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.honorarios-submodulo__ilustracion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--neutro100, #ffffff);
+  border: 1px dashed var(--gama300, var(--neutro400));
+}
+
+.honorarios-submodulo__pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.honorarios-acciones-vertical {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.honorarios-boton-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 88px;
+  flex: 1;
+  min-height: 82px;
+  padding: 10px 8px;
+  border-radius: 16px;
+  border: 1px solid var(--gama300, var(--neutro400));
+  background: var(--neutro100, #ffffff);
+  color: var(--principal);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: all 150ms ease;
+  text-align: center;
+}
+
+.honorarios-boton-add:hover {
+  background: var(--gama100);
+  border-color: var(--principal);
+  transform: translateY(-1px);
+}
+
+.honorarios-boton-add:focus-visible {
+  outline: 2px solid var(--principal);
+  outline-offset: 2px;
+}
+
+.honorarios-boton-add__mas {
+  font-size: 1.5rem;
+  line-height: 1;
+  font-weight: 400;
+}
+
+/* ---------- Sección Inferior Derecha ---------- */
+.honorarios-inferior-derecha {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
+  gap: 16px;
+}
+
+.honorarios-pildoras-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.honorarios-pildoras-grid .snd-pildora-filtro,
+.honorarios-pildoras-grid .pildoraFiltro {
+  width: 100%;
+  justify-content: center;
+}
+
+.honorarios-arco-contenedor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.honorarios-arco {
+  width: 132px;
+  height: 66px;
+  border-radius: 132px 132px 0 0;
+  border: 10px solid var(--gama200);
+  border-bottom: 0;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  background: linear-gradient(to top, var(--gama100), transparent);
+}
+
+.honorarios-arco__valor {
+  font-size: 1.35rem;
+  color: var(--principal);
+  line-height: 1;
+}
+
+/* ---------- Panel Detallado del Submódulo Seleccionado ---------- */
+.honorarios-detalle-panel {
+  margin-top: 28px;
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid var(--neutro400);
+  background: var(--neutro100, #ffffff);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+  display: grid;
+  gap: 16px;
+}
+
+.honorarios-detalle-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* ---------- Responsividad ---------- */
+@media (max-width: 1100px) {
+  .honorarios-tablero {
+    grid-template-columns: 1fr;
+  }
+  .honorarios-divisor {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--gama300, var(--neutro400)) 12%,
+      var(--principal) 50%,
+      var(--gama300, var(--neutro400)) 88%,
+      transparent
+    );
+  }
+}
+
+@media (max-width: 680px) {
+  .honorarios-cifras-grid,
+  .honorarios-submodulos-grid,
+  .honorarios-inferior-derecha,
+  .honorarios-pildoras-grid {
+    grid-template-columns: 1fr;
+  }
+  .honorarios-submodulos-layout {
+    grid-template-columns: 1fr;
+  }
+  .honorarios-acciones-vertical {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .honorarios-bienvenida {
+    flex-direction: column;
+    text-align: left;
+    align-items: flex-start;
+  }
+}

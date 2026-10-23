@@ -1,0 +1,6 @@
+export * from './snd'
+export { BienvenidaHonorarios, type BienvenidaHonorariosProps } from './honorarios/BienvenidaHonorarios'
+export { CifrasYEstadisticas, type CifrasYEstadisticasProps } from './honorarios/CifrasYEstadisticas'
+export { PanelSubmodulos, type PanelSubmodulosProps } from './honorarios/PanelSubmodulos'
+export { BandejaSubmodulo, type BandejaSubmoduloProps } from './honorarios/BandejaSubmodulo'
+export { ModalRegistroHonorarios, type ModalRegistroHonorariosProps } from './honorarios/ModalRegistroHonorarios'

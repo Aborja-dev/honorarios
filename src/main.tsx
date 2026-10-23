@@ -9,14 +9,14 @@ import { PrimeReactProvider } from 'primereact/api'
 import 'primereact/resources/themes/lara-light-blue/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
-import './primereact/snd-prime.css'
-import './snd/snd.css'
+import './lib/primereact/snd-prime.css'
+import './components/snd/snd.css'
 import './index.css'
 
 import App from './App'
-import { TemaProvider } from './core/tema'
-import { NotificacionesProvider } from './snd'
-import { registrarLocaleEs } from './primereact/localeEs'
+import { NotificacionesProvider } from './components/snd'
+import { TemaProvider } from './hooks'
+import { registrarLocaleEs } from './lib'
 
 registrarLocaleEs()
 

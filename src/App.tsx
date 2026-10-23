@@ -1,79 +1,101 @@
 import { lazy, Suspense, useState } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
+import {
+  MENU_LATERAL_HONORARIOS,
+  MENU_SUPERIOR_HONORARIOS,
+  OPCIONES_MENU_USUARIO,
+  USUARIO_INICIAL,
+} from './app/index'
 import {
   SndCargando,
   SndEncabezado,
+  SndMenuLateral,
   SndNavbar,
   SndPie,
   useNotificaciones,
-  type ItemNavegacion,
-  type OpcionUsuario,
   type UsuarioNavbar,
-} from './snd'
+} from './components/snd'
 
-const Inicio = lazy(() => import('./pages/Inicio'))
-const Componentes = lazy(() => import('./pages/Componentes'))
-const Colores = lazy(() => import('./pages/Colores'))
+const Landing = lazy(() => import('./pages/Landing'))
+const Login = lazy(() => import('./pages/Login'))
+const NotFound = lazy(() => import('./pages/NotFound'))
+const PruebaFiel = lazy(() => import('./pages/PruebaFiel'))
+const ValidarIdentidad = lazy(() => import('./pages/ValidarIdentidad'))
 
-const MENU: ItemNavegacion[] = [
-  { texto: 'Inicio', ruta: '/', exacta: true },
-  { texto: 'Componentes', ruta: '/componentes' },
-  { texto: 'Colores', ruta: '/colores' },
-]
+// Submódulos administrativos de Honorarios (pages/admin/)
+const PadronPrestadores = lazy(() => import('./pages/admin/PadronPrestadores'))
+const ContratosHonorarios = lazy(() => import('./pages/admin/ContratosHonorarios'))
+const ModeloContrato = lazy(() => import('./pages/admin/ModeloContrato'))
 
-const OPCIONES_USUARIO: OpcionUsuario[] = [
-  { texto: 'Mi perfil', icono: 'snd-user--avatar', ruta: '/' },
-  { texto: 'Cambiar perfil', icono: 'snd-user--settings', ruta: '/' },
-]
-
-/**
- * Sesión de demostración, solo para mostrar el menú de usuario y el botón "Iniciar sesión".
- * Sustituir por la identidad que entregue el Servicio de Identidad Digital (SIDBG).
- */
-const USUARIO_DEMO: UsuarioNavbar = { nombre: 'Regina Montenegro', rol: 'Perfil Ciudadano' }
+// Vistas del prestador de servicios (pages/user/)
+const PortalPrestador = lazy(() => import('./pages/user/PortalPrestador'))
+const MisEntregables = lazy(() => import('./pages/user/MisEntregables'))
 
 /**
- * Estructura de página del SND.
- * - `.fondo-textura`: capa fija con la textura oficial, atenuada (ver index.css).
- * - `.wrapper`: contenedor del SND. Reserva el alto de la franja fija del encabezado
- *   (`padding-top: var(--bodyTop)`) y ordena encabezado, contenido y pie en una cuadrícula.
- * - Las notificaciones las dibuja `NotificacionesProvider` (ver main.tsx).
+ * Estructura principal de la aplicación del Módulo de Honorarios (`App.tsx`).
+ * - Usa `.wrapper.wrapper--aside` del SND para integrar el menú lateral exclusivo de Honorarios.
+ * - Conserva el encabezado institucional, barra superior con selector de tema (Guinda / Verde),
+ *   menú de usuario y pie de página.
  */
 export default function App() {
   const notificar = useNotificaciones()
-  const [usuario, setUsuario] = useState<UsuarioNavbar | null>(USUARIO_DEMO)
+  const [usuario, setUsuario] = useState<UsuarioNavbar | null>(USUARIO_INICIAL)
+  const [menuColapsado, setMenuColapsado] = useState(false)
 
   const entrar = () => {
-    setUsuario(USUARIO_DEMO)
-    notificar.exito('Sesión de demostración iniciada.')
+    setUsuario(USUARIO_INICIAL)
+    notificar.exito('Sesión institucional iniciada.')
   }
   const salir = () => {
     setUsuario(null)
-    notificar.info('Sesión de demostración cerrada.')
+    notificar.info('Sesión institucional cerrada.')
   }
 
   return (
     <>
       <div className="fondo-textura" aria-hidden="true" />
-      <div className="wrapper">
+      <div className="wrapper wrapper--aside">
         <SndEncabezado>
           <SndNavbar
-            items={MENU}
+            items={MENU_SUPERIOR_HONORARIOS}
             usuario={usuario}
-            opcionesUsuario={OPCIONES_USUARIO}
+            opcionesUsuario={OPCIONES_MENU_USUARIO}
             mostrarSesion
             onSesion={entrar}
             onCerrarSesion={salir}
           />
         </SndEncabezado>
 
+        <SndMenuLateral
+          items={MENU_LATERAL_HONORARIOS}
+          titulo="Módulo de Honorarios"
+          etiqueta="Navegación del Módulo de Honorarios"
+          colapsado={menuColapsado}
+          onColapsar={setMenuColapsado}
+        />
+
         <main id="mainContent" tabIndex={-1}>
           <Suspense fallback={<SndCargando />}>
             <Routes>
-              <Route path="/" element={<Inicio />} />
-              <Route path="/componentes" element={<Componentes />} />
-              <Route path="/colores" element={<Colores />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              {/* Pantalla principal del Módulo de Honorarios */}
+              <Route path="/" element={<Landing />} />
+
+              {/* Submódulos administrativos de Honorarios */}
+              <Route path="/admin/padron" element={<PadronPrestadores />} />
+              <Route path="/admin/contratos" element={<ContratosHonorarios />} />
+              <Route path="/admin/modelo-contrato" element={<ModeloContrato />} />
+
+              {/* Vistas del prestador de servicios */}
+              <Route path="/user/portal" element={<PortalPrestador />} />
+              <Route path="/user/entregables" element={<MisEntregables />} />
+
+              {/* Acceso, firma electrónica e identidad */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/prueba-fiel" element={<PruebaFiel />} />
+              <Route path="/validar-identidad" element={<ValidarIdentidad />} />
+
+              {/* Ruta no encontrada */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </main>
