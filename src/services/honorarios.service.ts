@@ -47,38 +47,40 @@ export const UNIDADES_ADMINISTRATIVAS: string[] = [
 ]
 
 export const CATEGORIAS_OPERATIVAS: string[] = [
-  'Padrón Activo',
-  'Capítulo 1000',
-  'En Firma',
-  'Asimilados',
-  'Por Vencer',
-  'Dictaminados',
+  'Ingresado',
+  'Autorizado',
+  'Rechazado',
+  'Cancelado anticipadamente',
+  'Pendiente de Autorizar por SFP',
+  'En proceso',
+  'Cancelado por vencimiento',
+  'Cancelado por peticion de la institucion'
 ]
 
 export const TRIMESTRES_HONORARIOS: DatosTrimestre[] = [
   {
-    etiqueta: '1.er Trimestre 2026',
+    etiqueta: 'Quincena 18/2026',
     contratosActivos: 980,
     porcentajeAvance: 68,
     presupuestoEjercido: '$42.8 M',
     estadisticas: { vigentes: 48, enFirma: 27, enRevision: 15, porVencer: 10 },
   },
   {
-    etiqueta: '2.º Trimestre 2026',
+    etiqueta: 'Quincena 19/2026',
     contratosActivos: 1120,
     porcentajeAvance: 76,
     presupuestoEjercido: '$86.4 M',
     estadisticas: { vigentes: 52, enFirma: 23, enRevision: 15, porVencer: 10 },
   },
   {
-    etiqueta: '3.er Trimestre 2026',
+    etiqueta: 'Quincena 20/2026',
     contratosActivos: 1248,
     porcentajeAvance: 84,
     presupuestoEjercido: '$129.6 M',
     estadisticas: { vigentes: 50, enFirma: 25, enRevision: 15, porVencer: 10 },
   },
   {
-    etiqueta: '4.º Trimestre 2026',
+    etiqueta: 'Quincena 21/2026',
     contratosActivos: 1315,
     porcentajeAvance: 92,
     presupuestoEjercido: '$164.2 M',
@@ -89,18 +91,18 @@ export const TRIMESTRES_HONORARIOS: DatosTrimestre[] = [
 export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
   {
     id: 'padron',
-    titulo: 'Padrón del prestador de servicios',
+    titulo: 'Padron',
     subtitulo: 'Registro Único de Prestadores',
     rutaDedicada: '/admin/padron',
-    metrica: '1,420 activos',
-    detalle: 'Expedientes digitales, validación de RFC/CURP y constancias fiscales.',
+    metrica: '1,420',
+    detalle: 'Prestadores en la SABG',
     icono: 'snd-user--avatar',
     estadoTexto: 'Habilitado',
     estadoTipo: 'exito',
   },
   {
     id: 'contratos',
-    titulo: 'Contratos de honorarios',
+    titulo: 'Formalización de contratos',
     subtitulo: 'Gestión y Ciclo Contractual',
     rutaDedicada: '/admin/contratos',
     metrica: '1,248 vigentes',
@@ -111,7 +113,7 @@ export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
   },
   {
     id: 'modelo',
-    titulo: 'Modelo de contrato',
+    titulo: 'Validador de CURP',
     subtitulo: 'Plantillas Jurídicas Autorizadas',
     rutaDedicada: '/admin/modelo-contrato',
     metrica: '6 plantillas',
@@ -120,17 +122,17 @@ export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
     estadoTexto: 'Dictaminado',
     estadoTipo: 'purple',
   },
-  {
+    {
     id: 'suficiencia',
-    titulo: 'Suficiencia y entregables',
-    subtitulo: 'Control de Informes Mensuales',
-    rutaDedicada: '/user/entregables',
-    metrica: '94% al día',
-    detalle: 'Validación de reportes de actividades y liberación de pagos quincenales.',
-    icono: 'snd-calendar',
-    estadoTexto: 'Al corriente',
-    estadoTipo: 'alerta',
-  },
+    titulo: 'Modelo de contrato',
+    subtitulo: 'Plantillas Jurídicas Autorizadas',
+    rutaDedicada: '/admin/modelo-contrato',
+    metrica: '76%',
+    detalle: 'Modelo de campos de',
+    icono: 'snd-edit',
+    estadoTexto: 'Dictaminado',
+    estadoTipo: 'purple',
+  }
 ]
 
 export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]> = {

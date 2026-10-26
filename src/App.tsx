@@ -24,6 +24,7 @@ const ValidarIdentidad = lazy(() => import('./pages/ValidarIdentidad'))
 
 // Submódulos administrativos de Honorarios (pages/admin/)
 const PadronPrestadores = lazy(() => import('./pages/admin/PadronPrestadores'))
+const PadronPrestadoresServicio = lazy(() => import('./pages/PadronPrestadoresServicio'))
 const ContratosHonorarios = lazy(() => import('./pages/admin/ContratosHonorarios'))
 const ModeloContrato = lazy(() => import('./pages/admin/ModeloContrato'))
 
@@ -82,6 +83,7 @@ export default function App() {
 
               {/* Submódulos administrativos de Honorarios */}
               <Route path="/admin/padron" element={<PadronPrestadores />} />
+              <Route path="/padron-prestadores-servicio" element={<PadronPrestadoresServicio />} />
               <Route path="/admin/contratos" element={<ContratosHonorarios />} />
               <Route path="/admin/modelo-contrato" element={<ModeloContrato />} />
 

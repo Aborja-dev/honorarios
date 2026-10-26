@@ -7,6 +7,7 @@ import type { ItemMenuLateral, ItemNavegacion } from '../components/snd'
 export const MENU_LATERAL_HONORARIOS: ItemMenuLateral[] = [
   { texto: 'Tablero de Honorarios', icono: 'snd-home', ruta: '/', exacta: true },
   { texto: 'Padrón del Prestador', icono: 'snd-user--avatar', ruta: '/admin/padron' },
+  { texto: 'Padrón de Prestadores de Servicio', icono: 'snd-document', ruta: '/padron-prestadores-servicio' },
   { texto: 'Contratos de Honorarios', icono: 'snd-document', ruta: '/admin/contratos' },
   { texto: 'Modelo de Contrato', icono: 'snd-edit', ruta: '/admin/modelo-contrato' },
   { texto: 'Mis Entregables', icono: 'snd-calendar', ruta: '/user/entregables' },
