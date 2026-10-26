@@ -4,3 +4,4 @@ export { CifrasYEstadisticas, type CifrasYEstadisticasProps } from './honorarios
 export { PanelSubmodulos, type PanelSubmodulosProps } from './honorarios/PanelSubmodulos'
 export { BandejaSubmodulo, type BandejaSubmoduloProps } from './honorarios/BandejaSubmodulo'
 export { ModalRegistroHonorarios, type ModalRegistroHonorariosProps } from './honorarios/ModalRegistroHonorarios'
+export { ModalCargaMasiva, type ModalCargaMasivaProps } from './honorarios/ModalCargaMasiva'

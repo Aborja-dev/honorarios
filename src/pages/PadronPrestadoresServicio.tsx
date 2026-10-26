@@ -4,6 +4,7 @@ import { Calendar } from 'primereact/calendar'
 import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
 import {
+  ModalCargaMasiva,
   SndBoton,
   SndBotonEnlace,
   SndIcono,
@@ -28,8 +29,21 @@ const OPCIONES_ESTADO_CIVIL = [
 ]
 
 const OPCIONES_NACIONALIDAD = [
-  { label: 'M+éxico', value: 'MEXICANA' },
+  { label: 'México', value: 'MEXICANA' },
   { label: 'Extranjero con residencia permanente', value: 'EXTRANJERA' },
+]
+
+const OPCIONES_PAIS = [
+  'México',
+  'Estados Unidos',
+  'Canadá',
+  'Guatemala',
+  'Belice',
+  'Colombia',
+  'Argentina',
+  'Chile',
+  'España',
+  'Otro',
 ]
 
 const ENTIDADES_FEDERATIVAS = [
@@ -219,6 +233,7 @@ export default function PadronPrestadoresServicio() {
   const [acordeonesActivos, setAcordeonesActivos] = useState<number | number[]>([0])
   const [intentoEnvio, setIntentoEnvio] = useState(false)
   const [folioGenerado, setFolioGenerado] = useState<string | null>(null)
+  const [modalCargaMasivaAbierto, setModalCargaMasivaAbierto] = useState(false)
 
   // 1. Estado: Datos Personales
   const [nombres, setNombres] = useState('')
@@ -284,14 +299,11 @@ export default function PadronPrestadoresServicio() {
   )
 
   const seccionEscolaridadCompleta = Boolean(
-    nivelEstudios && carrera.trim() && institucionEducativa.trim() && estatusEstudios,
+    nivelEstudios && carrera.trim() && estatusEstudios,
   )
 
   const seccionExperienciaCompleta = Boolean(
-    institucionLaboral.trim() &&
-    puestoDesempenado.trim() &&
-    aniosExperiencia.trim() &&
-    funcionesPrincipales.trim(),
+    sectorLaboral && aniosExperiencia.trim() && funcionesPrincipales.trim(),
   )
 
   const totalSeccionesCompletas = [
@@ -439,14 +451,8 @@ export default function PadronPrestadoresServicio() {
           </p>
         </div>
         <div className="fila">
-          {/* Aqui quiero un boton que diga Carga masiva  */}
-          <SndBoton variante="fantasma" type="button" onClick={cargarDatosEjemplo}>
-            <SndIcono nombre="snd-document" tamano={18} />
-            Autocompletar ejemplo
-          </SndBoton>
-          <SndBotonEnlace variante="secundario" to="/admin/padron">
-            Ver bandeja del padrón
-          </SndBotonEnlace>
+
+
         </div>
       </div>
 
@@ -454,7 +460,7 @@ export default function PadronPrestadoresServicio() {
       <article className="honorarios-tarjeta" style={{ marginTop: 20 }}>
         <div className="honorarios-detalle-barra">
           <div className="fila">
-            <span className="b1sb color--principal">Avance de captura del expediente:</span>
+            <span className="b1sb color--principal">Avance de captura:</span>
             <span className={`pildora pildora--${totalSeccionesCompletas === 4 ? 'exito' : 'info'} snd-pildora`}>
               <span className="pildora__dot" aria-hidden="true" />
               {totalSeccionesCompletas} de 4 secciones completas
@@ -467,7 +473,16 @@ export default function PadronPrestadoresServicio() {
             )}
           </div>
 
+
           <div className="fila">
+            <SndBoton
+              variante="secundario"
+              type="button"
+              onClick={() => setModalCargaMasivaAbierto(true)}
+            >
+              <SndIcono nombre="snd-document" tamano={18} />
+              Carga masiva
+            </SndBoton>
             <SndBoton variante="secundario" type="button" onClick={expandirTodo}>
               Expandir las 4 secciones
             </SndBoton>
@@ -482,7 +497,7 @@ export default function PadronPrestadoresServicio() {
         <div style={{ marginTop: 16 }}>
           <SndMensaje tipo="exito">
             <p>
-              <strong>Expediente registrado en el Padrón de Prestadores de Servicio ({folioGenerado}):</strong> Los datos
+              <strong>La información del Prestador de Servicio ({folioGenerado}): ha sido guarda correctamente</strong> Los datos
               personales, dirección, escolaridad y experiencia laboral de{' '}
               <strong>
                 {nombres} {primerApellido} {segundoApellido}
@@ -516,7 +531,7 @@ export default function PadronPrestadoresServicio() {
                       1. Datos Personales
                     </span>
                     <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Identificación oficial, CURP, RFC con homoclave y medios de contacto
+                      Nombre, CURP, RFC con homoclave
                     </span>
                   </div>
                 </div>
@@ -528,6 +543,44 @@ export default function PadronPrestadoresServicio() {
             }
           >
             <div className="padron-form-grid">
+              <div className="campo">
+                <label htmlFor="dp-curp" className="b1sb">
+                  CURP (18 caracteres) <span className="requerido">*</span>
+                </label>
+                <InputText
+                  id="dp-curp"
+                  maxLength={18}
+                  value={curp}
+                  invalid={intentoEnvio && curp.trim().length < 18}
+                  onChange={(e) => setCurp(e.target.value.toUpperCase())}
+                  placeholder="Ej. LORM880412MDFRRL09"
+                />
+                {intentoEnvio && curp.trim().length < 18 && (
+                  <span className="campo__error">Ingresa los 18 caracteres de la CURP.</span>
+                )}
+              </div>
+              <div className="campo">
+
+
+                <SndBoton
+                  type="button"
+                  style={{ marginTop: '1rem' }}
+                  onClick={() => {
+                    setIntentoEnvio(true)
+                    if (seccionPersonalCompleta) {
+                      setAcordeonesActivos([1])
+                      notificar.exito('Datos personales completados correctamente.')
+                    } else {
+                      notificar.alerta('Por favor completa los datos personales obligatorios.')
+                    }
+                  }}
+                >
+                  Validar Curp
+                </SndBoton>
+              </div>
+              <div className="campo">
+              </div>
+
               <div className="campo">
                 <label htmlFor="dp-nombres" className="b1sb">
                   Nombre(s) <span className="requerido">*</span>
@@ -572,22 +625,7 @@ export default function PadronPrestadoresServicio() {
                 />
               </div>
 
-              <div className="campo">
-                <label htmlFor="dp-curp" className="b1sb">
-                  CURP (18 caracteres) <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="dp-curp"
-                  maxLength={18}
-                  value={curp}
-                  invalid={intentoEnvio && curp.trim().length < 18}
-                  onChange={(e) => setCurp(e.target.value.toUpperCase())}
-                  placeholder="Ej. LORM880412MDFRRL09"
-                />
-                {intentoEnvio && curp.trim().length < 18 && (
-                  <span className="campo__error">Ingresa los 18 caracteres de la CURP.</span>
-                )}
-              </div>
+
 
               <div className="campo">
                 <label htmlFor="dp-rfc" className="b1sb">
@@ -652,7 +690,7 @@ export default function PadronPrestadoresServicio() {
                       2. Dirección
                     </span>
                     <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Domicilio particular y fiscal registrado para efectos contractuales
+                      Domicilio registrado para efectos contractuales
                     </span>
                   </div>
                 </div>
@@ -729,7 +767,7 @@ export default function PadronPrestadoresServicio() {
 
               <div className="campo">
                 <label htmlFor="dir-colonia" className="b1sb">
-                  Colonia o Asentamiento <span className="requerido">*</span>
+                  Colonia<span className="requerido">*</span>
                 </label>
                 <InputText
                   id="dir-colonia"
@@ -748,11 +786,13 @@ export default function PadronPrestadoresServicio() {
                   País <span className="requerido">*</span>
                 </label>
                 <Dropdown
-                  id="dir-pais"
+                  inputId="dir-pais"
+                  options={OPCIONES_PAIS}
                   value={pais}
                   invalid={intentoEnvio && !pais.trim()}
-                  onChange={(e) => setPais(e.target.value)}
-                  placeholder="Ej. México"
+                  onChange={(e) => setPais(e.value ?? '')}
+                  placeholder="Selecciona país"
+                  appendTo="self"
                 />
                 {intentoEnvio && !pais.trim() && (
                   <span className="campo__error">El país es obligatorio.</span>
@@ -761,7 +801,7 @@ export default function PadronPrestadoresServicio() {
 
               <div className="campo">
                 <label htmlFor="dir-entidad" className="b1sb">
-                  Entidad Federativa <span className="requerido">*</span>
+                  Estado<span className="requerido">*</span>
                 </label>
                 <Dropdown
                   inputId="dir-entidad"
@@ -797,11 +837,11 @@ export default function PadronPrestadoresServicio() {
               style={{ marginTop: '1rem' }}
               onClick={() => {
                 setIntentoEnvio(true)
-                if (seccionPersonalCompleta) {
-                  setAcordeonesActivos([1])
-                  notificar.exito('Datos personales completados correctamente.')
+                if (seccionDireccionCompleta) {
+                  setAcordeonesActivos([2])
+                  notificar.exito('Datos de domicilio guardados temporalmente.')
                 } else {
-                  notificar.alerta('Por favor completa los datos personales obligatorios.')
+                  notificar.alerta('Por favor completa los datos de domicilio obligatorios.')
                 }
               }}
             >
@@ -824,7 +864,7 @@ export default function PadronPrestadoresServicio() {
                       3. Escolaridad
                     </span>
                     <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Formación académica, grado máximo de estudios y registro de cédula profesional
+                      Área de estudio, grado máximo de estudios y registro de certificado
                     </span>
                   </div>
                 </div>
@@ -904,11 +944,11 @@ export default function PadronPrestadoresServicio() {
               style={{ marginTop: '1rem' }}
               onClick={() => {
                 setIntentoEnvio(true)
-                if (seccionPersonalCompleta) {
-                  setAcordeonesActivos([1])
-                  notificar.exito('Datos personales completados correctamente.')
+                if (seccionEscolaridadCompleta) {
+                  setAcordeonesActivos([3])
+                  notificar.exito('Datos de escolaridad guardados temporalmente.')
                 } else {
-                  notificar.alerta('Por favor completa los datos personales obligatorios.')
+                  notificar.alerta('Por favor completa los datos de escolaridad obligatorios.')
                 }
               }}
             >
@@ -931,7 +971,7 @@ export default function PadronPrestadoresServicio() {
                       4. Experiencia Laboral
                     </span>
                     <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Trayectoria profesional, último encargo y actividades acreditables para el perfil
+                      Área de experiencia, Años de experiencia
                     </span>
                   </div>
                 </div>
@@ -1015,11 +1055,10 @@ export default function PadronPrestadoresServicio() {
               style={{ marginTop: '1rem' }}
               onClick={() => {
                 setIntentoEnvio(true)
-                if (seccionPersonalCompleta) {
-                  setAcordeonesActivos([1])
-                  notificar.exito('Datos personales completados correctamente.')
+                if (seccionExperienciaCompleta) {
+                  notificar.exito('Datos de experiencia laboral guardados temporalmente.')
                 } else {
-                  notificar.alerta('Por favor completa los datos personales obligatorios.')
+                  notificar.alerta('Por favor completa los datos de experiencia laboral obligatorios.')
                 }
               }}
             >
@@ -1048,6 +1087,12 @@ export default function PadronPrestadoresServicio() {
           </div>
         </article>
       </form>
+
+      {/* MODAL DE CARGA MASIVA */}
+      <ModalCargaMasiva
+        visible={modalCargaMasivaAbierto}
+        onCerrar={() => setModalCargaMasivaAbierto(false)}
+      />
     </div>
   )
 }
