@@ -206,6 +206,12 @@
   padding-block: 6px;
 }
 
+.honorarios-grafico {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+
 .honorarios-anillo {
   width: 154px;
   height: 154px;
@@ -464,8 +470,6 @@
 
 /* ---------- Sección Inferior Derecha ---------- */
 .honorarios-inferior-derecha {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
   gap: 16px;
 }
 
@@ -475,11 +479,35 @@
   gap: 10px;
 }
 
-.honorarios-pildoras-grid .snd-pildora-filtro,
+.honorarios-pildoras-grid .snd-pildora-filtro {
+  min-width: 0;
+}
+
 .honorarios-pildoras-grid .pildoraFiltro {
-  width: 100%;
+  width: 200px;
+  max-width: 100%;
+  min-width: 0;
   justify-content: center;
 }
+.honorarios-pildoras-grid span {
+  text-align: center;
+  display: inline-block;
+}
+
+/* Trunca solo el texto: el ícono de cierre debe conservar su tamaño. */
+.honorarios-pildoras-grid .pildoraFiltro > span:not(.snd-icono) {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.honorarios-pildoras-grid .pildoraFiltro .pildoraFiltro__cerrar {
+  flex: none;
+}
+
+
 
 .honorarios-arco-contenedor {
   display: flex;
@@ -568,3 +596,5 @@
     align-items: flex-start;
   }
 }
+
+

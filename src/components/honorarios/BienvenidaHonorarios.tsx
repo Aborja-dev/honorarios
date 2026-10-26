@@ -16,21 +16,14 @@ export function BienvenidaHonorarios({ etiquetaPeriodo }: BienvenidaHonorariosPr
           Ejercicio Fiscal 2026 · SABG
         </span>
         <h1 className="h2b patria honorarios-bienvenida__titulo">
-          Bienvenido al módulo de Honorarios
+          Módulo de Honorarios
         </h1>
         <p className="b1r honorarios-bienvenida__texto">
           Administra el padrón de prestadores de servicios profesionales, el control presupuestal de contratos y los
           modelos jurídicos autorizados desde un solo lugar.
         </p>
         <div className="honorarios-bienvenida__meta">
-          <span className="honorarios-bienvenida__chip sdr">
-            <SndIcono nombre="snd-calendar" tamano={16} />
-            Periodo activo: {etiquetaPeriodo}
-          </span>
-          <span className="honorarios-bienvenida__chip sdr">
-            <SndIcono nombre="snd-document" tamano={16} />
-            Partida 12101 · Honorarios
-          </span>
+          
         </div>
       </div>
       <div className="honorarios-bienvenida__ilustracion" aria-hidden="true">
