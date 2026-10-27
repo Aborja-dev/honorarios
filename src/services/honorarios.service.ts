@@ -1,4 +1,5 @@
 import type { TipoPildora } from '../components/snd'
+import { landingTextos } from '../pages/LandingTextos'
 
 export type ClaveSubmodulo = 'padron' | 'contratos' | 'modelo' | 'suficiencia'
 
@@ -91,44 +92,44 @@ export const TRIMESTRES_HONORARIOS: DatosTrimestre[] = [
 export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
   {
     id: 'padron',
-    titulo: 'Padron',
+    titulo: landingTextos.tituloPadron,
     subtitulo: 'Registro Único de Prestadores',
     rutaDedicada: '/admin/padron',
     metrica: '1,420',
-    detalle: 'Prestadores en la SABG',
+    detalle: landingTextos.descPadron,
     icono: 'snd-user--avatar',
     estadoTexto: 'Habilitado',
     estadoTipo: 'exito',
   },
   {
     id: 'contratos',
-    titulo: 'Formalización de contratos',
+    titulo: landingTextos.tituloContrato,
     subtitulo: 'Gestión y Ciclo Contractual',
     rutaDedicada: '/admin/contratos',
     metrica: '1,248 vigentes',
-    detalle: 'Elaboración, suficiencia presupuestal, anexos y seguimiento de firmas.',
+    detalle: landingTextos.descContrato,
     icono: 'snd-document',
     estadoTexto: 'En operación',
     estadoTipo: 'info',
   },
   {
     id: 'modelo',
-    titulo: 'Validador de CURP',
+    titulo: landingTextos.tituloValidarCurp,
     subtitulo: 'Plantillas Jurídicas Autorizadas',
     rutaDedicada: '/admin/modelo-contrato',
     metrica: '6 plantillas',
-    detalle: 'Clausulados dictaminados para Capítulo 1000, 3000 y asimilados a salarios.',
+    detalle: landingTextos.descValidarCurp,
     icono: 'snd-edit',
     estadoTexto: 'Dictaminado',
     estadoTipo: 'purple',
   },
     {
     id: 'suficiencia',
-    titulo: 'Modelo de contrato',
+    titulo: landingTextos.tituloModelo,
     subtitulo: 'Plantillas Jurídicas Autorizadas',
     rutaDedicada: '/admin/modelo-contrato',
     metrica: '76%',
-    detalle: 'Modelo de campos de',
+    detalle: landingTextos.descModelo,
     icono: 'snd-edit',
     estadoTexto: 'Dictaminado',
     estadoTipo: 'purple',

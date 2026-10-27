@@ -1,6 +1,7 @@
 import { SndBoton, SndBotonEnlace, SndIcono, SndMensaje, SndPildora, SndPildoraFiltro } from '../snd'
 import { CATEGORIAS_OPERATIVAS, type ClaveSubmodulo, type SubmoduloInfo } from '../../services'
 import CardRUSP from './CardRUSP'
+import { landingTextos } from '../../pages/LandingTextos'
 
 export interface PanelSubmodulosProps {
   submodulos: SubmoduloInfo[]
@@ -21,7 +22,6 @@ export function PanelSubmodulos({
   submodulos,
   submoduloActivo,
   onSeleccionarSubmodulo,
-  onAbrirModal,
   categoriasActivas,
   onAlternarCategoria,
 }: PanelSubmodulosProps) {
@@ -31,7 +31,7 @@ export function PanelSubmodulos({
     <div className="honorarios-columna">
       <div className="honorarios-encabezado-seccion">
         <div>
-          <h2 className="h2b honorarios-encabezado-seccion__titulo">Submódulos de Honorarios</h2>
+          <h2 className="h2b honorarios-encabezado-seccion__titulo">{landingTextos.seccionHonorarios}</h2>
         </div>
         <SndPildora tipo="info">{submoduloActual.titulo}</SndPildora>
       </div>
@@ -40,7 +40,7 @@ export function PanelSubmodulos({
         <div className="honorarios-submodulos-grid">
           {submodulos.map((sub, index) => {
             const esActivo = submoduloActivo === sub.id
-            if (index === 3) return <CardRUSP key={sub.id} sub={sub} esActivo={esActivo} onSeleccionarSubmodulo={onSeleccionarSubmodulo} />;
+            
             return (
               <article
                 key={sub.id}
@@ -73,13 +73,13 @@ export function PanelSubmodulos({
                         onSeleccionarSubmodulo(sub.id)
                       }}
                     >
-                      {true ? 'Carga Individual': ''}
+                      {true ? landingTextos.botonCargaMasiva: ''}
                     </SndBoton>
                     <SndBoton
                       variante="secundario"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      Carga Masiva
+                      {landingTextos.botonCargaIndividual}
                     </SndBoton>
                   </div>
                 </div>
@@ -94,13 +94,13 @@ export function PanelSubmodulos({
 
       {/* Sección Inferior Derecha: Categorías Operativas + Validación Jurídica */}
       <div className="honorarios-encabezado-seccion" style={{ marginTop: 4 }}>
-        <h2 className="h2b honorarios-encabezado-seccion__titulo">Informes</h2>
+        <h2 className="h2b honorarios-encabezado-seccion__titulo">{landingTextos.seccionInformes}</h2>
       </div>
 
       <div className="honorarios-inferior-derecha">
         <article className="honorarios-tarjeta">
           <div className="honorarios-tarjeta__encabezado">
-            <h3 className="sh0b honorarios-tarjeta__titulo">Categorías Operativas</h3>
+            <h3 className="sh0b honorarios-tarjeta__titulo">{landingTextos.tituloInformes}</h3>
             <span className="sdr">{categoriasActivas.length} activas</span>
           </div>
           <div className="honorarios-pildoras-grid">

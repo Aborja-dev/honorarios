@@ -1,6 +1,9 @@
-import { SndBoton, SndIcono, SndPildora, SndTooltip, useNotificaciones } from '../snd'
+import { SndBoton, SndTooltip } from '../snd'
 import type { DatosTrimestre } from '../../services'
-import { formatearNumero } from '../../utils'
+import CardRUSP from './CardRUSP'
+import ChartAsignacion from './chart/ChartAsignacion'
+import ChartEstatus, { COLORES_ESTATUS } from './chart/ChartEstatus'
+import { landingTextos } from '../../pages/LandingTextos'
 
 export interface CifrasYEstadisticasProps {
   datosTrimestre: DatosTrimestre
@@ -21,16 +24,13 @@ export function CifrasYEstadisticas({
   indiceTrimestre,
   totalTrimestres,
   onCambiarTrimestre,
-  ventanillaAbierta,
-  onCambiarVentanilla,
-  firmaActiva,
-  onCambiarFirma,
+
 }: CifrasYEstadisticasProps) {
-  const notificar = useNotificaciones()
   const { vigentes, enFirma, enRevision, porVencer } = datosTrimestre.estadisticas
-  const corte1 = vigentes
-  const corte2 = vigentes + enFirma
-  const corte3 = vigentes + enFirma + enRevision
+  const asignados = Math.round(
+    (datosTrimestre.contratosActivos * datosTrimestre.porcentajeAvance) / 100,
+  )
+  const pendientes = datosTrimestre.contratosActivos - asignados
 
   return (
     <>
@@ -38,7 +38,7 @@ export function CifrasYEstadisticas({
         {/* Tarjeta Izquierda: Cifra Circular de Contratos Activos */}
         <article className="honorarios-tarjeta">
           <div className="honorarios-tarjeta__encabezado">
-            <h2 className="sh0b honorarios-tarjeta__titulo">Asignacion PEF</h2>
+            <h2 className="sh0b honorarios-tarjeta__titulo">{landingTextos.tituloAsignacion}</h2>
             <SndTooltip
               texto="Total de contratos de honorarios activos y porcentaje de suficiencia presupuestal ejercida en el trimestre seleccionado."
               posicion="abajo-derecha"
@@ -46,19 +46,7 @@ export function CifrasYEstadisticas({
           </div>
 
           <div className="honorarios-anillo-contenedor">
-            <div
-              className="honorarios-anillo"
-              style={{
-                background: `conic-gradient(var(--principal) 0% ${datosTrimestre.porcentajeAvance}%, var(--gama100) ${datosTrimestre.porcentajeAvance}% 100%)`,
-              }}
-            >
-              <div className="honorarios-anillo__interior">
-                <p className="h2b honorarios-anillo__valor">
-                  {formatearNumero(datosTrimestre.contratosActivos)}
-                </p>
-                <span className="sdr honorarios-anillo__sub">Contratos</span>
-              </div>
-            </div>
+            <ChartAsignacion asignados={asignados} pendientes={pendientes} />
           </div>
 
           <div>
@@ -96,7 +84,7 @@ export function CifrasYEstadisticas({
         {/* Tarjeta Derecha: Estadísticas por Estatus Contractual */}
         <article className="honorarios-tarjeta">
           <div className="honorarios-tarjeta__encabezado">
-            <h2 className="sh0b honorarios-tarjeta__titulo">Estatus Contratos 2026</h2>
+            <h2 className="sh0b honorarios-tarjeta__titulo">{landingTextos.tituloEstatus}</h2>
             <SndTooltip
               texto="Distribución porcentual del estado actual de los contratos registrados en el ejercicio."
               posicion="abajo-derecha"
@@ -104,41 +92,24 @@ export function CifrasYEstadisticas({
           </div>
 
           <div className="honorarios-anillo-contenedor">
-            <div
-              className="honorarios-pastel"
-              style={{
-                background: `conic-gradient(
-                  var(--verde500) 0% ${corte1}%,
-                  var(--azul500) ${corte1}% ${corte2}%,
-                  var(--dorado500) ${corte2}% ${corte3}%,
-                  var(--rojo500) ${corte3}% 100%
-                )`,
-              }}
-              role="img"
-              aria-label={`Distribución de contratos: ${vigentes}% vigentes, ${enFirma}% en firma, ${enRevision}% en revisión y ${porVencer}% por vencer`}
-            >
-              <span className="honorarios-pastel__etiqueta" style={{ transform: 'translate(-7px, 10px)' }}>{enRevision}%</span>
-              <span className="honorarios-pastel__etiqueta" style={{ transform: 'translate(-43px, -17px)' }}>{porVencer}%</span>
-              <span className="honorarios-pastel__etiqueta" >{enFirma}%</span>
-              <span className="honorarios-pastel__etiqueta" style={{ transform: 'translate(7px, -26px)' }}>{vigentes}%</span>
-            </div>
+            <ChartEstatus datos={[vigentes, enFirma, enRevision, porVencer]} />
           </div>
 
           <ul className="honorarios-leyenda">
             <li className="honorarios-leyenda__item">
-              <span className="honorarios-leyenda__punto" style={{ background: 'var(--verde500)' }} />
+              <span className="honorarios-leyenda__punto" style={{ background: COLORES_ESTATUS[0] }} />
               <span>Autorizados ({vigentes}%)</span>
             </li>
             <li className="honorarios-leyenda__item">
-              <span className="honorarios-leyenda__punto" style={{ background: 'var(--azul500)' }} />
+              <span className="honorarios-leyenda__punto" style={{ background: COLORES_ESTATUS[1] }} />
               <span>Cancelacion anticipada ({enFirma}%)</span>
             </li>
             <li className="honorarios-leyenda__item">
-              <span className="honorarios-leyenda__punto" style={{ background: 'var(--dorado500)' }} />
+              <span className="honorarios-leyenda__punto" style={{ background: COLORES_ESTATUS[2] }} />
               <span>En proceso ({enRevision}%)</span>
             </li>
             <li className="honorarios-leyenda__item">
-              <span className="honorarios-leyenda__punto" style={{ background: 'var(--rojo500)' }} />
+              <span className="honorarios-leyenda__punto" style={{ background: COLORES_ESTATUS[3] }} />
               <span>Cancelado por vencimiento ({porVencer}%)</span>
             </li>
           </ul>
@@ -146,6 +117,7 @@ export function CifrasYEstadisticas({
       </div>
 
       {/* Tarjetas inferiores de control operativo */}
+      <CardRUSP />
     </>
   )
 }

@@ -206,6 +206,12 @@
   padding-block: 6px;
 }
 
+.honorarios-grafico {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+
 .honorarios-anillo {
   width: 154px;
   height: 154px;
@@ -483,6 +489,25 @@
   min-width: 0;
   justify-content: center;
 }
+.honorarios-pildoras-grid span {
+  text-align: center;
+  display: inline-block;
+}
+
+/* Trunca solo el texto: el ícono de cierre debe conservar su tamaño. */
+.honorarios-pildoras-grid .pildoraFiltro > span:not(.snd-icono) {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.honorarios-pildoras-grid .pildoraFiltro .pildoraFiltro__cerrar {
+  flex: none;
+}
+
+
 
 /* Trunca solo el texto: el ícono de cierre debe conservar su tamaño. */
 .honorarios-pildoras-grid .pildoraFiltro > span:not(.snd-icono) {

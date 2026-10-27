@@ -1,3 +1,4 @@
+import { landingTextos } from '../../pages/LandingTextos'
 import { SndIcono } from '../snd'
 
 export interface BienvenidaHonorariosProps {
@@ -16,14 +17,12 @@ export function BienvenidaHonorarios({ etiquetaPeriodo }: BienvenidaHonorariosPr
           Ejercicio Fiscal 2026 · SABG
         </span>
         <h1 className="h2b patria honorarios-bienvenida__titulo">
-          Módulo de Honorarios
+          {landingTextos.tituloPrincipal}
         </h1>
         <p className="b1r honorarios-bienvenida__texto">
-          Administra el padrón de prestadores de servicios profesionales, el control presupuestal de contratos y los
-          modelos jurídicos autorizados desde un solo lugar.
         </p>
         <div className="honorarios-bienvenida__meta">
-          
+          {landingTextos.descripcionPrincipal}
         </div>
       </div>
       <div className="honorarios-bienvenida__ilustracion" aria-hidden="true">
