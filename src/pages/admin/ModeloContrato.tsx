@@ -37,9 +37,14 @@ export default function ModeloContrato() {
             Catálogo de plantillas jurídicas y clausulados dictaminados para Honorarios
           </p>
         </div>
-        <SndBotonEnlace variante="secundario" to="/">
-          Volver al tablero
-        </SndBotonEnlace>
+        <div className="fila">
+          <SndBotonEnlace variante="primario" to="/alta-modelos-contratos">
+            Alta de modelos de contratos
+          </SndBotonEnlace>
+          <SndBotonEnlace variante="secundario" to="/">
+            Volver al tablero
+          </SndBotonEnlace>
+        </div>
       </div>
 
       <BandejaSubmodulo

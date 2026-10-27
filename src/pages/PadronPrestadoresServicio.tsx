@@ -447,7 +447,7 @@ export default function PadronPrestadoresServicio() {
             Padrón de Prestadores de Servicio
           </h1>
           <p className="sh0m color--principal" style={{ margin: '4px 0 0' }}>
-            Registro información de prestadores de servicio, domicilio, escolaridad y experiencia profesional para contratación bajo el régimen de honorarios
+            Registro de datos personales de prestadores de servicios profesionales por honorarios
           </p>
         </div>
         <div className="fila">
