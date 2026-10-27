@@ -14,28 +14,15 @@ export interface DireccionItem {
 }
 
 interface TablaDireccionProps {
-  direcciones?: DireccionItem[]
+  direcciones: DireccionItem[]
   onEditar?: (direccion: DireccionItem, index: number) => void
   onEliminar?: (index: number) => void
 }
 
-const DATOS_EJEMPLO: DireccionItem[] = [
-  {
-    id: 1,
-    calle: 'Av. Insurgentes Sur',
-    numeroExterior: '1735',
-    numeroInterior: 'Piso 4, Int. 402',
-    codigoPostal: '01020',
-    colonia: 'Guadalupe Inn',
-    municipioAlcaldia: 'Álvaro Obregón',
-    entidadFederativa: 'Ciudad de México',
-    pais: 'México',
-    referenciasDomicilio: 'Frente al parque',
-  },
-]
+
 
 export const TablaDireccion: React.FC<TablaDireccionProps> = ({
-  direcciones = DATOS_EJEMPLO,
+  direcciones,
   onEditar,
   onEliminar,
 }) => {
@@ -66,7 +53,7 @@ export const TablaDireccion: React.FC<TablaDireccionProps> = ({
             <th style={thStyle}>Municipio / Alcaldía</th>
             <th style={thStyle}>Estado</th>
             <th style={thStyle}>País</th>
-            <th style={thStyle}>Referencias</th>
+            {/* <th style={thStyle}>Referencias</th> */}
             {tieneAcciones && <th style={{ ...thStyle, textAlign: 'center' }}>Acciones</th>}
           </tr>
         </thead>
@@ -101,7 +88,7 @@ export const TablaDireccion: React.FC<TablaDireccionProps> = ({
                 <td style={tdStyle}>{dir.municipioAlcaldia || '-'}</td>
                 <td style={tdStyle}>{dir.entidadFederativa || '-'}</td>
                 <td style={tdStyle}>{dir.pais || '-'}</td>
-                <td style={tdStyle}>{dir.referenciasDomicilio || '-'}</td>
+                {/* <td style={tdStyle}>{dir.referenciasDomicilio || '-'}</td> */}
                 {tieneAcciones && (
                   <td style={{ ...tdStyle, textAlign: 'center' }}>
                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>

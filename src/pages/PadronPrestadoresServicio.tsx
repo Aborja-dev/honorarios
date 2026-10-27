@@ -11,7 +11,7 @@ import {
 } from '../components'
 import '../components/honorarios/Honorarios.css'
 import { useTitulo } from '../hooks'
-import TablaDireccion from '../components/prestadoresServicios/TablaDireccion'
+import TablaDireccion, { type DireccionItem } from '../components/prestadoresServicios/TablaDireccion'
 import TablaEscolaridad from '../components/prestadoresServicios/TablaEscolaridad'
 import TablaExperiencia from '../components/prestadoresServicios/TablaExperiencia'
 import { ToggleTabla } from '../components/prestadoresServicios/ToogleTabla'
@@ -22,7 +22,20 @@ const OPCIONES_NACIONALIDAD = [
   { label: 'México', value: 'MEXICANA' },
   { label: 'Extranjero con residencia permanente', value: 'EXTRANJERA' },
 ]
-
+const DATOS_EJEMPLO: DireccionItem[] = [
+  {
+    id: 1,
+    calle: 'Av. Insurgentes Sur',
+    numeroExterior: '1735',
+    numeroInterior: 'Piso 4, Int. 402',
+    codigoPostal: '01020',
+    colonia: 'Guadalupe Inn',
+    municipioAlcaldia: 'Álvaro Obregón',
+    entidadFederativa: 'Ciudad de México',
+    pais: 'México',
+    referenciasDomicilio: 'Frente al parque',
+  },
+]
 const OPCIONES_PAIS = [
   'México',
   'Estados Unidos',
@@ -459,8 +472,37 @@ export default function PadronPrestadoresServicio() {
     setNacionalidad(datosPersonalesPrueba.nacionalidad)
     notificar.exito("CURP validada correctamente", "CURP")
   }
+
+
+
   // logica de la seccion direccion
   const [showDireccion, setShowDireccion] = useState(true)
+  const [direcciones, setDirecciones] = useState<DireccionItem[]>(DATOS_EJEMPLO)
+  const handleDireccionCompleto = () => {
+    const newDireccion: DireccionItem = {
+      calle,
+      numeroExterior,
+      numeroInterior,
+      codigoPostal,
+      colonia,
+      municipioAlcaldia,
+      entidadFederativa,
+      pais,
+      referenciasDomicilio
+    }
+    setDirecciones([...direcciones, newDireccion])
+    setShowDireccion(true)
+  }
+  const clearDirecciones = () => {
+    setCodigoPostal('')
+    setCalle('')
+    setNumeroExterior('')
+    setNumeroInterior('')
+    setColonia('')
+    setPais('México')
+    setMunicipioAlcaldia('')
+    setReferenciasDomicilio('')
+  }
   return (
     <div className="contenedor">
       <style>{ESTILOS_ACORDEON_PADRON}</style>
@@ -587,8 +629,6 @@ export default function PadronPrestadoresServicio() {
                 )}
               </div>
               <div className="campo">
-
-
                 <SndBoton
                   type="button"
                   style={styleCURPButton}
@@ -736,7 +776,7 @@ export default function PadronPrestadoresServicio() {
               </div>
             }
           >
-            <ToggleTabla tabla={<TablaDireccion />} showTable={showDireccion}>
+            <ToggleTabla tabla={<TablaDireccion direcciones={direcciones} />} showTable={showDireccion}>
               <div className="padron-form-grid">
                 <div className="campo padron-form-grid__col-2">
                   <label htmlFor="dir-calle" className="b1sb">
@@ -872,7 +912,26 @@ export default function PadronPrestadoresServicio() {
                 (<SndBoton
                   type="button"
                   style={{ marginTop: '1rem' }}
-                  onClick={() => {
+                  onClick={handleDireccionCompleto}
+                >
+                  Guardar dirección
+                </SndBoton>)
+                : (
+                  <div style={{ display: 'flex', gap: '1rem' }}>
+                    <SndBoton
+                      type="button"
+                      style={{ marginTop: '1rem' }}
+                      onClick={() => {
+                        setShowDireccion(false)
+                        clearDirecciones()
+                      }}
+                    >
+                      Agregar otra dirección
+                    </SndBoton>
+                    <SndBoton
+                      type="button"
+                      style={{ marginTop: '1rem' }}
+                      onClick={() => {
                     setIntentoEnvio(true)
                     if (seccionDireccionCompleta) {
                       setAcordeonesActivos([2])
@@ -881,18 +940,13 @@ export default function PadronPrestadoresServicio() {
                       notificar.alerta('Por favor completa los datos de domicilio obligatorios.')
                     }
                   }}
-                >
-                  Guardar dirección
-                </SndBoton>)
-                : (<SndBoton
-                  type="button"
-                  style={{ marginTop: '1rem' }}
-                  onClick={() => {
-                    setShowDireccion(false)
-                  }}
-                >
-                  Direccion nueva
-                </SndBoton>)
+                    >
+                      Siguiente
+                    </SndBoton>
+                  </div>
+
+
+                )
             }
 
           </AccordionTab>
