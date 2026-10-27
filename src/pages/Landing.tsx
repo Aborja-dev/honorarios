@@ -23,6 +23,10 @@ import { sinAcentos } from '../utils'
  * Presenta el tablero dividido: bienvenida y bloques de cifras/estadísticas a la izquierda,
  * división vertical central, y submódulos de Honorarios a la derecha.
  */
+
+
+
+
 export default function Landing() {
   useTitulo('Módulo de Honorarios · SABG')
   const notificar = useNotificaciones()
