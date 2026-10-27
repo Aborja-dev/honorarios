@@ -128,7 +128,7 @@ export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
     subtitulo: 'Plantillas Jurídicas Autorizadas',
     rutaDedicada: '/admin/modelo-contrato',
     metrica: '76%',
-    detalle: 'Modelo de campos de',
+    detalle: 'Modelo de campos del contrato',
     icono: 'snd-edit',
     estadoTexto: 'Dictaminado',
     estadoTipo: 'purple',

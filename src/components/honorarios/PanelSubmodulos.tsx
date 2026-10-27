@@ -40,7 +40,7 @@ export function PanelSubmodulos({
         <div className="honorarios-submodulos-grid">
           {submodulos.map((sub, index) => {
             const esActivo = submoduloActivo === sub.id
-            if (index === 3) return <CardRUSP key={sub.id} sub={sub} esActivo={esActivo} onSeleccionarSubmodulo={onSeleccionarSubmodulo} />;
+            
             return (
               <article
                 key={sub.id}

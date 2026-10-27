@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
-  BandejaSubmodulo,
   BienvenidaHonorarios,
   CifrasYEstadisticas,
   ModalRegistroHonorarios,
@@ -47,7 +46,7 @@ export default function Landing() {
   const [ventanillaAbierta, setVentanillaAbierta] = useState(true)
   const [firmaActiva, setFirmaActiva] = useState(true)
 
-  const [categoriasActivas, setCategoriasActivas] = useState<string[]>(['Padrón Activo', 'Dictaminados'])
+  const [categoriasActivas, setCategoriasActivas] = useState<string[]>([])
   const alternarCategoria = (cat: string, nuevoEstado: boolean) => {
     setCategoriasActivas((prev) => (nuevoEstado ? [...prev, cat] : prev.filter((c) => c !== cat)))
   }
@@ -114,14 +113,6 @@ export default function Landing() {
         />
       </div>
 
-      {/* BANDEJA INTERACTIVA DEL SUBMÓDULO SELECCIONADO */}
-      <BandejaSubmodulo
-        submodulo={submoduloInfoActual}
-        registros={registrosFiltrados}
-        busqueda={busqueda}
-        onBusqueda={setBusqueda}
-        onNuevoRegistro={() => setModalTipo(submoduloActivo === 'suficiencia' ? 'contratos' : submoduloActivo)}
-      />
 
       {/* DIÁLOGO MODAL DE ALTA RÁPIDA */}
       <ModalRegistroHonorarios modalTipo={modalTipo} onCerrar={() => setModalTipo(null)} />

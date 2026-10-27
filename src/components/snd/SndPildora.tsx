@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { SndIcono } from './SndIcono'
+import { Download } from 'lucide-react'
 
 /** Tipos de píldora de estatus. */
 export type TipoPildora = 'exito' | 'error' | 'alerta' | 'info' | 'neutro' | 'naranja' | 'purple' | 'inactivo'
@@ -31,7 +31,7 @@ export function SndPildoraFiltro({ activo, onCambio, children }: SndPildoraFiltr
     <span className="snd-pildora-filtro">
       <button type="button" className="pildoraFiltro" aria-pressed={activo} onClick={() => onCambio(!activo)}>
         {children}
-        <SndIcono nombre="snd-close" className="pildoraFiltro__cerrar" tamano={24} />
+       <Download size={24} />
       </button>
     </span>
   )
