@@ -1,32 +1,20 @@
 import { useState, type FormEvent } from 'react'
 import { Accordion, AccordionTab } from 'primereact/accordion'
-import { Calendar } from 'primereact/calendar'
 import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
 import {
   ModalCargaMasiva,
   SndBoton,
-  SndBotonEnlace,
   SndIcono,
   SndMensaje,
   useNotificaciones,
 } from '../components'
 import '../components/honorarios/Honorarios.css'
 import { useTitulo } from '../hooks'
+import TablaDireccion from '../components/prestadoresServicios/TablaDireccion'
+import { ToggleTabla } from '../components/prestadoresServicios/ToogleTabla'
 
-const OPCIONES_GENERO = [
-  { label: 'Mujer', value: 'M' },
-  { label: 'Hombre', value: 'H' },
-  { label: 'No binario / Prefiero no especificar', value: 'X' },
-]
 
-const OPCIONES_ESTADO_CIVIL = [
-  { label: 'Soltero(a)', value: 'SOLTERO' },
-  { label: 'Casado(a)', value: 'CASADO' },
-  { label: 'Unión libre', value: 'UNION_LIBRE' },
-  { label: 'Divorciado(a)', value: 'DIVORCIADO' },
-  { label: 'Viudo(a)', value: 'VIUDO' },
-]
 
 const OPCIONES_NACIONALIDAD = [
   { label: 'México', value: 'MEXICANA' },
@@ -241,11 +229,12 @@ export default function PadronPrestadoresServicio() {
   const [segundoApellido, setSegundoApellido] = useState('')
   const [curp, setCurp] = useState('')
   const [rfc, setRfc] = useState('')
+  const [nacionalidad, setNacionalidad] = useState<string | null>('MEXICANA')
+
   const [homoclave, setHomoclave] = useState('')
   const [fechaNacimiento, setFechaNacimiento] = useState<Date | null>(null)
   const [genero, setGenero] = useState<string | null>('M')
   const [estadoCivil, setEstadoCivil] = useState<string | null>('SOLTERO')
-  const [nacionalidad, setNacionalidad] = useState<string | null>('MEXICANA')
   const [correo, setCorreo] = useState('')
   const [telefonoCelular, setTelefonoCelular] = useState('')
   const [telefonoFijo, setTelefonoFijo] = useState('')
@@ -405,8 +394,11 @@ export default function PadronPrestadoresServicio() {
     notificar.info('Formulario reiniciado correctamente.')
   }
 
-  const guardarExpediente = (e: FormEvent) => {
+  const guardarExpediente = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const data = Object.fromEntries(formData);
+    console.log(data)
     setIntentoEnvio(true)
 
     if (
@@ -435,7 +427,35 @@ export default function PadronPrestadoresServicio() {
       'Registro en Padrón Exitoso',
     )
   }
+  /* Handlers de la seccion Datso personales */
+  const styleCURPButton = {
+    width: '13rem',
+    height: '1rem',
+    marginTop: '2rem',
+  }
 
+  const datosPersonalesPrueba = {
+    nombre: "Abraham",
+    primerApellido: "Borja",
+    segundoApellido: "Organista",
+    curp: "DDFR235689HDFRRB01",
+    rfc: "DDFR235689VF6",
+    nacionalidad: "MEXICANA"
+  }
+
+  const [curpValidado, setCurpValidado] = useState(false)
+  const handlerValidarCurp = () => {
+    setCurpValidado(true)
+    setNombres(datosPersonalesPrueba.nombre)
+    setPrimerApellido(datosPersonalesPrueba.primerApellido)
+    setSegundoApellido(datosPersonalesPrueba.segundoApellido)
+    setCurp(datosPersonalesPrueba.curp)
+    setRfc(datosPersonalesPrueba.rfc)
+    setNacionalidad(datosPersonalesPrueba.nacionalidad)
+    notificar.exito("CURP validada correctamente", "CURP")
+  }
+  // logica de la seccion direccion
+  const [showDireccion, setShowDireccion] = useState(true)
   return (
     <div className="contenedor">
       <style>{ESTILOS_ACORDEON_PADRON}</style>
@@ -523,6 +543,7 @@ export default function PadronPrestadoresServicio() {
             header={
               <div className="padron-acordeon__cabecera">
                 <div className="padron-acordeon__titulo-grupo">
+
                   <span className="padron-acordeon__icono">
                     <SndIcono nombre="snd-user--avatar" tamano={22} />
                   </span>
@@ -542,7 +563,8 @@ export default function PadronPrestadoresServicio() {
               </div>
             }
           >
-            <div className="padron-form-grid">
+            <div className="padron-form-grid" aria-label='form-personal'>
+
               <div className="campo">
                 <label htmlFor="dp-curp" className="b1sb">
                   CURP (18 caracteres) <span className="requerido">*</span>
@@ -564,14 +586,17 @@ export default function PadronPrestadoresServicio() {
 
                 <SndBoton
                   type="button"
-                  style={{ marginTop: '1rem' }}
+                  style={styleCURPButton}
                   onClick={() => {
-                    setIntentoEnvio(true)
-                    if (seccionPersonalCompleta) {
-                      setAcordeonesActivos([1])
-                      notificar.exito('Datos personales completados correctamente.')
-                    } else {
-                      notificar.alerta('Por favor completa los datos personales obligatorios.')
+                    handlerValidarCurp()
+                    if (curpValidado) {
+                      setIntentoEnvio(true)
+                      if (seccionPersonalCompleta) {
+                        setAcordeonesActivos([1])
+                        notificar.exito('Datos personales completados correctamente.')
+                      } else {
+                        notificar.alerta('Por favor completa los datos personales obligatorios.')
+                      }
                     }
                   }}
                 >
@@ -589,6 +614,7 @@ export default function PadronPrestadoresServicio() {
                   id="dp-nombres"
                   value={nombres}
                   invalid={intentoEnvio && !nombres.trim()}
+                  disabled={!curpValidado}
                   onChange={(e) => setNombres(e.target.value)}
                   placeholder="Ej. María Fernanda"
                 />
@@ -605,6 +631,7 @@ export default function PadronPrestadoresServicio() {
                   id="dp-primer-apellido"
                   value={primerApellido}
                   invalid={intentoEnvio && !primerApellido.trim()}
+                  disabled={!curpValidado}
                   onChange={(e) => setPrimerApellido(e.target.value)}
                   placeholder="Ej. López"
                 />
@@ -620,6 +647,7 @@ export default function PadronPrestadoresServicio() {
                 <InputText
                   id="dp-segundo-apellido"
                   value={segundoApellido}
+                  disabled={!curpValidado}
                   onChange={(e) => setSegundoApellido(e.target.value)}
                   placeholder="Ej. Ríos"
                 />
@@ -634,6 +662,7 @@ export default function PadronPrestadoresServicio() {
                 <InputText
                   id="dp-rfc"
                   maxLength={10}
+                  disabled={!curpValidado}
                   value={rfc}
                   invalid={intentoEnvio && rfc.trim().length < 10}
                   onChange={(e) => setRfc(e.target.value.toUpperCase())}
@@ -652,6 +681,7 @@ export default function PadronPrestadoresServicio() {
                   inputId="dp-nacionalidad"
                   options={OPCIONES_NACIONALIDAD}
                   value={nacionalidad}
+                  disabled={!curpValidado}
                   onChange={(e) => setNacionalidad(e.value)}
                   appendTo="self"
                 />
@@ -659,11 +689,11 @@ export default function PadronPrestadoresServicio() {
 
             </div>
             <SndBoton
-              type="button"
+              type="submit"
               style={{ marginTop: '1rem' }}
               onClick={() => {
                 setIntentoEnvio(true)
-                if (seccionPersonalCompleta) {
+                if (seccionPersonalCompleta) { // if (seccionPersonalCompleta)
                   setAcordeonesActivos([1])
                   notificar.exito('Datos personales completados correctamente.')
                 } else {
@@ -701,152 +731,165 @@ export default function PadronPrestadoresServicio() {
               </div>
             }
           >
-            <div className="padron-form-grid">
+            <ToggleTabla tabla={<TablaDireccion />} showTable={showDireccion}>
+              <div className="padron-form-grid">
+                <div className="campo padron-form-grid__col-2">
+                  <label htmlFor="dir-calle" className="b1sb">
+                    Calle o Avenida <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="dir-calle"
+                    value={calle}
+                    invalid={intentoEnvio && !calle.trim()}
+                    onChange={(e) => setCalle(e.target.value)}
+                    placeholder="Ej. Av. Insurgentes Sur"
+                  />
+                  {intentoEnvio && !calle.trim() && (
+                    <span className="campo__error">La calle o avenida es obligatoria.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="dir-num-ext" className="b1sb">
+                    Número Exterior <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="dir-num-ext"
+                    value={numeroExterior}
+                    invalid={intentoEnvio && !numeroExterior.trim()}
+                    onChange={(e) => setNumeroExterior(e.target.value)}
+                    placeholder="Ej. 1735"
+                  />
+                  {intentoEnvio && !numeroExterior.trim() && (
+                    <span className="campo__error">Indica el número exterior o S/N.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="dir-num-int" className="b1sb">
+                    Número Interior / Depto.
+                  </label>
+                  <InputText
+                    id="dir-num-int"
+                    value={numeroInterior}
+                    onChange={(e) => setNumeroInterior(e.target.value)}
+                    placeholder="Ej. Piso 4, Int. 402"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="dir-cp" className="b1sb">
+                    Código Postal <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="dir-cp"
+                    maxLength={5}
+                    value={codigoPostal}
+                    invalid={intentoEnvio && !codigoPostal.trim()}
+                    onChange={(e) => setCodigoPostal(e.target.value.replace(/\D/g, ''))}
+                    placeholder="Ej. 01020"
+                  />
+                  {intentoEnvio && !codigoPostal.trim() && (
+                    <span className="campo__error">El código postal es obligatorio.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="dir-colonia" className="b1sb">
+                    Colonia<span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="dir-colonia"
+                    value={colonia}
+                    invalid={intentoEnvio && !colonia.trim()}
+                    onChange={(e) => setColonia(e.target.value)}
+                    placeholder="Ej. Guadalupe Inn"
+                  />
+                  {intentoEnvio && !colonia.trim() && (
+                    <span className="campo__error">La colonia es obligatoria.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="dir-pais" className="b1sb">
+                    País <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    inputId="dir-pais"
+                    options={OPCIONES_PAIS}
+                    value={pais}
+                    invalid={intentoEnvio && !pais.trim()}
+                    onChange={(e) => setPais(e.value ?? '')}
+                    placeholder="Selecciona país"
+                    appendTo="self"
+                  />
+                  {intentoEnvio && !pais.trim() && (
+                    <span className="campo__error">El país es obligatorio.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="dir-entidad" className="b1sb">
+                    Estado<span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    inputId="dir-entidad"
+                    options={ENTIDADES_FEDERATIVAS}
+                    value={entidadFederativa}
+                    onChange={(e) => setEntidadFederativa(e.value)}
+                    placeholder="Selecciona entidad"
+                    appendTo="self"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="dir-municipio" className="b1sb">
+                    Municipio o Alcaldía <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="dir-municipio"
+                    value={municipioAlcaldia}
+                    invalid={intentoEnvio && !municipioAlcaldia.trim()}
+                    onChange={(e) => setMunicipioAlcaldia(e.target.value)}
+                    placeholder="Ej. Álvaro Obregón"
+                  />
+                  {intentoEnvio && !municipioAlcaldia.trim() && (
+                    <span className="campo__error">El municipio o alcaldía es obligatorio.</span>
+                  )}
+                </div>
 
 
-              <div className="campo padron-form-grid__col-2">
-                <label htmlFor="dir-calle" className="b1sb">
-                  Calle o Avenida <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="dir-calle"
-                  value={calle}
-                  invalid={intentoEnvio && !calle.trim()}
-                  onChange={(e) => setCalle(e.target.value)}
-                  placeholder="Ej. Av. Insurgentes Sur"
-                />
-                {intentoEnvio && !calle.trim() && (
-                  <span className="campo__error">La calle o avenida es obligatoria.</span>
-                )}
+
               </div>
+            </ToggleTabla>
+            {
+              !showDireccion ?
+                (<SndBoton
+                  type="button"
+                  style={{ marginTop: '1rem' }}
+                  onClick={() => {
+                    setIntentoEnvio(true)
+                    if (seccionDireccionCompleta) {
+                      setAcordeonesActivos([2])
+                      notificar.exito('Datos de domicilio guardados temporalmente.')
+                    } else {
+                      notificar.alerta('Por favor completa los datos de domicilio obligatorios.')
+                    }
+                  }}
+                >
+                  Guardar dirección
+                </SndBoton>)
+                : (<SndBoton
+                  type="button"
+                  style={{ marginTop: '1rem' }}
+                  onClick={() => {
+                    setShowDireccion(false)
+                  }}
+                >
+                  Direccion nueva
+                </SndBoton>)
+            }
 
-              <div className="campo">
-                <label htmlFor="dir-num-ext" className="b1sb">
-                  Número Exterior <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="dir-num-ext"
-                  value={numeroExterior}
-                  invalid={intentoEnvio && !numeroExterior.trim()}
-                  onChange={(e) => setNumeroExterior(e.target.value)}
-                  placeholder="Ej. 1735"
-                />
-                {intentoEnvio && !numeroExterior.trim() && (
-                  <span className="campo__error">Indica el número exterior o S/N.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="dir-num-int" className="b1sb">
-                  Número Interior / Depto.
-                </label>
-                <InputText
-                  id="dir-num-int"
-                  value={numeroInterior}
-                  onChange={(e) => setNumeroInterior(e.target.value)}
-                  placeholder="Ej. Piso 4, Int. 402"
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="dir-cp" className="b1sb">
-                  Código Postal <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="dir-cp"
-                  maxLength={5}
-                  value={codigoPostal}
-                  invalid={intentoEnvio && !codigoPostal.trim()}
-                  onChange={(e) => setCodigoPostal(e.target.value.replace(/\D/g, ''))}
-                  placeholder="Ej. 01020"
-                />
-                {intentoEnvio && !codigoPostal.trim() && (
-                  <span className="campo__error">El código postal es obligatorio.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="dir-colonia" className="b1sb">
-                  Colonia<span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="dir-colonia"
-                  value={colonia}
-                  invalid={intentoEnvio && !colonia.trim()}
-                  onChange={(e) => setColonia(e.target.value)}
-                  placeholder="Ej. Guadalupe Inn"
-                />
-                {intentoEnvio && !colonia.trim() && (
-                  <span className="campo__error">La colonia es obligatoria.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="dir-pais" className="b1sb">
-                  País <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="dir-pais"
-                  options={OPCIONES_PAIS}
-                  value={pais}
-                  invalid={intentoEnvio && !pais.trim()}
-                  onChange={(e) => setPais(e.value ?? '')}
-                  placeholder="Selecciona país"
-                  appendTo="self"
-                />
-                {intentoEnvio && !pais.trim() && (
-                  <span className="campo__error">El país es obligatorio.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="dir-entidad" className="b1sb">
-                  Estado<span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="dir-entidad"
-                  options={ENTIDADES_FEDERATIVAS}
-                  value={entidadFederativa}
-                  onChange={(e) => setEntidadFederativa(e.value)}
-                  placeholder="Selecciona entidad"
-                  appendTo="self"
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="dir-municipio" className="b1sb">
-                  Municipio o Alcaldía <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="dir-municipio"
-                  value={municipioAlcaldia}
-                  invalid={intentoEnvio && !municipioAlcaldia.trim()}
-                  onChange={(e) => setMunicipioAlcaldia(e.target.value)}
-                  placeholder="Ej. Álvaro Obregón"
-                />
-                {intentoEnvio && !municipioAlcaldia.trim() && (
-                  <span className="campo__error">El municipio o alcaldía es obligatorio.</span>
-                )}
-              </div>
-
-
-
-            </div>
-            <SndBoton
-              type="button"
-              style={{ marginTop: '1rem' }}
-              onClick={() => {
-                setIntentoEnvio(true)
-                if (seccionDireccionCompleta) {
-                  setAcordeonesActivos([2])
-                  notificar.exito('Datos de domicilio guardados temporalmente.')
-                } else {
-                  notificar.alerta('Por favor completa los datos de domicilio obligatorios.')
-                }
-              }}
-            >
-              Guardar dirección
-            </SndBoton>
           </AccordionTab>
 
           {/* =====================================================================
