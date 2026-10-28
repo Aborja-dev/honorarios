@@ -475,13 +475,11 @@ export default function AltaModelosContratos() {
             Información del modelo de contrato
           </h1>
           <p className="sh0m color--principal" style={{ margin: '4px 0 0' }}>
-            Configuración de datos del contrato, anexo de actividades, entregables, escolaridad y experiencia laboral
+            Registro de datos del contrato, actividades, entregables, escolaridad y experiencia laboral
           </p>
         </div>
         <div className="fila">
-          <SndBoton variante="secundario" type="button" onClick={cargarDatosEjemplo}>
-            Cargar ejemplo
-          </SndBoton>
+
           <SndBotonEnlace variante="secundario" to="/admin/modelo-contrato">
             Ver catálogo de modelos
           </SndBotonEnlace>
@@ -560,7 +558,8 @@ export default function AltaModelosContratos() {
                       1. Datos Contrato
                     </span>
                     <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Clave de plantilla, unidad administrativa, vigencia, partida presupuestal y objeto
+                      Información general del contrato por honorarios
+
                     </span>
                   </div>
                 </div>
@@ -574,14 +573,14 @@ export default function AltaModelosContratos() {
             <div className="padron-form-grid">
               <div className="campo">
                 <label htmlFor="dc-clave" className="b1sb">
-                  Clave del Modelo <span className="requerido">*</span>
+                  Clave del Modelo de Contrato<span className="requerido">*</span>
                 </label>
                 <InputText
                   id="dc-clave"
                   value={claveModelo}
                   invalid={intentoEnvio && !claveModelo.trim()}
                   onChange={(e) => setClaveModelo(e.target.value.toUpperCase())}
-                  placeholder="Ej. MOD-JUR-2026-04"
+                  placeholder="Ej. 000000001"
                 />
                 {intentoEnvio && !claveModelo.trim() && (
                   <span className="campo__error">La clave del modelo es obligatoria.</span>
@@ -604,19 +603,6 @@ export default function AltaModelosContratos() {
                 )}
               </div>
 
-              <div className="campo">
-                <label htmlFor="dc-tipo" className="b1sb">
-                  Tipo de Contrato / Régimen <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="dc-tipo"
-                  options={OPCIONES_TIPO_MODELO}
-                  value={tipoContrato}
-                  onChange={(e) => setTipoContrato(e.value)}
-                  placeholder="Selecciona tipo de contrato"
-                  appendTo="self"
-                />
-              </div>
 
               <div className="campo">
                 <label htmlFor="dc-unidad" className="b1sb">
@@ -632,58 +618,19 @@ export default function AltaModelosContratos() {
                 />
               </div>
 
-              <div className="campo">
-                <label htmlFor="dc-partida" className="b1sb">
-                  Partida Presupuestal <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="dc-partida"
-                  options={OPCIONES_PARTIDA}
-                  value={partidaPresupuestal}
-                  onChange={(e) => setPartidaPresupuestal(e.value)}
-                  placeholder="Selecciona partida"
-                  appendTo="self"
-                />
-              </div>
 
-              <div className="campo">
-                <label htmlFor="dc-monto" className="b1sb">
-                  Honorarios Brutos Mensuales ($ MXN) <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="dc-monto"
-                  value={montoBrutoMensual}
-                  invalid={intentoEnvio && !montoBrutoMensual.trim()}
-                  onChange={(e) => setMontoBrutoMensual(e.target.value.replace(/[^0-9.]/g, ''))}
-                  placeholder="Ej. 38500.00"
-                />
-                {intentoEnvio && !montoBrutoMensual.trim() && (
-                  <span className="campo__error">Indica el monto bruto mensual referencial.</span>
-                )}
-              </div>
 
-              <div className="campo">
-                <label htmlFor="dc-periodicidad-pago" className="b1sb">
-                  Periodicidad de Pago
-                </label>
-                <Dropdown
-                  inputId="dc-periodicidad-pago"
-                  options={OPCIONES_PERIODICIDAD_PAGO}
-                  value={periodicidadPago}
-                  onChange={(e) => setPeriodicidadPago(e.value)}
-                  appendTo="self"
-                />
-              </div>
+
 
               <div className="campo">
                 <label htmlFor="dc-oficio" className="b1sb">
-                  Oficio de Dictamen Jurídico
+                  Proyecto / Objeto del contrato
                 </label>
                 <InputText
                   id="dc-oficio"
                   value={oficioDictamen}
                   onChange={(e) => setOficioDictamen(e.target.value)}
-                  placeholder="Ej. UAJ/DGNC/2026/0418"
+                  placeholder="Ej. Proyecto para servicios profesionales"
                 />
               </div>
 
@@ -727,14 +674,14 @@ export default function AltaModelosContratos() {
 
               <div className="campo padron-form-grid__col-3">
                 <label htmlFor="dc-objeto" className="b1sb">
-                  Objeto del Contrato <span className="requerido">*</span>
+                  Comentario
                 </label>
                 <textarea
                   id="dc-objeto"
                   className={`padron-textarea ${intentoEnvio && !objetoContrato.trim() ? 'padron-textarea--invalido' : ''}`}
                   value={objetoContrato}
                   onChange={(e) => setObjetoContrato(e.target.value)}
-                  placeholder="Describe el objeto contractual y alcance jurídico de la plantilla..."
+                  placeholder="Comentario adiciónal al modelo de contrato..."
                 />
                 {intentoEnvio && !objetoContrato.trim() && (
                   <span className="campo__error">El objeto del contrato es obligatorio.</span>
@@ -774,7 +721,7 @@ export default function AltaModelosContratos() {
                       2. Actividades
                     </span>
                     <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Funciones sustantivas, periodicidad, modalidad y descripción del anexo técnico
+
                     </span>
                   </div>
                 </div>
@@ -786,37 +733,13 @@ export default function AltaModelosContratos() {
             }
           >
             <div className="padron-form-grid">
-              <div className="campo">
-                <label htmlFor="act-clave" className="b1sb">
-                  Clave de Actividad / Anexo
-                </label>
-                <InputText
-                  id="act-clave"
-                  value={claveActividad}
-                  onChange={(e) => setClaveActividad(e.target.value.toUpperCase())}
-                  placeholder="Ej. ACT-HON-01"
-                />
-              </div>
 
-              <div className="campo padron-form-grid__col-2">
-                <label htmlFor="act-funcion" className="b1sb">
-                  Función Principal / Actividad Sustantiva <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="act-funcion"
-                  value={funcionPrincipal}
-                  invalid={intentoEnvio && !funcionPrincipal.trim()}
-                  onChange={(e) => setFuncionPrincipal(e.target.value)}
-                  placeholder="Ej. Análisis y dictaminación técnico-jurídica de expedientes contractuales"
-                />
-                {intentoEnvio && !funcionPrincipal.trim() && (
-                  <span className="campo__error">La función principal es obligatoria.</span>
-                )}
-              </div>
+
+
 
               <div className="campo">
                 <label htmlFor="act-periodicidad" className="b1sb">
-                  Periodicidad de Ejecución <span className="requerido">*</span>
+                  ID actividad <span className="requerido">*</span>
                 </label>
                 <Dropdown
                   inputId="act-periodicidad"
@@ -827,9 +750,10 @@ export default function AltaModelosContratos() {
                 />
               </div>
 
+
               <div className="campo">
                 <label htmlFor="act-modalidad" className="b1sb">
-                  Modalidad del Servicio
+                  Tipo de actividad
                 </label>
                 <Dropdown
                   inputId="act-modalidad"
@@ -841,44 +765,56 @@ export default function AltaModelosContratos() {
               </div>
 
               <div className="campo">
-                <label htmlFor="act-nivel" className="b1sb">
-                  Nivel de Homologación
+                <label htmlFor="dc-fecha-inicio" className="b1sb">
+                  Fecha de Inicio<span className="requerido">*</span>
                 </label>
-                <Dropdown
-                  inputId="act-nivel"
-                  options={OPCIONES_NIVEL_HOMOLOGACION}
-                  value={nivelHomologacion}
-                  onChange={(e) => setNivelHomologacion(e.value)}
+                <Calendar
+                  inputId="dc-fecha-inicio"
+                  value={fechaInicioVigencia}
+                  invalid={intentoEnvio && !fechaInicioVigencia}
+                  onChange={(e) => setFechaInicioVigencia((e.value as Date | null) ?? null)}
+                  dateFormat="dd/mm/yy"
+                  placeholder="dd/mm/aaaa"
+                  showIcon
                   appendTo="self"
                 />
-              </div>
-
-              <div className="campo padron-form-grid__col-3">
-                <label htmlFor="act-supervisora" className="b1sb">
-                  Área Supervisora / Administradora de las Actividades <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="act-supervisora"
-                  value={areaSupervisora}
-                  invalid={intentoEnvio && !areaSupervisora.trim()}
-                  onChange={(e) => setAreaSupervisora(e.target.value)}
-                  placeholder="Ej. Dirección de Normatividad y Consulta"
-                />
-                {intentoEnvio && !areaSupervisora.trim() && (
-                  <span className="campo__error">Indica el área encargada de supervisar las actividades.</span>
+                {intentoEnvio && !fechaInicioVigencia && (
+                  <span className="campo__error">Selecciona la fecha de inicio de vigencia.</span>
                 )}
               </div>
 
+              <div className="campo">
+                <label htmlFor="dc-fecha-fin" className="b1sb">
+                  Fecha de Fin <span className="requerido">*</span>
+                </label>
+                <Calendar
+                  inputId="dc-fecha-fin"
+                  value={fechaFinVigencia}
+                  invalid={intentoEnvio && !fechaFinVigencia}
+                  onChange={(e) => setFechaFinVigencia((e.value as Date | null) ?? null)}
+                  dateFormat="dd/mm/yy"
+                  placeholder="dd/mm/aaaa"
+                  showIcon
+                  appendTo="self"
+                />
+                {intentoEnvio && !fechaFinVigencia && (
+                  <span className="campo__error">Selecciona la fecha de término de vigencia.</span>
+                )}
+              </div>
+
+
+
+
               <div className="campo padron-form-grid__col-3">
                 <label htmlFor="act-descripcion" className="b1sb">
-                  Descripción Detallada de Actividades <span className="requerido">*</span>
+                  Descripción actividad <span className="requerido">*</span>
                 </label>
                 <textarea
                   id="act-descripcion"
                   className={`padron-textarea ${intentoEnvio && !descripcionActividades.trim() ? 'padron-textarea--invalido' : ''}`}
                   value={descripcionActividades}
                   onChange={(e) => setDescripcionActividades(e.target.value)}
-                  placeholder="Enlista las actividades específicas que integrarán el anexo técnico del contrato..."
+                  placeholder="Describe la actividad específica que integrarán el contrato..."
                 />
                 {intentoEnvio && !descripcionActividades.trim() && (
                   <span className="campo__error">La descripción de actividades es obligatoria.</span>
@@ -918,7 +854,7 @@ export default function AltaModelosContratos() {
                       3. Entregables
                     </span>
                     <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Productos esperados, periodicidad de entrega, formato y criterios de validación
+                      Entregables esperados, fecha de entrega, impacto y complejidad.
                     </span>
                   </div>
                 </div>
@@ -932,17 +868,35 @@ export default function AltaModelosContratos() {
             <div className="padron-form-grid">
               <div className="campo padron-form-grid__col-2">
                 <label htmlFor="ent-nombre" className="b1sb">
-                  Nombre o Denominación del Entregable <span className="requerido">*</span>
+                  Nombre del entregable <span className="requerido">*</span>
                 </label>
                 <InputText
                   id="ent-nombre"
                   value={nombreEntregable}
                   invalid={intentoEnvio && !nombreEntregable.trim()}
                   onChange={(e) => setNombreEntregable(e.target.value)}
-                  placeholder="Ej. Informe mensual de actividades y relación de expedientes dictaminados"
+                  placeholder="Ej. Informe mensual de actividades y relación de expedientes"
                 />
                 {intentoEnvio && !nombreEntregable.trim() && (
                   <span className="campo__error">El nombre del entregable es obligatorio.</span>
+                )}
+              </div>
+              <div className="campo">
+                <label htmlFor="dc-fecha-fin" className="b1sb">
+                  Fecha entregable <span className="requerido">*</span>
+                </label>
+                <Calendar
+                  inputId="dc-fecha-fin"
+                  value={fechaFinVigencia}
+                  invalid={intentoEnvio && !fechaFinVigencia}
+                  onChange={(e) => setFechaFinVigencia((e.value as Date | null) ?? null)}
+                  dateFormat="dd/mm/yy"
+                  placeholder="dd/mm/aaaa"
+                  showIcon
+                  appendTo="self"
+                />
+                {intentoEnvio && !fechaFinVigencia && (
+                  <span className="campo__error">Selecciona la fecha de término de vigencia.</span>
                 )}
               </div>
 
@@ -950,7 +904,7 @@ export default function AltaModelosContratos() {
                 <label htmlFor="ent-tipo" className="b1sb">
                   Tipo de Entregable <span className="requerido">*</span>
                 </label>
-                <Dropdown
+                <InputText
                   inputId="ent-tipo"
                   options={OPCIONES_TIPO_ENTREGABLE}
                   value={tipoEntregable}

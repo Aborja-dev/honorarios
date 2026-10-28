@@ -114,7 +114,7 @@ export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
   },
   {
     id: 'modelo',
-    titulo: landingTextos.tituloValidarCurp,
+    titulo: landingTextos.tituloModelo,
     subtitulo: 'Plantillas Jurídicas Autorizadas',
     rutaDedicada: '/admin/modelo-contrato',
     metrica: '6 plantillas',
@@ -123,7 +123,7 @@ export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
     estadoTexto: 'Dictaminado',
     estadoTipo: 'purple',
   },
-    {
+  {
     id: 'suficiencia',
     titulo: landingTextos.tituloModelo,
     subtitulo: 'Plantillas Jurídicas Autorizadas',

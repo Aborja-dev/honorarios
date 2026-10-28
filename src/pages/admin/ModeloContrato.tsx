@@ -34,7 +34,7 @@ export default function ModeloContrato() {
             Modelo de Contrato
           </h1>
           <p className="sh0m color--principal" style={{ margin: '4px 0 0' }}>
-            Catálogo de plantillas jurídicas y clausulados dictaminados para Honorarios
+
           </p>
         </div>
         <div className="fila">
