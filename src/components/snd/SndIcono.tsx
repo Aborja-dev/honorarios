@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { useSndConfig } from '../../lib/sndConfig'
 import { cn } from '../../utils/cn'
 
@@ -55,6 +55,8 @@ export interface SndIconoProps {
   etiqueta?: string
   /** Conserva los colores propios del SVG en lugar de heredar `currentColor`. */
   colorOriginal?: boolean
+  /** Estilos en línea aplicados al contenedor del ícono. */
+  style?: CSSProperties
   /** Criterio de dimensionado: `caja` (cuadrado), `alto` o `ancho` (logos no cuadrados). */
   ajuste?: 'caja' | 'alto' | 'ancho'
   /** Clases adicionales; sirven para colorear con las clases del SND (`color--azul500`). */
@@ -69,6 +71,7 @@ export function SndIcono({
   colorOriginal = false,
   ajuste = 'caja',
   className,
+  style,
 }: SndIconoProps) {
   const config = useSndConfig()
   const [svg, setSvg] = useState<string | null>(null)
@@ -107,7 +110,7 @@ export function SndIcono({
         'snd-icono',
         className,
       )}
-      style={tamano ? { width: tamano, height: tamano } : undefined}
+      style={{ ...(tamano ? { width: tamano, height: tamano } : {}), ...style }}
       role={etiqueta ? 'img' : undefined}
       aria-label={etiqueta || undefined}
       aria-hidden={etiqueta ? undefined : true}

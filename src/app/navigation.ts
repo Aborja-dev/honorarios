@@ -12,7 +12,7 @@ export const MENU_LATERAL_HONORARIOS: ItemMenuLateral[] = [
   { texto: 'Modelo de Contrato', icono: 'snd-edit', ruta: '/admin/modelo-contrato' },
   { texto: 'Mis Entregables', icono: 'snd-calendar', ruta: '/user/entregables' },
   { texto: 'Firma e.firma (FIEL)', icono: 'snd-checkmark--filled', ruta: '/prueba-fiel' },
-  { texto: 'Validar Identidad', icono: 'snd-user', ruta: '/validar-identidad' },
+  { texto: 'Validador de Compatibilidad', icono: 'snd-user', ruta: '/validar-identidad' },
 ]
 
 /**

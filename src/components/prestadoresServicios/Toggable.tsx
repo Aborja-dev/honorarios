@@ -2,10 +2,22 @@ import React from 'react'
 
 
 
-const Toggable = ({children}) => {
+export const Toggable = ({children, EmptyTemplate, toogle}: {
+  children: React.ReactNode,
+  EmptyTemplate: React.ReactNode,
+  toogle: boolean
+}) => {
+  if (toogle) {
+    return (
+      <>
+        {children}
+      </>
+    )
+  }
   return (
-    <div>Toggable</div>
+    <>
+      {EmptyTemplate}
+    </>
   )
 }
 
-export default Toggable

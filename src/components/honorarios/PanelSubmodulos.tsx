@@ -79,16 +79,17 @@ export function PanelSubmodulos({
                     >
                       {true ? landingTextos.botonCargaMasiva : ''}
                     </SndBoton>
-                    <SndBoton
+                    <SndBotonEnlace
                       style={{
                         fontSize: "0.8rem",
                         padding: "1rem 0.8rem"
                       }}
                       variante="secundario"
+                      to={sub.rutaDedicada}
                       onClick={(e) => e.stopPropagation()}
                     >
                       {landingTextos.botonCargaIndividual}
-                    </SndBoton>
+                    </SndBotonEnlace>
                   </div>
                 </div>
               </article>
