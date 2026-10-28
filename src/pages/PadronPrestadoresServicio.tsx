@@ -287,7 +287,8 @@ export default function PadronPrestadoresServicio() {
 
   const [showEscolaridad, setShowEscolaridad] = useState(true)
   const [showExperiencia, setShowExperiencia] = useState(true)
-
+  const [showDireccion, setShowDireccion] = useState(true)
+  const [direcciones, setDirecciones] = useState<DireccionItem[]>(DATOS_EJEMPLO)
   // Validaciones por sección
   const seccionPersonalCompleta = Boolean(
     nombres.trim() &&
@@ -469,8 +470,7 @@ export default function PadronPrestadoresServicio() {
 
 
   // logica de la seccion direccion
-  const [showDireccion, setShowDireccion] = useState(true)
-  const [direcciones, setDirecciones] = useState<DireccionItem[]>(DATOS_EJEMPLO)
+
   const handleDireccionCompleto = () => {
     const newDireccion: DireccionItem = {
       calle,
