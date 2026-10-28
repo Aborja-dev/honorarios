@@ -107,8 +107,8 @@ export default function PadronPrestadoresServicio() {
   const [municipioAlcaldia, setMunicipioAlcaldia] = useState('')
   const [entidadFederativa, setEntidadFederativa] = useState<string | null>('Ciudad de México')
   const [referenciasDomicilio, setReferenciasDomicilio] = useState('')
-  const [fechaInicio, setFechaInicio] = useState()
-  const [fechaFin, setFechaFin] = useState()
+  const [fechaInicio, setFechaInicio] = useState<Date | null>(null)
+  const [fechaFin, setFechaFin] = useState<Date | null>(null)
   // 3. Estado: Escolaridad
   const [nivelEstudios, setNivelEstudios] = useState<string | null>('LICENCIATURA')
   const [carrera, setCarrera] = useState('')
@@ -158,7 +158,7 @@ export default function PadronPrestadoresServicio() {
     seccionExperienciaCompleta,
   ].filter(Boolean).length
 
-  const expandirTodo = () => setAcordeonesActivos([0, 1, 2, 3])
+  const expandirTodo = () => setAcordeonesActivos([0, 1, 2, 3, 4])
   const colapsarTodo = () => setAcordeonesActivos([])
 
 
@@ -216,10 +216,10 @@ export default function PadronPrestadoresServicio() {
       !seccionExperienciaCompleta
     ) {
       const pendientes: number[] = []
-      if (!seccionPersonalCompleta) pendientes.push(0)
-      if (!seccionDireccionCompleta) pendientes.push(1)
-      if (!seccionEscolaridadCompleta) pendientes.push(2)
-      if (!seccionExperienciaCompleta) pendientes.push(3)
+      if (!seccionPersonalCompleta) pendientes.push(0, 1)
+      if (!seccionDireccionCompleta) pendientes.push(2)
+      if (!seccionEscolaridadCompleta) pendientes.push(3)
+      if (!seccionExperienciaCompleta) pendientes.push(4)
       setAcordeonesActivos(pendientes)
       notificar.error(
         'Por favor completa los campos obligatorios marcados con asterisco (*) en todas las secciones.',
@@ -295,7 +295,7 @@ export default function PadronPrestadoresServicio() {
             <InputText aria-label="Buscar por nombre" placeholder="Ramo" />
             <InputText aria-label="Buscar por CURP" placeholder="UR" />
             <InputText aria-label="Buscar por RFC" placeholder="CURP" />
-            <SndBoton  type="button">Buscar</SndBoton>
+            <SndBoton type="button">Buscar</SndBoton>
             <SndBoton variante="secundario" type="button" onClick={() => setShowFormulario(!showFormulario)}>
               Nuevo prestador
             </SndBoton>
@@ -336,7 +336,7 @@ export default function PadronPrestadoresServicio() {
         </div>
       )}
 
-      {/* FORMULARIO CON LOS CUATRO ACORDEONES */}
+      {/* FORMULARIO CON LOS ACORDEONES */}
       <Toggable toogle={showFormulario} EmptyTemplate={<EmptyForm />}>
         <form onSubmit={guardarExpediente} noValidate style={{ marginTop: 20 }}>
           <Accordion
@@ -345,35 +345,51 @@ export default function PadronPrestadoresServicio() {
             onTabChange={(e) => setAcordeonesActivos(e.index)}
             className="padron-acordeon"
           >
-            {/* =====================================================================
-              ACORDEÓN 1: DATOS PERSONALES
-             ===================================================================== */}
+            {/* VALIDACIÓN DE IDENTIDAD Y VIGENCIA */}
             <AccordionTab
               header={
                 <div className="padron-acordeon__cabecera">
                   <div className="padron-acordeon__titulo-grupo">
-
                     <span className="padron-acordeon__icono">
                       <SndIcono nombre="snd-user--avatar" tamano={22} />
                     </span>
                     <div>
                       <span className="sh0b" style={{ display: 'block' }}>
-                        1. Datos Personales
+                        Validación de CURP
                       </span>
                       <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                        Nombre, CURP, RFC con homoclave
+                        CURP y periodo de prestación del servicio
                       </span>
                     </div>
                   </div>
-                  <span className={`pildora pildora--${seccionPersonalCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                  <span className={`pildora pildora--${curpValidado ? 'exito' : 'alerta'} snd-pildora`}>
                     <span className="pildora__dot" aria-hidden="true" />
-                    {seccionPersonalCompleta ? 'Completado' : 'Por capturar'}
+                    {curpValidado ? 'Validada' : 'Pendiente'}
                   </span>
                 </div>
               }
             >
-              <div className="padron-form-grid" aria-label='form-personal'>
-
+              <div className="padron-form-grid">
+                <div className="padron-form-grid__busqueda">
+                  <div className="campo">
+                    <label htmlFor="dp-ramo" className="b1sb">Ramo</label>
+                    <InputText
+                      id="dp-ramo"
+                      className="padron-form-grid__filtro"
+                      defaultValue="06 - Hacienda y Crédito Público"
+                      disabled
+                    />
+                  </div>
+                  <div className="campo">
+                    <label htmlFor="dp-ur" className="b1sb">UR</label>
+                    <InputText
+                      id="dp-ur"
+                      className="padron-form-grid__filtro"
+                      defaultValue="000 - Secretaría de Hacienda y Crédito Público"
+                      disabled
+                    />
+                  </div>
+                </div>
                 <div className="campo">
                   <label htmlFor="dp-curp" className="b1sb">
                     CURP (18 caracteres) <span className="requerido">*</span>
@@ -403,7 +419,6 @@ export default function PadronPrestadoresServicio() {
                     appendTo="self"
                   />
                 </div>
-
                 <div className="campo">
                   <label htmlFor="fecha-fin" className="b1sb">
                     Fecha de fin
@@ -426,7 +441,7 @@ export default function PadronPrestadoresServicio() {
                       if (curpValidado) {
                         setIntentoEnvio(true)
                         if (seccionPersonalCompleta) {
-                          setAcordeonesActivos([1])
+                          setAcordeonesActivos([2])
                           notificar.exito('Datos personales completados correctamente.')
                         } else {
                           notificar.alerta('Por favor completa los datos personales obligatorios.')
@@ -437,11 +452,37 @@ export default function PadronPrestadoresServicio() {
                     Validar posible compatibilidad
                   </SndBoton>
                 </div>
-                <div className="campo">
-                </div>
-                <div className="campo">
-                </div>
+              </div>
+            </AccordionTab>
 
+            {/* =====================================================================
+              ACORDEÓN 1: DATOS PERSONALES
+             ===================================================================== */}
+            <AccordionTab
+              header={
+                <div className="padron-acordeon__cabecera">
+                  <div className="padron-acordeon__titulo-grupo">
+
+                    <span className="padron-acordeon__icono">
+                      <SndIcono nombre="snd-user--avatar" tamano={22} />
+                    </span>
+                    <div>
+                      <span className="sh0b" style={{ display: 'block' }}>
+                        1. Datos Personales
+                      </span>
+                      <span className="sdr" style={{ color: 'var(--neutro600)' }}>
+                        Nombre, apellidos y RFC con homoclave
+                      </span>
+                    </div>
+                  </div>
+                  <span className={`pildora pildora--${seccionPersonalCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                    <span className="pildora__dot" aria-hidden="true" />
+                    {seccionPersonalCompleta ? 'Completado' : 'Por capturar'}
+                  </span>
+                </div>
+              }
+            >
+              <div className="padron-form-grid" aria-label='form-personal'>
                 <div className="campo">
                   <label htmlFor="dp-nombres" className="b1sb">
                     Nombre(s) <span className="requerido">*</span>
@@ -530,7 +571,7 @@ export default function PadronPrestadoresServicio() {
                 onClick={() => {
                   setIntentoEnvio(true)
                   if (seccionPersonalCompleta) { // if (seccionPersonalCompleta)
-                    setAcordeonesActivos([1])
+                    setAcordeonesActivos([2])
                     notificar.exito('Datos personales completados correctamente.')
                   } else {
                     notificar.alerta('Por favor completa los datos personales obligatorios.')
@@ -578,7 +619,7 @@ export default function PadronPrestadoresServicio() {
                 onSiguiente={() => {
                   setIntentoEnvio(true)
                   if (seccionDireccionCompleta) {
-                    setAcordeonesActivos([2])
+                    setAcordeonesActivos([3])
                     notificar.exito('Datos de domicilio guardados temporalmente.')
                   } else {
                     notificar.alerta('Por favor completa los datos de domicilio obligatorios.')
@@ -717,7 +758,7 @@ export default function PadronPrestadoresServicio() {
                   onClick={() => {
                     setIntentoEnvio(true)
                     if (seccionEscolaridadCompleta) {
-                      setAcordeonesActivos([3])
+                      setAcordeonesActivos([4])
                       notificar.exito('Datos de escolaridad guardados temporalmente.')
                     } else {
                       notificar.alerta('Por favor completa los datos de escolaridad obligatorios.')
@@ -859,7 +900,7 @@ export default function PadronPrestadoresServicio() {
                   onClick={() => {
                     setIntentoEnvio(true)
                     if (seccionExperienciaCompleta) {
-                      setAcordeonesActivos([0])
+                      setAcordeonesActivos([1])
                       notificar.exito('Datos de experiencia laboral guardados temporalmente.')
                     } else {
                       notificar.alerta('Por favor completa los datos de experiencia laboral obligatorios.')
