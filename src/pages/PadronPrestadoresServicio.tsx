@@ -18,61 +18,17 @@ import TablaEscolaridad from '../components/prestadoresServicios/TablaEscolarida
 import TablaExperiencia from '../components/prestadoresServicios/TablaExperiencia'
 import { ToggleTabla } from '../components/prestadoresServicios/ToogleTabla'
 import { DATOS_EJEMPLO_DIRECCIONES, DATOS_PERSONALES_PRUEBA } from './PadronPrestadoresServicio.mock'
+import { Calendar } from 'primereact/calendar'
 
-
+const EmptyForm = () =>{
+  return (<></>)
+}
 
 const OPCIONES_NACIONALIDAD = [
   { label: 'México', value: 'MEXICANA' },
   { label: 'Extranjero con residencia permanente', value: 'EXTRANJERA' },
 ]
 const DATOS_EJEMPLO: DireccionItem[] = DATOS_EJEMPLO_DIRECCIONES
-const OPCIONES_PAIS = [
-  'México',
-  'Estados Unidos',
-  'Canadá',
-  'Guatemala',
-  'Belice',
-  'Colombia',
-  'Argentina',
-  'Chile',
-  'España',
-  'Otro',
-]
-
-const ENTIDADES_FEDERATIVAS = [
-  'Aguascalientes',
-  'Baja California',
-  'Baja California Sur',
-  'Campeche',
-  'Chiapas',
-  'Chihuahua',
-  'Ciudad de México',
-  'Coahuila',
-  'Colima',
-  'Durango',
-  'Estado de México',
-  'Guanajuato',
-  'Guerrero',
-  'Hidalgo',
-  'Jalisco',
-  'Michoacán',
-  'Morelos',
-  'Nayarit',
-  'Nuevo León',
-  'Oaxaca',
-  'Puebla',
-  'Querétaro',
-  'Quintana Roo',
-  'San Luis Potosí',
-  'Sinaloa',
-  'Sonora',
-  'Tabasco',
-  'Tamaulipas',
-  'Tlaxcala',
-  'Veracruz',
-  'Yucatán',
-  'Zacatecas',
-].map((e) => ({ label: e, value: e }))
 
 const OPCIONES_NIVEL_ESTUDIOS = [
   { label: 'Bachillerato / Equivalente', value: 'BACHILLERATO' },
@@ -132,6 +88,7 @@ export default function PadronPrestadoresServicio() {
   const [rfc, setRfc] = useState('')
   const [nacionalidad, setNacionalidad] = useState<string | null>('MEXICANA')
 
+
   const [homoclave, setHomoclave] = useState('')
   const [fechaNacimiento, setFechaNacimiento] = useState<Date | null>(null)
   const [genero, setGenero] = useState<string | null>('M')
@@ -150,6 +107,8 @@ export default function PadronPrestadoresServicio() {
   const [municipioAlcaldia, setMunicipioAlcaldia] = useState('')
   const [entidadFederativa, setEntidadFederativa] = useState<string | null>('Ciudad de México')
   const [referenciasDomicilio, setReferenciasDomicilio] = useState('')
+  const [fechaInicio, setFechaInicio] = useState()
+  const [fechaFin, setFechaFin] = useState()
   // 3. Estado: Escolaridad
   const [nivelEstudios, setNivelEstudios] = useState<string | null>('LICENCIATURA')
   const [carrera, setCarrera] = useState('')
@@ -200,54 +159,6 @@ export default function PadronPrestadoresServicio() {
   const expandirTodo = () => setAcordeonesActivos([0, 1, 2, 3])
   const colapsarTodo = () => setAcordeonesActivos([])
 
-  const cargarDatosEjemplo = () => {
-    setNombres('María Fernanda')
-    setPrimerApellido('López')
-    setSegundoApellido('Ríos')
-    setCurp('LORM880412MDFRRL09')
-    setRfc('LORM880412')
-    setHomoclave('HDF')
-    setFechaNacimiento(new Date(1988, 3, 12))
-    setGenero('M')
-    setEstadoCivil('SOLTERO')
-    setNacionalidad('MEXICANA')
-    setCorreo('mflopez.prestador@funcionpublica.gob.mx')
-    setTelefonoCelular('5541239876')
-    setTelefonoFijo('5520003000')
-
-    setCodigoPostal('01020')
-    setCalle('Av. Insurgentes Sur')
-    setNumeroExterior('1735')
-    setNumeroInterior('Piso 4')
-    setColonia('Guadalupe Inn')
-    setPais('México')
-    setMunicipioAlcaldia('Álvaro Obregón')
-    setEntidadFederativa('Ciudad de México')
-    setReferenciasDomicilio('Entre Barranca del Muerto y Río Mixcoac')
-
-    setNivelEstudios('LICENCIATURA')
-    setCarrera('Licenciatura en Derecho y Administración Pública')
-    setInstitucionEducativa('Universidad Nacional Autónoma de México (UNAM)')
-    setEstatusEstudios('TITULADO')
-    setDocumentoComprobatorio('CEDULA')
-    setCedulaProfesional('08945123')
-    setAnioTitulacion('2013')
-
-    setInstitucionLaboral('Secretaría Anticorrupción y Buen Gobierno')
-    setSectorLaboral('PUBLICO_FEDERAL')
-    setPuestoDesempenado('Especialista en Análisis Normativo de Contratos')
-    setAreaAdscripcion('Dirección General de Recursos Humanos')
-    setFechaInicioLaboral(new Date(2022, 0, 16))
-    setFechaFinLaboral(new Date(2025, 11, 31))
-    setAniosExperiencia('6')
-    setFuncionesPrincipales(
-      'Revisión técnico-jurídica de expedientes de prestadores de servicios profesionales por honorarios, dictaminación de compatibilidad y validación presupuestal.',
-    )
-
-    setIntentoEnvio(false)
-    setAcordeonesActivos([0, 1, 2, 3])
-    notificar.info('Se cargaron datos de demostración en las cuatro secciones del formulario.')
-  }
 
   const limpiarFormulario = () => {
     setNombres('')
@@ -350,7 +261,7 @@ export default function PadronPrestadoresServicio() {
       <div className="honorarios-encabezado-seccion">
         <div>
           <h1 className="h1b patria" style={{ margin: 0 }}>
-            Padrón de Prestadores de Servicio
+            Padrón de Prestadores
           </h1>
           <p className="sh0m color--principal" style={{ margin: '4px 0 0' }}>
             Registro información de prestadores de servicio, domicilio, escolaridad y experiencia profesional para contratación bajo el régimen de honorarios
@@ -378,9 +289,17 @@ export default function PadronPrestadoresServicio() {
               </span>
             )}
           </div>
+          <div className="fila" style={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
+            <InputText aria-label="Buscar por nombre" placeholder="Nombre" />
+            <InputText aria-label="Buscar por CURP" placeholder="CURP" />
+            <InputText aria-label="Buscar por RFC" placeholder="RFC" />
+            <SndBoton type="button">Buscar</SndBoton>
+            <SndBoton variante="secundario" type="button" onClick={limpiarFormulario}>
+              Nuevo prestador
+            </SndBoton>
+          </div>
 
-
-          <div className="fila">
+          <div className="fila" style={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
             <SndBoton
               variante="secundario"
               type="button"
@@ -468,6 +387,33 @@ export default function PadronPrestadoresServicio() {
                 )}
               </div>
               <div className="campo">
+                <label htmlFor="fecha-inicio" className="b1sb">
+                  Fecha de inicio
+                </label>
+                <Calendar
+                  inputId="fecha-inicio"
+                  value={fechaInicio}
+                  onChange={(e) => setFechaInicio((e.value as Date | null) ?? null)}
+                  dateFormat="dd/mm/yy"
+                  showIcon
+                  appendTo="self"
+                />
+              </div>
+
+              <div className="campo">
+                <label htmlFor="fecha-fin" className="b1sb">
+                  Fecha de fin
+                </label>
+                <Calendar
+                  inputId="fecha-fin"
+                  value={fechaFin}
+                  onChange={(e) => setFechaFin((e.value as Date | null) ?? null)}
+                  dateFormat="dd/mm/yy"
+                  showIcon
+                  appendTo="self"
+                />
+              </div>
+              <div className="campo">
                 <SndBoton
                   type="button"
                   style={styleCURPButton}
@@ -484,7 +430,7 @@ export default function PadronPrestadoresServicio() {
                     }
                   }}
                 >
-                  Validar Curp
+                  Validar posible compatibilidad
                 </SndBoton>
               </div>
               <div className="campo">

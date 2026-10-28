@@ -43,3 +43,11 @@ Registro automático de cambios realizados por el agente.
 **Aprendizaje:** El indicador muestra 0% cuando no hay contratos para evitar una división entre cero. El typecheck conserva errores preexistentes por variables no usadas, sin errores en ChartAsignacion.tsx.
 
 ---
+
+## [2026-10-28 12:31:52] Fila de búsqueda en Padrón de Prestadores
+
+**Acción:** Agregados los campos Nombre, CURP y RFC junto a los botones Buscar y Nuevo en una sola fila.
+**Archivos:** src/pages/PadronPrestadoresServicio.tsx, bitacora.md
+**Aprendizaje:** Se reutilizó la clase `fila` para conservar el espaciado y permitir adaptación en pantallas angostas. El typecheck conserva errores preexistentes en el proyecto.
+
+---
