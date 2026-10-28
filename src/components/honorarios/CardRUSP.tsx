@@ -18,7 +18,7 @@ const CardRUSP = () => {
                     <span className="sdr">{landingTextos.descCifrasRUSP}</span>
                     <p className="sdr">Quincena actual</p>
                 </div>
-                <SndIcono nombre="snd-user--avatar" tamano={36} className="color--principal" />
+                <SndIcono nombre="snd-document" tamano={36} className="color--principal" />
             </div>
 
             <div className="honorarios-submodulo__pie">
@@ -26,6 +26,9 @@ const CardRUSP = () => {
                 <div className="fila" style={{ gap: 8 }}>
                     <SndBoton variante="primario">
                         {landingTextos.botonCifrasRusp}
+                    </SndBoton>
+                    <SndBoton variante="primario">
+                        Ver el detalle
                     </SndBoton>
                 </div>
             </div>

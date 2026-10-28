@@ -10,13 +10,14 @@ import { Pie } from 'react-chartjs-2'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-export const COLORES_ESTATUS = ['#0B6623', '#1E40AF', '#C09A53', '#991B1B']
+export const COLORES_ESTATUS = ['#4A0C26', '#001D1A', '#C09A53','#6708C1' ,'#991B1B', ]
 
 const ETIQUETAS_ESTATUS = [
-  'Autorizados',
-  'Cancelación anticipada',
   'En proceso',
-  'Cancelado por vencimiento',
+  'Autorizados',
+  'Pendiente de autorizar',
+  'Cancelación anticipada',
+  'Rechazado'
 ]
 
 const pieSliceLabelsPlugin: Plugin<'pie'> = {
@@ -43,7 +44,7 @@ const pieSliceLabelsPlugin: Plugin<'pie'> = {
         ctx.shadowBlur = 4
         ctx.shadowOffsetX = 1
         ctx.shadowOffsetY = 1
-        ctx.fillText(valor.toString(), x, y)
+        ctx.fillText(`${valor.toString()}%`, x, y)
         ctx.restore()
       })
     })

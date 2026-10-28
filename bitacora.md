@@ -27,3 +27,19 @@ Registro automático de cambios realizados por el agente.
 **Aprendizaje:** El proyecto no usa Tailwind (Chars.tsx tenía clases que no aplicaban); se usan las variables/estilos del SND. Los plugins de Chart.js necesitan tipado explícito y `Element.tooltipPosition(true)` puede devolver coordenadas nulas.
 
 ---
+
+## [2026-10-28 10:21:01] Calendarios en Validación de Identidad
+
+**Acción:** Reemplazados los campos de fecha de inicio y fin por componentes Calendar controlados, con etiquetas asociadas, formato dd/mm/yy y estilos SND existentes.
+**Archivos:** src/pages/ValidarIdentidad.tsx, bitacora.md
+**Aprendizaje:** El proyecto ya centraliza la apariencia de Calendar en snd-prime.css, por lo que no fue necesario agregar CSS específico. El typecheck conserva errores preexistentes por variables no usadas en otros archivos, sin errores en ValidarIdentidad.tsx.
+
+---
+
+## [2026-10-28 11:20:00] Porcentaje visible en gráfica de asignación
+
+**Acción:** Agregado al centro de la gráfica el porcentaje redondeado de contratos asignados respecto del total.
+**Archivos:** src/components/honorarios/chart/ChartAsignacion.tsx, bitacora.md
+**Aprendizaje:** El indicador muestra 0% cuando no hay contratos para evitar una división entre cero. El typecheck conserva errores preexistentes por variables no usadas, sin errores en ChartAsignacion.tsx.
+
+---

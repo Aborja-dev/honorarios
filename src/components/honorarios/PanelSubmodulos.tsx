@@ -40,7 +40,7 @@ export function PanelSubmodulos({
         <div className="honorarios-submodulos-grid">
           {submodulos.map((sub, index) => {
             const esActivo = submoduloActivo === sub.id
-            
+
             return (
               <article
                 key={sub.id}
@@ -67,15 +67,23 @@ export function PanelSubmodulos({
                   <SndPildora tipo={sub.estadoTipo}>{sub.estadoTexto}</SndPildora>
                   <div className="fila" style={{ gap: 8 }}>
                     <SndBoton
+                      style={{
+                        fontSize: "0.8rem",
+                        padding: "1rem 0.8rem"
+                      }}
                       variante={true ? 'primario' : 'secundario'}
                       onClick={(e) => {
                         e.stopPropagation()
                         onSeleccionarSubmodulo(sub.id)
                       }}
                     >
-                      {true ? landingTextos.botonCargaMasiva: ''}
+                      {true ? landingTextos.botonCargaMasiva : ''}
                     </SndBoton>
                     <SndBoton
+                      style={{
+                        fontSize: "0.8rem",
+                        padding: "1rem 0.8rem"
+                      }}
                       variante="secundario"
                       onClick={(e) => e.stopPropagation()}
                     >
@@ -101,7 +109,6 @@ export function PanelSubmodulos({
         <article className="honorarios-tarjeta">
           <div className="honorarios-tarjeta__encabezado">
             <h3 className="sh0b honorarios-tarjeta__titulo">{landingTextos.tituloInformes}</h3>
-            <span className="sdr">{categoriasActivas.length} activas</span>
           </div>
           <div className="honorarios-pildoras-grid">
             {CATEGORIAS_OPERATIVAS.map((cat) => (
@@ -113,6 +120,17 @@ export function PanelSubmodulos({
                 <span>{cat}</span>
               </SndPildoraFiltro>
             ))}
+            <SndBoton
+              style={{
+                fontSize: "0.8rem",
+                width: "100%",
+                maxWidth: "200px",
+                padding: "1rem 0.8rem"
+              }}
+              onClick={(e) => {}}
+            >
+              Generar reporte dinamico
+            </SndBoton>
           </div>
         </article>
       </div>

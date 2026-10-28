@@ -26,7 +26,7 @@ export function CifrasYEstadisticas({
   onCambiarTrimestre,
 
 }: CifrasYEstadisticasProps) {
-  const { vigentes, enFirma, enRevision, porVencer } = datosTrimestre.estadisticas
+  const { vigentes, enFirma, enRevision, porVencer,pendientes: conPEndientes } = datosTrimestre.estadisticas
   const asignados = Math.round(
     (datosTrimestre.contratosActivos * datosTrimestre.porcentajeAvance) / 100,
   )
@@ -50,34 +50,11 @@ export function CifrasYEstadisticas({
           </div>
 
           <div>
-            <p style={{ textAlign: 'center', marginBottom: 8 }}>Presupuesto Autorizado</p>
+            <p style={{ textAlign: 'center', marginBottom: 8 }}>Monto autorizado</p>
             <p className="sdr" style={{ textAlign: 'center', marginBottom: 8 }}>
               {datosTrimestre.etiqueta} <strong>{datosTrimestre.presupuestoEjercido}</strong>
             </p>
-            <div className="honorarios-control-rango">
-              <SndBoton
-                variante="secundario"
-                aria-label="Trimestre anterior"
-                disabled={indiceTrimestre === 0}
-                onClick={() => onCambiarTrimestre(Math.max(0, indiceTrimestre - 1))}
-              >
-                −
-              </SndBoton>
-              <div className="honorarios-control-rango__barra" aria-hidden="true">
-                <div
-                  className="honorarios-control-rango__progreso"
-                  style={{ width: `${((indiceTrimestre + 1) / totalTrimestres) * 100}%` }}
-                />
-              </div>
-              <SndBoton
-                variante="secundario"
-                aria-label="Siguiente trimestre"
-                disabled={indiceTrimestre === totalTrimestres - 1}
-                onClick={() => onCambiarTrimestre(Math.min(totalTrimestres - 1, indiceTrimestre + 1))}
-              >
-                +
-              </SndBoton>
-            </div>
+
           </div>
         </article>
 
@@ -92,25 +69,29 @@ export function CifrasYEstadisticas({
           </div>
 
           <div className="honorarios-anillo-contenedor">
-            <ChartEstatus datos={[vigentes, enFirma, enRevision, porVencer]} />
+            <ChartEstatus datos={[vigentes, enFirma, enRevision, porVencer, conPEndientes]} />
           </div>
 
           <ul className="honorarios-leyenda">
             <li className="honorarios-leyenda__item">
               <span className="honorarios-leyenda__punto" style={{ background: COLORES_ESTATUS[0] }} />
-              <span>Autorizados ({vigentes}%)</span>
+              <span>En proceso ({vigentes}%)</span>
             </li>
             <li className="honorarios-leyenda__item">
               <span className="honorarios-leyenda__punto" style={{ background: COLORES_ESTATUS[1] }} />
-              <span>Cancelacion anticipada ({enFirma}%)</span>
+              <span>Autorizados ({enFirma}%)</span>
             </li>
             <li className="honorarios-leyenda__item">
               <span className="honorarios-leyenda__punto" style={{ background: COLORES_ESTATUS[2] }} />
-              <span>En proceso ({enRevision}%)</span>
+              <span>Pendiente de autorizar ({enRevision}%)</span>
             </li>
             <li className="honorarios-leyenda__item">
               <span className="honorarios-leyenda__punto" style={{ background: COLORES_ESTATUS[3] }} />
-              <span>Cancelado por vencimiento ({porVencer}%)</span>
+              <span>Cancelacion anticipada ({porVencer}%)</span>
+            </li>
+            <li className="honorarios-leyenda__item">
+              <span className="honorarios-leyenda__punto" style={{ background: COLORES_ESTATUS[4] }} />
+              <span>Rechazado ({conPEndientes}%)</span>
             </li>
           </ul>
         </article>

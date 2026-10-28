@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState } from 'react'
 import { Accordion, AccordionTab } from 'primereact/accordion'
 import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
@@ -10,12 +10,14 @@ import {
   useNotificaciones,
 } from '../components'
 import '../components/honorarios/Honorarios.css'
+import './PadronPrestadoresServicio.css'
 import { useTitulo } from '../hooks'
-import TablaDireccion, { type DireccionItem } from '../components/prestadoresServicios/TablaDireccion'
+import { type DireccionItem } from '../components/prestadoresServicios/TablaDireccion'
 import SeccionDireccion from '../components/prestadoresServicios/SeccionDireccion'
 import TablaEscolaridad from '../components/prestadoresServicios/TablaEscolaridad'
 import TablaExperiencia from '../components/prestadoresServicios/TablaExperiencia'
 import { ToggleTabla } from '../components/prestadoresServicios/ToogleTabla'
+import { DATOS_EJEMPLO_DIRECCIONES, DATOS_PERSONALES_PRUEBA } from './PadronPrestadoresServicio.mock'
 
 
 
@@ -23,20 +25,7 @@ const OPCIONES_NACIONALIDAD = [
   { label: 'México', value: 'MEXICANA' },
   { label: 'Extranjero con residencia permanente', value: 'EXTRANJERA' },
 ]
-const DATOS_EJEMPLO: DireccionItem[] = [
-  {
-    id: 1,
-    calle: 'Av. Insurgentes Sur',
-    numeroExterior: '1735',
-    numeroInterior: 'Piso 4, Int. 402',
-    codigoPostal: '01020',
-    colonia: 'Guadalupe Inn',
-    municipioAlcaldia: 'Álvaro Obregón',
-    entidadFederativa: 'Ciudad de México',
-    pais: 'México',
-    referenciasDomicilio: 'Frente al parque',
-  },
-]
+const DATOS_EJEMPLO: DireccionItem[] = DATOS_EJEMPLO_DIRECCIONES
 const OPCIONES_PAIS = [
   'México',
   'Estados Unidos',
@@ -116,110 +105,6 @@ const OPCIONES_SECTOR_LABORAL = [
   { label: 'Organismo Autónomo / Social', value: 'AUTONOMO' },
 ]
 
-const ESTILOS_ACORDEON_PADRON = `
-  .padron-form-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px 20px;
-  }
-  .padron-form-grid__col-2 {
-    grid-column: span 2;
-  }
-  .padron-form-grid__col-3 {
-    grid-column: 1 / -1;
-  }
-  .padron-acordeon .p-accordion-tab {
-    margin-bottom: 14px;
-    border-radius: 16px;
-    border: 1px solid var(--neutro400, #dddddd);
-    background: var(--neutro100, #ffffff);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-    overflow: hidden;
-  }
-  .padron-acordeon .p-accordion-header .p-accordion-header-link {
-    padding: 18px 22px;
-    background: var(--neutro200, #f9f9f9);
-    color: var(--neutro800, #222222);
-    border: 0;
-    border-radius: 0;
-    transition: background-color 150ms ease, color 150ms ease;
-    text-decoration: none;
-  }
-  .padron-acordeon .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link {
-    background: var(--gama100, #f9ebf0);
-    color: var(--gama900, #611232);
-    border-bottom: 1px solid var(--gama300, var(--neutro400));
-  }
-  .padron-acordeon .p-accordion-header:not(.p-disabled) .p-accordion-header-link:hover {
-    background: var(--gama100, #f9ebf0);
-    color: var(--principal, #9B2247);
-  }
-  .padron-acordeon .p-accordion-header:not(.p-disabled) .p-accordion-header-link:focus-visible {
-    box-shadow: inset 0 0 0 2px var(--principal, #9B2247);
-    outline: none;
-  }
-  .padron-acordeon .p-accordion-content {
-    padding: 22px 24px;
-    background: var(--neutro100, #ffffff);
-    border: 0;
-  }
-  .padron-acordeon__cabecera {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    width: 100%;
-    flex-wrap: wrap;
-  }
-  .padron-acordeon__titulo-grupo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .padron-acordeon__icono {
-    display: inline-grid;
-    place-items: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    background: var(--principal, #9B2247);
-    color: #ffffff;
-    flex: none;
-  }
-  .padron-textarea {
-    width: 100%;
-    min-height: 92px;
-    padding: 10px 12px;
-    font-family: inherit;
-    font-size: 1rem;
-    border: 1px solid var(--neutro600, #767676);
-    border-radius: 8px;
-    color: var(--neutro800, #222222);
-    background: var(--neutro100, #ffffff);
-    resize: vertical;
-  }
-  .padron-textarea:focus {
-    border-color: var(--principal, #9B2247);
-    outline: none;
-  }
-  .padron-textarea--invalido {
-    border-color: var(--rojo500, #9B0F15);
-    box-shadow: 0 0 0 1px var(--rojo500, #9B0F15);
-  }
-  @media (max-width: 960px) {
-    .padron-form-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .padron-form-grid__col-2 {
-      grid-column: 1 / -1;
-    }
-  }
-  @media (max-width: 640px) {
-    .padron-form-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-`
 
 /**
  * Pantalla dedicada "Padrón de Prestadores de Servicio" (`src/pages/PadronPrestadoresServicio.tsx`).
@@ -265,7 +150,6 @@ export default function PadronPrestadoresServicio() {
   const [municipioAlcaldia, setMunicipioAlcaldia] = useState('')
   const [entidadFederativa, setEntidadFederativa] = useState<string | null>('Ciudad de México')
   const [referenciasDomicilio, setReferenciasDomicilio] = useState('')
-
   // 3. Estado: Escolaridad
   const [nivelEstudios, setNivelEstudios] = useState<string | null>('LICENCIATURA')
   const [carrera, setCarrera] = useState('')
@@ -287,7 +171,6 @@ export default function PadronPrestadoresServicio() {
 
   const [showEscolaridad, setShowEscolaridad] = useState(true)
   const [showExperiencia, setShowExperiencia] = useState(true)
-  const [showDireccion, setShowDireccion] = useState(true)
   const [direcciones, setDirecciones] = useState<DireccionItem[]>(DATOS_EJEMPLO)
   // Validaciones por sección
   const seccionPersonalCompleta = Boolean(
@@ -446,59 +329,22 @@ export default function PadronPrestadoresServicio() {
     marginTop: '2rem',
   }
 
-  const datosPersonalesPrueba = {
-    nombre: "Abraham",
-    primerApellido: "Borja",
-    segundoApellido: "Organista",
-    curp: "DDFR235689HDFRRB01",
-    rfc: "DDFR235689VF6",
-    nacionalidad: "MEXICANA"
-  }
-
   const [curpValidado, setCurpValidado] = useState(false)
   const handlerValidarCurp = () => {
     setCurpValidado(true)
-    setNombres(datosPersonalesPrueba.nombre)
-    setPrimerApellido(datosPersonalesPrueba.primerApellido)
-    setSegundoApellido(datosPersonalesPrueba.segundoApellido)
-    setCurp(datosPersonalesPrueba.curp)
-    setRfc(datosPersonalesPrueba.rfc)
-    setNacionalidad(datosPersonalesPrueba.nacionalidad)
+    setNombres(DATOS_PERSONALES_PRUEBA.nombre)
+    setPrimerApellido(DATOS_PERSONALES_PRUEBA.primerApellido)
+    setSegundoApellido(DATOS_PERSONALES_PRUEBA.segundoApellido)
+    setCurp(DATOS_PERSONALES_PRUEBA.curp)
+    setRfc(DATOS_PERSONALES_PRUEBA.rfc)
+    setNacionalidad(DATOS_PERSONALES_PRUEBA.nacionalidad)
     notificar.exito("CURP validada correctamente", "CURP")
   }
 
 
 
-  // logica de la seccion direccion
-
-  const handleDireccionCompleto = () => {
-    const newDireccion: DireccionItem = {
-      calle,
-      numeroExterior,
-      numeroInterior,
-      codigoPostal,
-      colonia,
-      municipioAlcaldia,
-      entidadFederativa,
-      pais,
-      referenciasDomicilio
-    }
-    setDirecciones([...direcciones, newDireccion])
-    setShowDireccion(true)
-  }
-  const clearDirecciones = () => {
-    setCodigoPostal('')
-    setCalle('')
-    setNumeroExterior('')
-    setNumeroInterior('')
-    setColonia('')
-    setPais('México')
-    setMunicipioAlcaldia('')
-    setReferenciasDomicilio('')
-  }
   return (
     <div className="contenedor">
-      <style>{ESTILOS_ACORDEON_PADRON}</style>
 
       {/* ENCABEZADO INSTITUCIONAL DE LA PANTALLA */}
       <div className="honorarios-encabezado-seccion">

@@ -37,6 +37,7 @@ export interface DatosTrimestre {
     enFirma: number
     enRevision: number
     porVencer: number
+    pendientes: number
   }
 }
 
@@ -48,14 +49,12 @@ export const UNIDADES_ADMINISTRATIVAS: string[] = [
 ]
 
 export const CATEGORIAS_OPERATIVAS: string[] = [
-  'Ingresado',
+  'En proceso',
   'Autorizado',
   'Rechazado',
   'Cancelado anticipadamente',
   'Pendiente de Autorizar por SFP',
-  'En proceso',
-  'Cancelado por vencimiento',
-  'Cancelado por peticion de la institucion'
+  
 ]
 
 export const TRIMESTRES_HONORARIOS: DatosTrimestre[] = [
@@ -64,55 +63,33 @@ export const TRIMESTRES_HONORARIOS: DatosTrimestre[] = [
     contratosActivos: 980,
     porcentajeAvance: 68,
     presupuestoEjercido: '$42.8 M',
-    estadisticas: { vigentes: 48, enFirma: 27, enRevision: 15, porVencer: 10 },
+    estadisticas: { vigentes: 48, enFirma: 27, enRevision: 15, porVencer: 10, pendientes: 30 },
   },
   {
     etiqueta: 'Quincena 19/2026',
     contratosActivos: 1120,
     porcentajeAvance: 76,
     presupuestoEjercido: '$86.4 M',
-    estadisticas: { vigentes: 52, enFirma: 23, enRevision: 15, porVencer: 10 },
+    estadisticas: { vigentes: 52, enFirma: 23, enRevision: 15, porVencer: 10, pendientes: 30 },
   },
   {
     etiqueta: 'Quincena 20/2026',
     contratosActivos: 1248,
     porcentajeAvance: 84,
     presupuestoEjercido: '$129.6 M',
-    estadisticas: { vigentes: 50, enFirma: 25, enRevision: 15, porVencer: 10 },
+    estadisticas: { vigentes: 50, enFirma: 25, enRevision: 15, porVencer: 10, pendientes: 30 },
   },
   {
     etiqueta: 'Quincena 21/2026',
     contratosActivos: 1315,
     porcentajeAvance: 92,
     presupuestoEjercido: '$164.2 M',
-    estadisticas: { vigentes: 58, enFirma: 18, enRevision: 14, porVencer: 10 },
+    estadisticas: { vigentes: 58, enFirma: 18, enRevision: 14, porVencer: 10, pendientes: 30 },
   },
 ]
 
 export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
-  {
-    id: 'padron',
-    titulo: landingTextos.tituloPadron,
-    subtitulo: 'Registro Único de Prestadores',
-    rutaDedicada: '/admin/padron',
-    metrica: '1,420 Prestadores',
-    detalle: landingTextos.descPadron,
-    icono: 'snd-user--avatar',
-    estadoTexto: 'Habilitado',
-    estadoTipo: 'exito',
-  },
-  {
-    id: 'contratos',
-    titulo: landingTextos.tituloContrato,
-    subtitulo: 'Gestión y Ciclo Contractual',
-    rutaDedicada: '/admin/contratos',
-    metrica: '248 vigentes',
-    detalle: landingTextos.descContrato,
-    icono: 'snd-document',
-    estadoTexto: 'En operación',
-    estadoTipo: 'info',
-  },
-  {
+    {
     id: 'modelo',
     titulo: landingTextos.tituloValidarCurp,
     subtitulo: 'Plantillas Jurídicas Autorizadas',
@@ -124,6 +101,17 @@ export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
     estadoTipo: 'purple',
   },
   {
+    id: 'padron',
+    titulo: landingTextos.tituloPadron,
+    subtitulo: 'Registro Único de Prestadores',
+    rutaDedicada: '/admin/padron',
+    metrica: '1,420 Prestadores',
+    detalle: landingTextos.descPadron,
+    icono: 'snd-user--avatar',
+    estadoTexto: 'Habilitado',
+    estadoTipo: 'exito',
+  },
+    {
     id: 'suficiencia',
     titulo: landingTextos.tituloModelo,
     subtitulo: 'Plantillas Jurídicas Autorizadas',
@@ -133,6 +121,17 @@ export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
     icono: 'snd-edit',
     estadoTexto: 'Dictaminado',
     estadoTipo: 'purple',
+  },
+  {
+    id: 'contratos',
+    titulo: landingTextos.tituloContrato,
+    subtitulo: 'Gestión y Ciclo Contractual',
+    rutaDedicada: '/admin/contratos',
+    metrica: '248 vigentes',
+    detalle: landingTextos.descContrato,
+    icono: 'snd-document',
+    estadoTexto: 'En operación',
+    estadoTipo: 'info',
   }
 ]
 

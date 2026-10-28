@@ -19,6 +19,9 @@ const centerTextPlugin: Plugin<'doughnut'> = {
       (acumulado, valor) => (typeof valor === 'number' ? acumulado + valor : acumulado),
       0,
     )
+    const asignados = dataset?.data[0]
+    const porcentajeAsignado =
+      total > 0 && typeof asignados === 'number' ? Math.round((asignados / total) * 100) : 0
 
     ctx.save()
     ctx.font = 'bold 28px sans-serif'
@@ -30,6 +33,10 @@ const centerTextPlugin: Plugin<'doughnut'> = {
     ctx.font = '500 14px sans-serif'
     ctx.fillStyle = '#71717A'
     ctx.fillText('Contratos', width / 2, height / 2 + 18)
+
+    ctx.font = '600 13px sans-serif'
+    ctx.fillStyle = '#58112C'
+    ctx.fillText(`${porcentajeAsignado}% Ejercido`, width / 2, height / 2 + 42)
     ctx.restore()
   },
 }

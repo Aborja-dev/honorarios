@@ -11,7 +11,7 @@ export const landingTextos = {
     tituloContrato: "Formalización de contratos",
     descContrato: "Contratos autorizados y vigentes.",
     tituloValidarCurp: "Validador de Compatibilidad",
-    descValidarCurp: "Valida mediante CURP si el prestador cuenta con compatibilidad.",
+    descValidarCurp: "Valida mediante CURP si el prestador cuenta con posible compatibilidad.",
     tituloModelo: "Modelo de contrato",
     descModelo: "Actividades, Entregables y datos generales del contrato.",
     seccionHonorarios: "Submodulos de honorarios",
