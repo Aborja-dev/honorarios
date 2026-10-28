@@ -71,6 +71,12 @@ const OPCIONES_FORMATO_ENTREGA = [
   { label: 'Carga en repositorio institucional SABG', value: 'REPOSITORIO' },
 ]
 
+const OPCIONES_IMPACTO = [
+  { label: 'D1', value: '1' },
+  { label: 'I2', value: '2' },
+  { label: 'C3', value: '3' },
+]
+
 const OPCIONES_NIVEL_ESTUDIOS = [
   { label: 'Bachillerato / Equivalente', value: 'BACHILLERATO' },
   { label: 'Técnico Superior Universitario', value: 'TSU' },
@@ -902,7 +908,7 @@ export default function AltaModelosContratos() {
 
               <div className="campo">
                 <label htmlFor="ent-tipo" className="b1sb">
-                  Tipo de Entregable <span className="requerido">*</span>
+                  ID RUSP Recibe Entregable <span className="requerido">*</span>
                 </label>
                 <InputText
                   inputId="ent-tipo"
@@ -915,7 +921,7 @@ export default function AltaModelosContratos() {
 
               <div className="campo">
                 <label htmlFor="ent-periodicidad" className="b1sb">
-                  Periodicidad de Entrega <span className="requerido">*</span>
+                  Autonomia<span className="requerido">*</span>
                 </label>
                 <Dropdown
                   inputId="ent-periodicidad"
@@ -928,7 +934,7 @@ export default function AltaModelosContratos() {
 
               <div className="campo">
                 <label htmlFor="ent-formato" className="b1sb">
-                  Formato y Medio de Entrega
+                  Complejidad
                 </label>
                 <Dropdown
                   inputId="ent-formato"
@@ -939,48 +945,33 @@ export default function AltaModelosContratos() {
                 />
               </div>
 
+
+
               <div className="campo">
-                <label htmlFor="ent-corte" className="b1sb">
-                  Fecha o Día Límite de Corte <span className="requerido">*</span>
+                <label htmlFor="ent-formato" className="b1sb">
+                  Impacto
                 </label>
-                <InputText
-                  id="ent-corte"
-                  value={diaCorteEntrega}
-                  invalid={intentoEnvio && !diaCorteEntrega.trim()}
-                  onChange={(e) => setDiaCorteEntrega(e.target.value)}
-                  placeholder="Ej. Último día hábil de cada mes"
+                <Dropdown
+                  inputId="ent-formato"
+                  options={OPCIONES_IMPACTO}
+                  value={formatoEntrega}
+                  onChange={(e) => setFormatoEntrega(e.value)}
+                  appendTo="self"
                 />
-                {intentoEnvio && !diaCorteEntrega.trim() && (
-                  <span className="campo__error">Indica el plazo o día de corte del entregable.</span>
-                )}
               </div>
 
-              <div className="campo padron-form-grid__col-3">
-                <label htmlFor="ent-receptor" className="b1sb">
-                  Cargo del Servidor Público que Recibe y Valida <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="ent-receptor"
-                  value={cargoReceptor}
-                  invalid={intentoEnvio && !cargoReceptor.trim()}
-                  onChange={(e) => setCargoReceptor(e.target.value)}
-                  placeholder="Ej. Titular de la Dirección de Normatividad y Consulta"
-                />
-                {intentoEnvio && !cargoReceptor.trim() && (
-                  <span className="campo__error">El cargo del servidor público validador es obligatorio.</span>
-                )}
-              </div>
+
 
               <div className="campo padron-form-grid__col-3">
                 <label htmlFor="ent-criterios" className="b1sb">
-                  Criterios de Aceptación y Verificación <span className="requerido">*</span>
+                  Descripción Entregable <span className="requerido">*</span>
                 </label>
                 <textarea
                   id="ent-criterios"
                   className={`padron-textarea ${intentoEnvio && !criteriosAceptacion.trim() ? 'padron-textarea--invalido' : ''}`}
                   value={criteriosAceptacion}
                   onChange={(e) => setCriteriosAceptacion(e.target.value)}
-                  placeholder="Especifica las condiciones de calidad, elementos mínimos y firmas requeridas para liberar el pago..."
+                  placeholder="Especifica la descripción del entregable..."
                 />
                 {intentoEnvio && !criteriosAceptacion.trim() && (
                   <span className="campo__error">Los criterios de aceptación son obligatorios.</span>
@@ -1020,7 +1011,7 @@ export default function AltaModelosContratos() {
                       4. Escolaridad
                     </span>
                     <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Área de estudio, grado máximo de estudios y registro de certificado requerido
+                      Área de estudio, grado de estudios y registro de certificado requerido
                     </span>
                   </div>
                 </div>
@@ -1034,7 +1025,7 @@ export default function AltaModelosContratos() {
             <div className="padron-form-grid">
               <div className="campo">
                 <label htmlFor="esc-nivel" className="b1sb">
-                  Nivel Máximo de Estudios <span className="requerido">*</span>
+                  Nivel estudio <span className="requerido">*</span>
                 </label>
                 <Dropdown
                   inputId="esc-nivel"
@@ -1075,18 +1066,7 @@ export default function AltaModelosContratos() {
                 />
               </div>
 
-              <div className="campo">
-                <label htmlFor="esc-documento" className="b1sb">
-                  Documento Acreditable
-                </label>
-                <Dropdown
-                  inputId="esc-documento"
-                  options={OPCIONES_DOCUMENTO_ACADEMICO}
-                  value={documentoComprobatorio}
-                  onChange={(e) => setDocumentoComprobatorio(e.value)}
-                  appendTo="self"
-                />
-              </div>
+
 
               <div className="campo">
                 <label htmlFor="esc-cedula" className="b1sb">
@@ -1134,7 +1114,7 @@ export default function AltaModelosContratos() {
                       5. Experiencia Laboral
                     </span>
                     <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Área de experiencia, años de experiencia y perfil requerido
+                      Área de experiencia y años de experiencia
                     </span>
                   </div>
                 </div>
@@ -1174,7 +1154,7 @@ export default function AltaModelosContratos() {
 
               <div className="campo">
                 <label htmlFor="exp-anios" className="b1sb">
-                  Años de Experiencia en el Ramo <span className="requerido">*</span>
+                  Años de Experiencia <span className="requerido">*</span>
                 </label>
                 <InputText
                   id="exp-anios"
