@@ -32,8 +32,11 @@
   position: sticky;
   top: 16px;
   align-self: flex-start;
-  max-height: calc(100vh - 32px);
-  overflow-y: auto;
+  /*
+    Sin `overflow` aquí ni en la tarjeta: el gatillo está en `right: -14px` y
+    cualquier recorte lo cortaría. Al declarar `overflow-y`, el eje X deja de
+    ser `visible`, y eso producía la barra de scroll horizontal.
+  */
 }
 
 .prestadores-layout__contenido {
@@ -50,6 +53,15 @@
   border: 1px solid var(--neutro400, #dddddd);
   box-sizing: border-box;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  /* Fondo oscuro del SND (mismo guinda que el menú lateral), declarado aquí para
+     no depender de lo que herede. El contenido usa texto claro. */
+  background: var(--principal, #9B2247);
+  color: #ffffff;
+  /*
+    Sin `overflow` en la tarjeta: el gatillo está en `right: -14px` y cualquier
+    recorte lo cortaría a la mitad. El menú de 5 secciones no desborda la
+    altura del viewport, así que no necesita scroll propio.
+  */
 }
 
 .prestadores-layout__menu .menuMain--colapsado {
@@ -71,20 +83,25 @@
   display: grid;
   place-items: center;
   padding: 4px;
-  background: var(--neutro100, #ffffff);
-  border: 1px solid var(--neutro400, #dddddd);
+  /*
+    Sobre el menú guinda, el gatillo va en guinda oscuro con la flecha blanca:
+    un círculo blanco aquí destacaba demasiado y competía con el menú.
+  */
+  background: var(--gama900, #611232);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 9999px;
-  color: var(--neutro600, #767676);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  transition: color 150ms ease, background-color 150ms ease;
+  transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease;
 }
 .prestadores-layout__menu .menuMain__gatillo:hover {
-  color: var(--principal, #9B2247);
-  background: var(--gama100, #f9ebf0);
+  background: var(--principal, #9B2247);
+  border-color: #ffffff;
+  color: #ffffff;
 }
 .prestadores-layout__menu .menuMain__gatillo:focus-visible {
-  outline: 2px solid var(--principal, #9B2247);
+  outline: 2px solid #ffffff;
   outline-offset: 2px;
 }
 .prestadores-layout__menu .menuMain__gatilloIco {
@@ -132,7 +149,10 @@
   padding: 10px 12px;
   /* Sin esquinas redondeadas: el renglón es una franja de ancho completo. */
   border-radius: 0;
-  color: var(--neutro700, #4b4b4b);
+  /* Fondo explícito para que el hover no herede el del SND. */
+  background: transparent;
+  /* Sobre fondo guinda el texto va en blanco. */
+  color: #ffffff;
   font-size: 0.875rem;
   font-weight: 500;
   text-decoration: none;
@@ -140,12 +160,17 @@
   overflow: hidden;
   transition: background-color 150ms ease, color 150ms ease;
 }
+/* Hover del renglón no activo: se aclara el fondo, el texto sigue blanco. */
 .prestadores-layout__menu .menuMain__link:hover {
-  background: var(--gama100, #f9ebf0);
-  color: var(--principal, #9B2247);
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+/* La descripción acompaña el color del texto para mantener el contraste. */
+.prestadores-layout__menu .menuMain__link:hover .menuMain__desc {
+  color: inherit;
 }
 .prestadores-layout__menu .menuMain__link:focus-visible {
-  outline: 2px solid var(--principal, #9B2247);
+  outline: 2px solid #ffffff;
   outline-offset: -2px;
 }
 .prestadores-layout__menu .menuMain__link--active {
