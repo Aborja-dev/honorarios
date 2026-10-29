@@ -66,12 +66,41 @@ const OPCIONES_SECTOR_LABORAL = [
  * 3. Escolaridad
  * 4. Experiencia Laboral
  */
-export default function PadronPrestadoresServicio() {
+export interface PadronPrestadoresServicioProps {
+  /**
+   * Índices de los acordeones abiertos. Si se indica junto con `onAcordeonesChange`,
+   * el componente funciona en modo controlado y el estado lo posee el padre.
+   */
+  acordeonesActivos?: number | number[]
+  /** Notifica los cambios de acordeón abierto al padre (modo controlado). */
+  onAcordeonesChange?: (indices: number | number[]) => void
+  /** Id del elemento raíz, para enlazar anchors desde fuera. */
+  id?: string
+}
+
+export default function PadronPrestadoresServicio({
+  acordeonesActivos: acordeonesControlados,
+  onAcordeonesChange,
+  id,
+}: PadronPrestadoresServicioProps = {}) {
   useTitulo('Padrón de Prestadores de Servicio · Módulo de Honorarios')
   const notificar = useNotificaciones()
 
-  // Control de pestañas abiertas en el acordeón (permite abrir una o varias secciones)
-  const [acordeonesActivos, setAcordeonesActivos] = useState<number | number[]>([0])
+  // Estado local de respaldo para cuando el componente se usa sin controlar.
+  const [acordeonesLocales, setAcordeonesLocales] = useState<number | number[]>([0])
+
+  // Modo controlado si el padre entrega ambos: valor y notificador.
+  const esControlado = acordeonesControlados !== undefined && onAcordeonesChange !== undefined
+  const acordeonesActivos = esControlado ? acordeonesControlados : acordeonesLocales
+
+  /** Actualiza el acordeón en el estado correcto según el modo. */
+  const setAcordeonesActivos = (indices: number | number[]) => {
+    if (!esControlado) {
+      setAcordeonesLocales(indices)
+      return
+    }
+    onAcordeonesChange(indices)
+  }
   const [intentoEnvio, setIntentoEnvio] = useState(false)
   const [folioGenerado, setFolioGenerado] = useState<string | null>(null)
   const [modalCargaMasivaAbierto, setModalCargaMasivaAbierto] = useState(false)
@@ -252,7 +281,7 @@ export default function PadronPrestadoresServicio() {
 
 
   return (
-    <div className="contenedor">
+    <div className="contenedor" id={id}>
 
       {/* ENCABEZADO INSTITUCIONAL DE LA PANTALLA */}
       <div className="honorarios-encabezado-seccion">
@@ -355,7 +384,7 @@ export default function PadronPrestadoresServicio() {
                 </div>
               }
             >
-              <div className="padron-form-grid">
+              <div className="padron-form-grid" id="padron-seccion-curp">
                 <div className="padron-form-grid__busqueda">
                   <div className="campo">
                     <label htmlFor="dp-ramo" className="b1sb">Ramo</label>
@@ -477,7 +506,7 @@ export default function PadronPrestadoresServicio() {
                 </div>
               }
             >
-              <div className="padron-form-grid" aria-label='form-personal'>
+              <div className="padron-form-grid" aria-label='form-personal' id="padron-seccion-personal">
                 <div className="campo">
                   <label htmlFor="dp-nombres" className="b1sb">
                     Nombre(s) <span className="requerido">*</span>
@@ -603,24 +632,26 @@ export default function PadronPrestadoresServicio() {
                 </div>
               }
             >
-              <SeccionDireccion
-                intentoEnvio={intentoEnvio}
-                direcciones={direcciones}
-                onDireccionesChange={setDirecciones}
-                seccionDireccionCompleta={seccionDireccionCompleta}
-                onGuardarDireccion={() => {
-                  notificar.exito('Dirección agregada correctamente.')
-                }}
-                onSiguiente={() => {
-                  setIntentoEnvio(true)
-                  if (seccionDireccionCompleta) {
-                    setAcordeonesActivos([3])
-                    notificar.exito('Datos de domicilio guardados temporalmente.')
-                  } else {
-                    notificar.alerta('Por favor completa los datos de domicilio obligatorios.')
-                  }
-                }}
-              />
+              <div id="padron-seccion-direccion">
+                <SeccionDireccion
+                  intentoEnvio={intentoEnvio}
+                  direcciones={direcciones}
+                  onDireccionesChange={setDirecciones}
+                  seccionDireccionCompleta={seccionDireccionCompleta}
+                  onGuardarDireccion={() => {
+                    notificar.exito('Dirección agregada correctamente.')
+                  }}
+                  onSiguiente={() => {
+                    setIntentoEnvio(true)
+                    if (seccionDireccionCompleta) {
+                      setAcordeonesActivos([3])
+                      notificar.exito('Datos de domicilio guardados temporalmente.')
+                    } else {
+                      notificar.alerta('Por favor completa los datos de domicilio obligatorios.')
+                    }
+                  }}
+                />
+              </div>
             </AccordionTab>
 
             {/* =====================================================================
@@ -650,7 +681,7 @@ export default function PadronPrestadoresServicio() {
               }
             >
               <ToggleTabla tabla={<TablaEscolaridad />} showTable={showEscolaridad}>
-                <div className="padron-form-grid">
+                <div className="padron-form-grid" id="padron-seccion-escolaridad">
                   <div className="campo">
                     <label htmlFor="esc-nivel" className="b1sb">
                       Nivel Máximo de Estudios <span className="requerido">*</span>
@@ -802,7 +833,7 @@ export default function PadronPrestadoresServicio() {
               }
             >
               <ToggleTabla tabla={<TablaExperiencia />} showTable={showExperiencia}>
-                <div className="padron-form-grid">
+                <div className="padron-form-grid" id="padron-seccion-experiencia">
                   <div className="campo">
                     <label htmlFor="exp-institucion" className="b1sb">
                       Institución

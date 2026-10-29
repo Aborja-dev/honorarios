@@ -19,8 +19,12 @@ export interface MenuFlotanteProps {
   items: ItemMenuFlotante[]
   titulo?: string
   etiqueta?: string
-  /** Ancla activa: el `id` de la sección visible. */
-  activa?: string
+  /**
+   * `ancla` de la sección marcada como activa. Obligatoria a propósito: si se omite,
+   * ningún renglón coincide y el menú se vería todo en color neutro sin avisar.
+   * Puede ser `undefined` explícito cuando no hay sección abierta.
+   */
+  activa: string | undefined
   colapsado: boolean
   onColapsar: (colapsado: boolean) => void
   /** Clases adicionales aplicadas al `nav`. */

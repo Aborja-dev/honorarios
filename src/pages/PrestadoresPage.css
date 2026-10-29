@@ -1,0 +1,229 @@
+/* =========================================================================
+   PADRÓN DE PRESTADORES: MENÚ DE SECCIONES AL LADO DEL FORMULARIO
+   El menú se coloca a la izquierda del formulario y se mantiene visible al
+   desplazarse (`sticky`). Incluye las clases `menuMain*` de MenuFlotante.
+   ========================================================================= */
+
+.prestadores-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 24px;
+  box-sizing: border-box;
+  /* Ocupa todo el ancho disponible del <main> del SND (que es grid item). */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.prestadores-layout__menu {
+  flex: 0 0 auto;
+  /* Ancho explícito: sin él, el flex lo comprime a min-content y el menú se ve vacío. */
+  width: 16rem;
+  min-width: 16rem;
+  /* Se fija bajo el encabezado mientras se recorre el formulario largo. */
+  position: sticky;
+  top: 16px;
+  align-self: flex-start;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+}
+
+.prestadores-layout__contenido {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Tarjeta del menú con esquinas redondeadas */
+.menuMain {
+  position: relative;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--neutro400, #dddddd);
+
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+}
+
+.menuMain--colapsado {
+  width: 100%;
+}
+/* El ancho colapsado lo aplica el aside, que es quien reserva el espacio. */
+.prestadores-layout__menu:has(.menuMain--colapsado) {
+  width: 4.5rem;
+  min-width: 4.5rem;
+}
+
+/* Gatillo para colapsar, asomado sobre el borde derecho */
+.menuMain__gatillo {
+  position: absolute;
+  right: -14px;
+  top: 16px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  background: var(--neutro100, #ffffff);
+  border: 1px solid var(--neutro400, #dddddd);
+  border-radius: 9999px;
+  color: var(--neutro600, #767676);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+.menuMain__gatillo:hover {
+  color: var(--principal, #9B2247);
+  background: var(--gama100, #f9ebf0);
+}
+.menuMain__gatillo:focus-visible {
+  outline: 2px solid var(--principal, #9B2247);
+  outline-offset: 2px;
+}
+.menuMain__gatilloIco {
+  transition: transform 220ms ease;
+}
+.menuMain--colapsado .menuMain__gatilloIco {
+  transform: rotate(180deg);
+}
+
+.menuMain__header {
+  padding: 4px 8px 10px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--neutro300, #eeeeee);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.menuMain__headerCont {
+  font-weight: 700;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.menuMain--colapsado .menuMain__header {
+  display: none;
+}
+
+.menuMain__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.menuMain__item {
+  width: 100%;
+}
+
+.menuMain__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  /* Sin esquinas redondeadas: el renglón es una franja de ancho completo. */
+  border-radius: 0;
+  color: var(--neutro700, #4b4b4b);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.menuMain__link:hover {
+  background: var(--gama100, #f9ebf0);
+  color: var(--principal, #9B2247);
+}
+.menuMain__link:focus-visible {
+  outline: 2px solid var(--principal, #9B2247);
+  outline-offset: -2px;
+}
+.menuMain__link--active {
+  background: var(--principal, #9B2247);
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(155, 34, 71, 0.28);
+}
+.menuMain__link--active:hover {
+  background: var(--gama800, #7a1b38);
+  color: #ffffff;
+}
+
+/*
+  La hoja del SND (snd-guinda.css, servida desde el CDN) decora `.menuMain__link` con
+  pseudo-elementos que no están en este proyecto: un recuadro blanco sobre el borde
+  izquierdo del renglón activo. Como esa hoja se carga por <link> después del bundle,
+  su especificidad es desconocida aquí, así que la anulación va con !important.
+*/
+.menuMain__link::before,
+.menuMain__link::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  border: 0 !important;
+}
+
+.menuMain__icono {
+  flex: none;
+  color: currentColor;
+}
+
+.menuMain__txt {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.menuMain__desc {
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.75;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Punto de avance de cada sección */
+.menuMain__estado {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-left: auto;
+  border-radius: 9999px;
+  background: var(--neutro500, #a0a0a0);
+}
+.menuMain__estado--ok {
+  background: var(--verde500, #2f8f46);
+}
+.menuMain__link--active .menuMain__estado {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+/* Modo colapsado: solo íconos, centrados */
+.menuMain--colapsado .menuMain__link {
+  justify-content: center;
+  padding: 10px 0;
+}
+.menuMain--colapsado .menuMain__txt,
+.menuMain--colapsado .menuMain__estado {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .prestadores-layout {
+    flex-direction: column;
+    padding: 16px;
+  }
+  .prestadores-layout__menu {
+    position: static;
+    width: 100%;
+    min-width: 0;
+    max-height: none;
+    overflow: visible;
+  }
+  .menuMain,
+  .menuMain--colapsado {
+    width: 100%;
+  }
+  .prestadores-layout__menu:has(.menuMain--colapsado) {
+    width: 100%;
+    min-width: 0;
+  }
+}
