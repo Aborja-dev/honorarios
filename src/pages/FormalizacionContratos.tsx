@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Accordion, AccordionTab } from 'primereact/accordion'
 import { Calendar } from 'primereact/calendar'
+import { Checkbox } from 'primereact/checkbox'
 import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
 import {
@@ -22,6 +23,12 @@ const OPCIONES_SI_NO = [
 ]
 
 const OPCIONES_MOT_DECPAT = [
+  { label: 'PORQUE EL PUESTO ESTÁ COMPRENDIDO EN LAS FRACCIONES II, III, IV, VI, VII, Y XIII DEL ARTÍCULO 36 DE LA LFRASP SIN SER HOMÓLOGOS', value: '1' },
+  { label: 'POR MANEJAR O APLICAR RECURSOS ECONÓMICOS, VALORES Y FONDOS DE LA FEDERACIÓN', value: '2' },
+  { label: 'POR REALIZAR ACTIVIDADES DE INSPECCIÓN Y VIGILANCIA', value: '3' },
+]
+
+const OPCIONES_HON_EXEPCIONES = [
   { label: 'PORQUE EL PUESTO ESTÁ COMPRENDIDO EN LAS FRACCIONES II, III, IV, VI, VII, Y XIII DEL ARTÍCULO 36 DE LA LFRASP SIN SER HOMÓLOGOS', value: '1' },
   { label: 'POR MANEJAR O APLICAR RECURSOS ECONÓMICOS, VALORES Y FONDOS DE LA FEDERACIÓN', value: '2' },
   { label: 'POR REALIZAR ACTIVIDADES DE INSPECCIÓN Y VIGILANCIA', value: '3' },
@@ -340,12 +347,12 @@ export default function FormalizacionContratos() {
   const [modeloContrato, setModeloContrato] = useState<string | null>('MOD-JUR-2026-01')
   const [prestadorServicio, setPrestadorServicio] = useState('')
   const [ordinalContrato, setOrdinalContrato] = useState('1')
-  const [chkCompatHon, setChkCompatHon] = useState<string | null>('SI')
+  const [chkCompatHon, setChkCompatHon] = useState(false)
   const [fechaInicioContrato, setFechaInicioContrato] = useState<Date | null>(null)
   const [fechaTerminoContrato, setFechaTerminoContrato] = useState<Date | null>(null)
   const [estatus, setEstatus] = useState<string | null>(CATEGORIAS_OPERATIVAS[0])
   const [anioContrato, setAnioContrato] = useState('2026')
-  const [perteneceOic, setPerteneceOic] = useState<string | null>('NO')
+  const [perteneceOic, setPerteneceOic] = useState(false)
   const [fechaFirma, setFechaFirma] = useState<Date | null>(null)
   const [pais, setPais] = useState<string | null>('México')
   const [estado, setEstado] = useState<string | null>('Ciudad de México')
@@ -361,8 +368,8 @@ export default function FormalizacionContratos() {
   const [partida, setPartida] = useState<string | null>('12101')
   const [origen, setOrigen] = useState<string | null>('FISCALES')
   const [articuloPef, setArticuloPef] = useState('')
-  const [declaraIsr, setDeclaraIsr] = useState<string | null>('SI')
-  const [declaracionPatrimonial, setDeclaracionPatrimonial] = useState<string | null>('SI')
+  const [declaraIsr, setDeclaraIsr] = useState(false)
+  const [declaracionPatrimonial, setDeclaracionPatrimonial] = useState(false)
   const [motivoDeclaracionPatrimonial, setMotivoDeclaracionPatrimonial] = useState('')
 
   // =========================================================================
@@ -373,9 +380,9 @@ export default function FormalizacionContratos() {
   const [lugarTrabajo, setLugarTrabajo] = useState('')
   const [chkRecomendOic, setChkRecomendOic] = useState<string | null>('NO')
   const [autorizacionDictamenPresupuestal, setAutorizacionDictamenPresupuestal] = useState('')
-  const [chkServicioIgual, setChkServicioIgual] = useState<string | null>('NO')
+  const [chkServicioIgual, setChkServicioIgual] = useState(false)
   const [numeroOficioExcepcion, setNumeroOficioExcepcion] = useState('')
-  const [existePlazaHon, setExistePlazaHon] = useState<string | null>('NO')
+  const [existePlazaHon, setExistePlazaHon] = useState(false)
   const [justificacionPlaza, setJustificacionPlaza] = useState('')
   const [comentarioFormalizacion, setComentarioFormalizacion] = useState('')
 
@@ -453,12 +460,12 @@ export default function FormalizacionContratos() {
     setModeloContrato('MOD-JUR-2026-01')
     setPrestadorServicio('')
     setOrdinalContrato('1')
-    setChkCompatHon('SI')
+    setChkCompatHon(false)
     setFechaInicioContrato(null)
     setFechaTerminoContrato(null)
     setEstatus(CATEGORIAS_OPERATIVAS[0])
     setAnioContrato('2026')
-    setPerteneceOic('NO')
+    setPerteneceOic(false)
     setFechaFirma(null)
     setPais('México')
     setEstado('Ciudad de México')
@@ -471,8 +478,8 @@ export default function FormalizacionContratos() {
     setPartida('12101')
     setOrigen('FISCALES')
     setArticuloPef('')
-    setDeclaraIsr('SI')
-    setDeclaracionPatrimonial('SI')
+    setDeclaraIsr(false)
+    setDeclaracionPatrimonial(false)
     setMotivoDeclaracionPatrimonial('')
 
     setDisposiciones('')
@@ -480,9 +487,9 @@ export default function FormalizacionContratos() {
     setLugarTrabajo('')
     setChkRecomendOic('NO')
     setAutorizacionDictamenPresupuestal('')
-    setChkServicioIgual('NO')
+    setChkServicioIgual(false)
     setNumeroOficioExcepcion('')
-    setExistePlazaHon('NO')
+    setExistePlazaHon(false)
     setJustificacionPlaza('')
     setComentarioFormalizacion('')
 
@@ -735,12 +742,10 @@ export default function FormalizacionContratos() {
                 <label htmlFor="fc-chk-compat" className="b1sb">
                   Compatibilidad
                 </label>
-                <Dropdown
+                <Checkbox
                   inputId="fc-chk-compat"
-                  options={OPCIONES_SI_NO}
-                  value={chkCompatHon}
-                  onChange={(e) => setChkCompatHon(e.value)}
-                  appendTo="self"
+                  checked={chkCompatHon}
+                  onChange={(e) => setChkCompatHon(Boolean(e.checked))}
                 />
               </div>
 
@@ -817,12 +822,10 @@ export default function FormalizacionContratos() {
                 <label htmlFor="fc-pertenece-oic" className="b1sb">
                   Pertenece OIC
                 </label>
-                <Dropdown
+                <Checkbox
                   inputId="fc-pertenece-oic"
-                  options={OPCIONES_SI_NO}
-                  value={perteneceOic}
-                  onChange={(e) => setPerteneceOic(e.value)}
-                  appendTo="self"
+                  checked={perteneceOic}
+                  onChange={(e) => setPerteneceOic(Boolean(e.checked))}
                 />
               </div>
 
@@ -901,7 +904,7 @@ export default function FormalizacionContratos() {
                   </span>
                   <div>
                     <span className="sh0b" style={{ display: 'block' }}>
-                      2. Formalización de contratos · Importes y Datos Fiscales
+                      2. Formalización de contratos · Importes y Declaración Patrimonial
                     </span>
                     <span className="sdr" style={{ color: 'var(--neutro600)' }}>
                       Importes, exhibiciones, partida presupuestal, PEF, ISR y declaración patrimonial
@@ -1040,12 +1043,10 @@ export default function FormalizacionContratos() {
                 <label htmlFor="fc-declara-isr" className="b1sb">
                   Declara ISR
                 </label>
-                <Dropdown
+                <Checkbox
                   inputId="fc-declara-isr"
-                  options={OPCIONES_SI_NO}
-                  value={declaraIsr}
-                  onChange={(e) => setDeclaraIsr(e.value)}
-                  appendTo="self"
+                  checked={declaraIsr}
+                  onChange={(e) => setDeclaraIsr(Boolean(e.checked))}
                 />
               </div>
 
@@ -1053,12 +1054,10 @@ export default function FormalizacionContratos() {
                 <label htmlFor="fc-declara-patrimonial" className="b1sb">
                   Declaración Patrimonial
                 </label>
-                <Dropdown
+                <Checkbox
                   inputId="fc-declara-patrimonial"
-                  options={OPCIONES_SI_NO}
-                  value={declaracionPatrimonial}
-                  onChange={(e) => setDeclaracionPatrimonial(e.value)}
-                  appendTo="self"
+                  checked={declaracionPatrimonial}
+                  onChange={(e) => setDeclaracionPatrimonial(Boolean(e.checked))}
                 />
               </div>
 
@@ -1083,13 +1082,13 @@ export default function FormalizacionContratos() {
                 setIntentoEnvio(true)
                 if (seccionPresupuestalCompleta) {
                   setAcordeonesActivos([2])
-                  notificar.exito('Importes y datos fiscales guardados temporalmente.')
+                  notificar.exito('Importes y Declaración Patrimonial guardados temporalmente.')
                 } else {
-                  notificar.alerta('Por favor completa los datos presupuestales obligatorios.')
+                  notificar.alerta('Por favor completa los datos de importes y declaración patrimonial obligatorios.')
                 }
               }}
             >
-              Guardar importes y datos fiscales
+              Guardar importes y declaración patrimonial
             </SndBoton>
           </AccordionTab>
 
@@ -1105,10 +1104,10 @@ export default function FormalizacionContratos() {
                   </span>
                   <div>
                     <span className="sh0b" style={{ display: 'block' }}>
-                      3. Formalización de contratos · Normatividad, Dictámenes y Plaza
+                      3. Formalización de contratos · Normatividad y Disposiciones
                     </span>
                     <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Disposiciones, fundamento legal, lugar de trabajo, dictamen presupuestal y justificación de plaza
+                      Disposiciones, fundamento legal, lugar de trabajo
                     </span>
                   </div>
                 </div>
@@ -1120,14 +1119,14 @@ export default function FormalizacionContratos() {
             }
           >
             <div className="padron-form-grid">
-              <div className="campo">
+              <div className="campo padron-form-grid__col-3">
                 <label htmlFor="fc-disposiciones" className="b1sb">
                   Disposiciones <span className="requerido">*</span>
                 </label>
-                <InputText
+                <textarea
                   id="fc-disposiciones"
+                  className={`padron-textarea ${intentoEnvio && !disposiciones.trim() ? 'padron-textarea--invalido' : ''}`}
                   value={disposiciones}
-                  invalid={intentoEnvio && !disposiciones.trim()}
                   onChange={(e) => setDisposiciones(e.target.value)}
                   placeholder="Ej. Disposiciones en las materias de Recursos Humanos"
                 />
@@ -1136,14 +1135,14 @@ export default function FormalizacionContratos() {
                 )}
               </div>
 
-              <div className="campo">
+              <div className="campo padron-form-grid__col-3" >
                 <label htmlFor="fc-fundamento-legal" className="b1sb">
                   Fundamento Legal <span className="requerido">*</span>
                 </label>
-                <InputText
+                <textarea
                   id="fc-fundamento-legal"
+                  className={`padron-textarea ${intentoEnvio && !disposiciones.trim() ? 'padron-textarea--invalido' : ''}`}
                   value={fundamentoLegal}
-                  invalid={intentoEnvio && !fundamentoLegal.trim()}
                   onChange={(e) => setFundamentoLegal(e.target.value)}
                   placeholder="Ej. Art. 69 LFPRH y Código Civil Federal"
                 />
@@ -1168,18 +1167,7 @@ export default function FormalizacionContratos() {
                 )}
               </div>
 
-              <div className="campo">
-                <label htmlFor="fc-chk-recomend-oic" className="b1sb">
-                  Chk_Recomend Oic
-                </label>
-                <Dropdown
-                  inputId="fc-chk-recomend-oic"
-                  options={OPCIONES_SI_NO}
-                  value={chkRecomendOic}
-                  onChange={(e) => setChkRecomendOic(e.value)}
-                  appendTo="self"
-                />
-              </div>
+
 
               <div className="campo">
                 <label htmlFor="fc-dictamen-presupuestal" className="b1sb">
@@ -1199,14 +1187,12 @@ export default function FormalizacionContratos() {
 
               <div className="campo">
                 <label htmlFor="fc-chk-servicio-igual" className="b1sb">
-                  Chk_Servicio Igual
+                  Servicio Igual
                 </label>
-                <Dropdown
+                <Checkbox
                   inputId="fc-chk-servicio-igual"
-                  options={OPCIONES_SI_NO}
-                  value={chkServicioIgual}
-                  onChange={(e) => setChkServicioIgual(e.value)}
-                  appendTo="self"
+                  checked={chkServicioIgual}
+                  onChange={(e) => setChkServicioIgual(Boolean(e.checked))}
                 />
               </div>
 
@@ -1224,44 +1210,185 @@ export default function FormalizacionContratos() {
 
               <div className="campo">
                 <label htmlFor="fc-existe-plaza" className="b1sb">
-                  Existe_Plaza Hon
+                  Existe Plaza Honorarios
                 </label>
-                <Dropdown
+                <Checkbox
                   inputId="fc-existe-plaza"
-                  options={OPCIONES_SI_NO}
-                  value={existePlazaHon}
-                  onChange={(e) => setExistePlazaHon(e.value)}
-                  appendTo="self"
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-justificacion-plaza" className="b1sb">
-                  Justificacion Plaza
-                </label>
-                <InputText
-                  id="fc-justificacion-plaza"
-                  value={justificacionPlaza}
-                  onChange={(e) => setJustificacionPlaza(e.target.value)}
-                  placeholder="Ej. Actividades temporales sin plaza equivalente vacante"
+                  checked={existePlazaHon}
+                  onChange={(e) => setExistePlazaHon(Boolean(e.checked))}
                 />
               </div>
 
               <div className="campo padron-form-grid__col-3">
-                <label htmlFor="fc-comentario" className="b1sb">
-                  Comentario <span className="requerido">*</span>
+                <label htmlFor="fc-justificacion-plaza" className="b1sb">
+                  Justificacion Plaza
                 </label>
                 <textarea
-                  id="fc-comentario"
-                  className={`padron-textarea ${intentoEnvio && !comentarioFormalizacion.trim() ? 'padron-textarea--invalido' : ''}`}
-                  value={comentarioFormalizacion}
-                  onChange={(e) => setComentarioFormalizacion(e.target.value)}
-                  placeholder="Ingresa comentarios adicionales sobre la formalización del contrato..."
+                  id="fc-justificacion-plaza"
+                  value={justificacionPlaza}
+                  className={`padron-textarea ${intentoEnvio && !disposiciones.trim() ? 'padron-textarea--invalido' : ''}`}
+                  onChange={(e) => setJustificacionPlaza(e.target.value)}
+                  placeholder="Ej. Actividades temporales sin plaza equivalente vacante"
                 />
-                {intentoEnvio && !comentarioFormalizacion.trim() && (
-                  <span className="campo__error">El comentario de formalización es obligatorio.</span>
+              </div>
+              {/* tabla de exepciones TablaExepciones */}
+              <div className="padron-form-grid__col-3">
+                <div className="contenedor-tabla" style={{ marginTop: '0.5rem' }}>
+                  <table
+                    style={{
+                      width: '100%',
+                      minWidth: '40rem',
+                      borderCollapse: 'collapse',
+                      fontSize: '0.875rem',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <thead>
+                      <tr style={{ backgroundColor: 'var(--principal, #9B2247)' }}>
+                        <th
+                          style={{
+                            padding: '0.75rem 1rem',
+                            fontWeight: 600,
+                            color: '#fff',
+                            whiteSpace: 'nowrap',
+                            border: '1px solid var(--gama800, #6F1D36)',
+                          }}
+                        >
+                          Id Exepción
+                        </th>
+                        <th
+                          style={{
+                            padding: '0.75rem 1rem',
+                            fontWeight: 600,
+                            color: '#fff',
+                            whiteSpace: 'nowrap',
+                            border: '1px solid var(--gama800, #6F1D36)',
+                          }}
+                        >
+                          Numero de fracción
+                        </th>
+                        <th
+                          style={{
+                            padding: '0.75rem 1rem',
+                            fontWeight: 600,
+                            color: '#fff',
+                            whiteSpace: 'nowrap',
+                            border: '1px solid var(--gama800, #6F1D36)',
+                          }}
+                        >
+                          Descripción
+                        </th>
+                        <th
+                          style={{
+                            padding: '0.75rem 1rem',
+                            fontWeight: 600,
+                            color: '#fff',
+                            whiteSpace: 'nowrap',
+                            border: '1px solid var(--gama800, #6F1D36)',
+                            textAlign: 'center',
+                          }}
+                        >
+                          Acciones
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style={{ borderBottom: '1px solid var(--neutro400, #dddddd)' }}>
+                        <td
+                          style={{
+                            padding: '0.75rem 1rem',
+                            color: 'var(--neutro800, #333)',
+                            verticalAlign: 'middle',
+                            border: '1px solid var(--neutro400, #dddddd)',
+                          }}
+                        >
+                          EXC-HON-2026-01
+                        </td>
+                        <td
+                          style={{
+                            padding: '0.75rem 1rem',
+                            color: 'var(--neutro800, #333)',
+                            verticalAlign: 'middle',
+                            border: '1px solid var(--neutro400, #dddddd)',
+                          }}
+                        >
+                          Fracción I
+                        </td>
+                        <td
+                          style={{
+                            padding: '0.75rem 1rem',
+                            color: 'var(--neutro800, #333)',
+                            verticalAlign: 'middle',
+                            border: '1px solid var(--neutro400, #dddddd)',
+                          }}
+                        >
+                          Excepción autorizada para contratación de servicios profesionales por honorarios.
+                        </td>
+                        <td
+                          style={{
+                            padding: '0.75rem 1rem',
+                            color: 'var(--neutro800, #333)',
+                            verticalAlign: 'middle',
+                            border: '1px solid var(--neutro400, #dddddd)',
+                            textAlign: 'center',
+                          }}
+                        >
+                          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                            <button
+                              type="button"
+                              style={{
+                                background: 'none',
+                                border: '1px solid var(--neutro400, #cccccc)',
+                                borderRadius: '8px',
+                                padding: '4px 8px',
+                                cursor: 'pointer',
+                                fontSize: '0.8rem',
+                                color: 'var(--neutro800, #333)',
+                              }}
+                              title="Modificar excepción"
+                            >
+                              Modificar
+                            </button>
+                            <button
+                              type="button"
+                              style={{
+                                background: 'none',
+                                border: '1px solid var(--principal, #9B2247)',
+                                borderRadius: '8px',
+                                padding: '4px 8px',
+                                cursor: 'pointer',
+                                fontSize: '0.8rem',
+                                color: 'var(--principal, #9B2247)',
+                              }}
+                              title="Agregar excepción"
+                            >
+                              Agregar
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div className="campo">
+                <label htmlFor="exc-id-excepcion" className="b1sb">
+                  Id Excepción <span className="requerido">*</span>
+                </label>
+                <Dropdown
+                  id="exc-id-excepcion"
+                  value={idExcepcion}
+                  options={OPCIONES_HON_EXEPCIONES}
+                  invalid={intentoEnvio && !idExcepcion.trim()}
+                  onChange={(e) => setIdExcepcion(e.target.value.toUpperCase())}
+                  placeholder=""
+                />
+                {intentoEnvio && !idExcepcion.trim() && (
+                  <span className="campo__error">El identificador de excepción es obligatorio.</span>
                 )}
               </div>
+
+
             </div>
 
             <SndBoton
@@ -1271,13 +1398,13 @@ export default function FormalizacionContratos() {
                 setIntentoEnvio(true)
                 if (seccionNormatividadCompleta) {
                   setAcordeonesActivos([3])
-                  notificar.exito('Datos de normatividad y dictámenes guardados temporalmente.')
+                  notificar.exito('Datos de normatividad y disposiciones guardados temporalmente.')
                 } else {
                   notificar.alerta('Por favor completa los datos de normatividad obligatorios.')
                 }
               }}
             >
-              Guardar normatividad y dictámenes
+              Guardar normatividad y disposiciones
             </SndBoton>
           </AccordionTab>
 
@@ -1308,16 +1435,166 @@ export default function FormalizacionContratos() {
             }
           >
             <div className="padron-form-grid">
-              <div className="campo">
+              {/* tabla de Servidores publicos que suscriben TablaServidoresPublicos */}
+              <div className="padron-form-grid__col-3">
+                <div className="contenedor-tabla" style={{ marginTop: '0.5rem' }}>
+                  <table
+                    id="TablaServidoresPublicos"
+                    style={{
+                      width: '100%',
+                      minWidth: '40rem',
+                      borderCollapse: 'collapse',
+                      fontSize: '0.875rem',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <thead>
+                      <tr style={{ backgroundColor: 'var(--principal, #9B2247)' }}>
+                        <th
+                          style={{
+                            padding: '0.75rem 1rem',
+                            fontWeight: 600,
+                            color: '#fff',
+                            whiteSpace: 'nowrap',
+                            border: '1px solid var(--gama800, #6F1D36)',
+                          }}
+                        >
+                          Ordinal
+                        </th>
+                        <th
+                          style={{
+                            padding: '0.75rem 1rem',
+                            fontWeight: 600,
+                            color: '#fff',
+                            whiteSpace: 'nowrap',
+                            border: '1px solid var(--gama800, #6F1D36)',
+                          }}
+                        >
+                          Id RUSP
+                        </th>
+                        <th
+                          style={{
+                            padding: '0.75rem 1rem',
+                            fontWeight: 600,
+                            color: '#fff',
+                            whiteSpace: 'nowrap',
+                            border: '1px solid var(--gama800, #6F1D36)',
+                          }}
+                        >
+                          Nombre del servidor público
+                        </th>
+                        <th
+                          style={{
+                            padding: '0.75rem 1rem',
+                            fontWeight: 600,
+                            color: '#fff',
+                            whiteSpace: 'nowrap',
+                            border: '1px solid var(--gama800, #6F1D36)',
+                            textAlign: 'center',
+                          }}
+                        >
+                          {''}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style={{ borderBottom: '1px solid var(--neutro400, #dddddd)' }}>
+                        <td
+                          style={{
+                            padding: '0.75rem 1rem',
+                            color: 'var(--neutro800, #333)',
+                            verticalAlign: 'middle',
+                            border: '1px solid var(--neutro400, #dddddd)',
+                          }}
+                        >
+                          1
+                        </td>
+                        <td
+                          style={{
+                            padding: '0.75rem 1rem',
+                            color: 'var(--neutro800, #333)',
+                            verticalAlign: 'middle',
+                            border: '1px solid var(--neutro400, #dddddd)',
+                          }}
+                        >
+                          000004918
+                        </td>
+                        <td
+                          style={{
+                            padding: '0.75rem 1rem',
+                            color: 'var(--neutro800, #333)',
+                            verticalAlign: 'middle',
+                            border: '1px solid var(--neutro400, #dddddd)',
+                          }}
+                        >
+                          Alejandro Morales Domínguez
+                        </td>
+                        <td
+                          style={{
+                            padding: '0.75rem 1rem',
+                            color: 'var(--neutro800, #333)',
+                            verticalAlign: 'middle',
+                            border: '1px solid var(--neutro400, #dddddd)',
+                            textAlign: 'center',
+                          }}
+                        >
+                          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                            <button
+                              type="button"
+                              style={{
+                                background: 'none',
+                                border: '1px solid var(--neutro400, #cccccc)',
+                                borderRadius: '8px',
+                                padding: '4px 8px',
+                                cursor: 'pointer',
+                                fontSize: '0.8rem',
+                                color: 'var(--neutro800, #333)',
+                              }}
+                              title="Modificar servidor público"
+                            >
+                              Modificar
+                            </button>
+                            <button
+                              type="button"
+                              style={{
+                                background: 'none',
+                                border: '1px solid var(--principal, #9B2247)',
+                                borderRadius: '8px',
+                                padding: '4px 8px',
+                                cursor: 'pointer',
+                                fontSize: '0.8rem',
+                                color: 'var(--principal, #9B2247)',
+                              }}
+                              title="Agregar servidor público"
+                            >
+                              Agregar
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div
+                className={`campo ${intentoEnvio && !idServidorPublicoSuscribe.trim() ? 'padron-buscador--invalido' : ''}`}
+              >
                 <label htmlFor="sp-id-servidor" className="b1sb">
                   Id Servidores publico que suscribe <span className="requerido">*</span>
                 </label>
-                <InputText
-                  id="sp-id-servidor"
-                  value={idServidorPublicoSuscribe}
-                  invalid={intentoEnvio && !idServidorPublicoSuscribe.trim()}
-                  onChange={(e) => setIdServidorPublicoSuscribe(e.target.value.toUpperCase())}
-                  placeholder="Ej. RUSP-SP-004918"
+                <SndBuscador
+                  variante="principal"
+                  etiqueta="Buscar servidor público que suscribe"
+                  placeholder="Ej. 000004918"
+                  valor={idServidorPublicoSuscribe}
+                  ancho="100%"
+                  onValor={(valor) => setIdServidorPublicoSuscribe(valor.toUpperCase())}
+                  onBuscar={(valor) => {
+                    if (valor.trim()) {
+                      notificar.info(`Buscando servidor público: «${valor}».`)
+                    }
+                  }}
                 />
                 {intentoEnvio && !idServidorPublicoSuscribe.trim() && (
                   <span className="campo__error">
@@ -1374,10 +1651,10 @@ export default function FormalizacionContratos() {
                   </span>
                   <div>
                     <span className="sh0b" style={{ display: 'block' }}>
-                      5. Excepciones de contrato
+                      5. Comentarios de contrato
                     </span>
                     <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Registro de identificador de excepción aplicable y justificación
+
                     </span>
                   </div>
                 </div>
@@ -1389,35 +1666,23 @@ export default function FormalizacionContratos() {
             }
           >
             <div className="padron-form-grid">
-              <div className="campo">
-                <label htmlFor="exc-id-excepcion" className="b1sb">
-                  Id Excepción <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="exc-id-excepcion"
-                  value={idExcepcion}
-                  invalid={intentoEnvio && !idExcepcion.trim()}
-                  onChange={(e) => setIdExcepcion(e.target.value.toUpperCase())}
-                  placeholder="Ej. EXC-HON-2026-01"
-                />
-                {intentoEnvio && !idExcepcion.trim() && (
-                  <span className="campo__error">El identificador de excepción es obligatorio.</span>
-                )}
-              </div>
+
+
+
 
               <div className="campo padron-form-grid__col-3">
-                <label htmlFor="exc-comentario" className="b1sb">
+                <label htmlFor="fc-comentario" className="b1sb">
                   Comentario <span className="requerido">*</span>
                 </label>
                 <textarea
-                  id="exc-comentario"
-                  className={`padron-textarea ${intentoEnvio && !comentarioExcepcion.trim() ? 'padron-textarea--invalido' : ''}`}
-                  value={comentarioExcepcion}
-                  onChange={(e) => setComentarioExcepcion(e.target.value)}
-                  placeholder="Describe el detalle o fundamento de la excepción de contrato..."
+                  id="fc-comentario"
+                  className={`padron-textarea ${intentoEnvio && !comentarioFormalizacion.trim() ? 'padron-textarea--invalido' : ''}`}
+                  value={comentarioFormalizacion}
+                  onChange={(e) => setComentarioFormalizacion(e.target.value)}
+                  placeholder="Ingresa comentarios adicionales sobre la formalización del contrato..."
                 />
-                {intentoEnvio && !comentarioExcepcion.trim() && (
-                  <span className="campo__error">El comentario de excepción de contrato es obligatorio.</span>
+                {intentoEnvio && !comentarioFormalizacion.trim() && (
+                  <span className="campo__error">El comentario de formalización es obligatorio.</span>
                 )}
               </div>
             </div>
