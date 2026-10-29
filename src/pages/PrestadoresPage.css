@@ -1,7 +1,12 @@
 /* =========================================================================
    PADRÓN DE PRESTADORES: MENÚ DE SECCIONES AL LADO DEL FORMULARIO
    El menú se coloca a la izquierda del formulario y se mantiene visible al
-   desplazarse (`sticky`). Incluye las clases `menuMain*` de MenuFlotante.
+   desplazarse (`sticky`).
+
+   IMPORTANTE: las clases `menuMain*` también las usa el menú lateral global
+   del SND (SndMenuLateral, en App.tsx). Por eso TODAS las reglas de este
+   archivo van acotadas con el prefijo `.prestadores-layout__menu`: así no
+   alteran el ancho ni la animación del menú lateral de otras pantallas.
    ========================================================================= */
 
 .prestadores-layout {
@@ -21,6 +26,8 @@
   /* Ancho explícito: sin él, el flex lo comprime a min-content y el menú se ve vacío. */
   width: 16rem;
   min-width: 16rem;
+  /* Anima el ancho al colapsar y extender; el menú interno siempre mide 100%. */
+  transition: width 220ms ease, min-width 220ms ease;
   /* Se fija bajo el encabezado mientras se recorre el formulario largo. */
   position: sticky;
   top: 16px;
@@ -34,28 +41,29 @@
   min-width: 0;
 }
 
-/* Tarjeta del menú con esquinas redondeadas */
-.menuMain {
+/* ---------- Tarjeta del menú ---------- */
+.prestadores-layout__menu .menuMain {
   position: relative;
+  /* El ancho lo gobierna el aside; la tarjeta solo lo acompaña. */
   width: 100%;
   padding: 12px;
   border: 1px solid var(--neutro400, #dddddd);
-
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
   box-sizing: border-box;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-.menuMain--colapsado {
+.prestadores-layout__menu .menuMain--colapsado {
   width: 100%;
 }
+
 /* El ancho colapsado lo aplica el aside, que es quien reserva el espacio. */
 .prestadores-layout__menu:has(.menuMain--colapsado) {
   width: 4.5rem;
   min-width: 4.5rem;
 }
 
-/* Gatillo para colapsar, asomado sobre el borde derecho */
-.menuMain__gatillo {
+/* ---------- Gatillo para colapsar ---------- */
+.prestadores-layout__menu .menuMain__gatillo {
   position: absolute;
   right: -14px;
   top: 16px;
@@ -71,39 +79,41 @@
   cursor: pointer;
   transition: color 150ms ease, background-color 150ms ease;
 }
-.menuMain__gatillo:hover {
+.prestadores-layout__menu .menuMain__gatillo:hover {
   color: var(--principal, #9B2247);
   background: var(--gama100, #f9ebf0);
 }
-.menuMain__gatillo:focus-visible {
+.prestadores-layout__menu .menuMain__gatillo:focus-visible {
   outline: 2px solid var(--principal, #9B2247);
   outline-offset: 2px;
 }
-.menuMain__gatilloIco {
+.prestadores-layout__menu .menuMain__gatilloIco {
   transition: transform 220ms ease;
 }
-.menuMain--colapsado .menuMain__gatilloIco {
+.prestadores-layout__menu .menuMain--colapsado .menuMain__gatilloIco {
   transform: rotate(180deg);
 }
 
-.menuMain__header {
+/* ---------- Encabezado ---------- */
+.prestadores-layout__menu .menuMain__header {
   padding: 4px 8px 10px;
   margin-bottom: 8px;
   border-bottom: 1px solid var(--neutro300, #eeeeee);
   overflow: hidden;
   white-space: nowrap;
 }
-.menuMain__headerCont {
+.prestadores-layout__menu .menuMain__headerCont {
   font-weight: 700;
   font-size: 0.8125rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.menuMain--colapsado .menuMain__header {
+.prestadores-layout__menu .menuMain--colapsado .menuMain__header {
   display: none;
 }
 
-.menuMain__lista {
+/* ---------- Lista de secciones ---------- */
+.prestadores-layout__menu .menuMain__lista {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -111,11 +121,11 @@
   padding: 0;
   list-style: none;
 }
-.menuMain__item {
+.prestadores-layout__menu .menuMain__item {
   width: 100%;
 }
 
-.menuMain__link {
+.prestadores-layout__menu .menuMain__link {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -130,20 +140,20 @@
   overflow: hidden;
   transition: background-color 150ms ease, color 150ms ease;
 }
-.menuMain__link:hover {
+.prestadores-layout__menu .menuMain__link:hover {
   background: var(--gama100, #f9ebf0);
   color: var(--principal, #9B2247);
 }
-.menuMain__link:focus-visible {
+.prestadores-layout__menu .menuMain__link:focus-visible {
   outline: 2px solid var(--principal, #9B2247);
   outline-offset: -2px;
 }
-.menuMain__link--active {
+.prestadores-layout__menu .menuMain__link--active {
   background: var(--principal, #9B2247);
   color: #ffffff;
   box-shadow: 0 6px 14px rgba(155, 34, 71, 0.28);
 }
-.menuMain__link--active:hover {
+.prestadores-layout__menu .menuMain__link--active:hover {
   background: var(--gama800, #7a1b38);
   color: #ffffff;
 }
@@ -151,28 +161,27 @@
 /*
   La hoja del SND (snd-guinda.css, servida desde el CDN) decora `.menuMain__link` con
   pseudo-elementos que no están en este proyecto: un recuadro blanco sobre el borde
-  izquierdo del renglón activo. Como esa hoja se carga por <link> después del bundle,
-  su especificidad es desconocida aquí, así que la anulación va con !important.
+  izquierdo del renglón activo. Se anulan solo dentro de este menú.
 */
-.menuMain__link::before,
-.menuMain__link::after {
+.prestadores-layout__menu .menuMain__link::before,
+.prestadores-layout__menu .menuMain__link::after {
   content: none !important;
   display: none !important;
   background: none !important;
   border: 0 !important;
 }
 
-.menuMain__icono {
+.prestadores-layout__menu .menuMain__icono {
   flex: none;
   color: currentColor;
 }
 
-.menuMain__txt {
+.prestadores-layout__menu .menuMain__txt {
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
-.menuMain__desc {
+.prestadores-layout__menu .menuMain__desc {
   font-size: 0.75rem;
   font-weight: 400;
   opacity: 0.75;
@@ -180,8 +189,8 @@
   text-overflow: ellipsis;
 }
 
-/* Punto de avance de cada sección */
-.menuMain__estado {
+/* ---------- Punto de avance ---------- */
+.prestadores-layout__menu .menuMain__estado {
   flex: none;
   width: 8px;
   height: 8px;
@@ -189,20 +198,20 @@
   border-radius: 9999px;
   background: var(--neutro500, #a0a0a0);
 }
-.menuMain__estado--ok {
+.prestadores-layout__menu .menuMain__estado--ok {
   background: var(--verde500, #2f8f46);
 }
-.menuMain__link--active .menuMain__estado {
+.prestadores-layout__menu .menuMain__link--active .menuMain__estado {
   background: rgba(255, 255, 255, 0.65);
 }
 
-/* Modo colapsado: solo íconos, centrados */
-.menuMain--colapsado .menuMain__link {
+/* ---------- Modo colapsado: solo íconos ---------- */
+.prestadores-layout__menu .menuMain--colapsado .menuMain__link {
   justify-content: center;
   padding: 10px 0;
 }
-.menuMain--colapsado .menuMain__txt,
-.menuMain--colapsado .menuMain__estado {
+.prestadores-layout__menu .menuMain--colapsado .menuMain__txt,
+.prestadores-layout__menu .menuMain--colapsado .menuMain__estado {
   display: none;
 }
 
@@ -217,9 +226,11 @@
     min-width: 0;
     max-height: none;
     overflow: visible;
+    /* Sin animación de ancho: aquí siempre ocupa la fila completa. */
+    transition: none;
   }
-  .menuMain,
-  .menuMain--colapsado {
+  .prestadores-layout__menu .menuMain,
+  .prestadores-layout__menu .menuMain--colapsado {
     width: 100%;
   }
   .prestadores-layout__menu:has(.menuMain--colapsado) {
