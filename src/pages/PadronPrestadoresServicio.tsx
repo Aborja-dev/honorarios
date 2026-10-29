@@ -19,10 +19,6 @@ import TablaExperiencia from '../components/prestadoresServicios/TablaExperienci
 import { ToggleTabla } from '../components/prestadoresServicios/ToogleTabla'
 import { DATOS_EJEMPLO_DIRECCIONES, DATOS_PERSONALES_PRUEBA } from './PadronPrestadoresServicio.mock'
 import { Calendar } from 'primereact/calendar'
-import { Toggable } from '../components/prestadoresServicios/Toggable'
-const EmptyForm = () => {
-  return (<>Nose encuetra</>)
-}
 
 const OPCIONES_NACIONALIDAD = [
   { label: 'México', value: 'MEXICANA' },
@@ -239,7 +235,6 @@ export default function PadronPrestadoresServicio() {
   const styleCURPButton = {
     width: '13rem',
     height: '1rem',
-    marginTop: '2rem',
   }
 
   const [curpValidado, setCurpValidado] = useState(false)
@@ -291,33 +286,24 @@ export default function PadronPrestadoresServicio() {
               </span>
             )}
           </div>
-          <div className="fila" style={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
-            <InputText aria-label="Buscar por nombre" placeholder="Ramo" />
-            <InputText aria-label="Buscar por CURP" placeholder="UR" />
-            <InputText aria-label="Buscar por RFC" placeholder="CURP" />
-            <SndBoton type="button">Buscar</SndBoton>
-            <SndBoton variante="secundario" type="button" onClick={() => setShowFormulario(!showFormulario)}>
-              Nuevo prestador
+
+          <div className="fila" >
+            <SndBoton
+              variante="secundario"
+              type="button"
+              onClick={() => setModalCargaMasivaAbierto(true)}
+            >
+              <SndIcono nombre="snd-document" tamano={18} />
+              Carga masiva
+            </SndBoton>
+            <SndBoton variante="secundario" type="button" onClick={expandirTodo}>
+              Expandir las 4 secciones
+            </SndBoton>
+            <SndBoton variante="fantasma" type="button" onClick={colapsarTodo}>
+              Contraer todo
             </SndBoton>
           </div>
-          <Toggable toogle={showFormulario} EmptyTemplate={null}>
-            <div className="fila" style={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
-              <SndBoton
-                variante="secundario"
-                type="button"
-                onClick={() => setModalCargaMasivaAbierto(true)}
-              >
-                <SndIcono nombre="snd-document" tamano={18} />
-                Carga masiva
-              </SndBoton>
-              <SndBoton variante="secundario" type="button" onClick={expandirTodo}>
-                Expandir las 4 secciones
-              </SndBoton>
-              <SndBoton variante="fantasma" type="button" onClick={colapsarTodo}>
-                Contraer todo
-              </SndBoton>
-            </div>
-          </Toggable>
+
         </div>
       </article>
 
@@ -337,7 +323,7 @@ export default function PadronPrestadoresServicio() {
       )}
 
       {/* FORMULARIO CON LOS ACORDEONES */}
-      <Toggable toogle={showFormulario} EmptyTemplate={<EmptyForm />}>
+      
         <form onSubmit={guardarExpediente} noValidate style={{ marginTop: 20 }}>
           <Accordion
             multiple
@@ -433,11 +419,13 @@ export default function PadronPrestadoresServicio() {
                   />
                 </div>
                 <div className="campo">
+                  <label className="b1sb"> Validar posible compatibilidad</label>
                   <SndBoton
                     type="button"
                     style={styleCURPButton}
                     onClick={() => {
                       handlerValidarCurp()
+                      setShowFormulario(true)
                       if (curpValidado) {
                         setIntentoEnvio(true)
                         if (seccionPersonalCompleta) {
@@ -449,9 +437,16 @@ export default function PadronPrestadoresServicio() {
                       }
                     }}
                   >
-                    Validar posible compatibilidad
+                   Validar
                   </SndBoton>
                 </div>
+                {
+                  showFormulario && (
+                <div className="campo padron-form-grid__col-2">
+                  <SndMensaje tipo='alerta'>{`El prestador con CURP de ${curp} tiene compatibilidad y no presenta conflictos para el ejercicio de sus funciones`}</SndMensaje>
+                </div>
+                  )
+                }
               </div>
             </AccordionTab>
 
@@ -943,7 +938,7 @@ export default function PadronPrestadoresServicio() {
             </div>
           </article>
         </form>
-      </Toggable>
+
       {/* MODAL DE CARGA MASIVA */}
       <ModalCargaMasiva
         visible={modalCargaMasivaAbierto}
