@@ -13,6 +13,7 @@ export interface ItemMenuFlotante {
   descripcion?: string
   /** Marca de avance; pinta el punto de color del renglón. */
   estado?: 'completado' | 'pendiente'
+  tooltip: string
 }
 
 export interface MenuFlotanteProps {
@@ -63,7 +64,7 @@ export function MenuFlotante({
         {items.map((item) => {
           const esActiva = item.ancla === activa
           return (
-            <li key={item.ancla} className="menuMain__item">
+            <li key={item.ancla} className="menuMain__item" title={item.tooltip}>
               <a
                 href={`#${item.ancla}`}
                 className={cn('menuMain__link menuMain__linkSm', esActiva && 'menuMain__link--active')}

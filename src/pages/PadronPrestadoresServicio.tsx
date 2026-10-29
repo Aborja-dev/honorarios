@@ -352,623 +352,623 @@ export default function PadronPrestadoresServicio({
       )}
 
       {/* FORMULARIO CON LOS ACORDEONES */}
-      
-        <form onSubmit={guardarExpediente} noValidate style={{ marginTop: 20 }}>
-          <Accordion
-            multiple
-            activeIndex={acordeonesActivos}
-            onTabChange={(e) => setAcordeonesActivos(e.index)}
-            className="padron-acordeon"
-          >
-            {/* VALIDACIÓN DE IDENTIDAD Y VIGENCIA */}
-            <AccordionTab
-              header={
-                <div className="padron-acordeon__cabecera">
-                  <div className="padron-acordeon__titulo-grupo">
-                    <span className="padron-acordeon__icono">
-                      <SndIcono nombre="snd-user--avatar" tamano={22} />
-                    </span>
-                    <div>
-                      <span className="sh0b" style={{ display: 'block' }}>
-                        Validación de CURP
-                      </span>
-                      <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                        CURP y periodo de prestación del servicio
-                      </span>
-                    </div>
-                  </div>
-                  <span className={`pildora pildora--${curpValidado ? 'exito' : 'alerta'} snd-pildora`}>
-                    <span className="pildora__dot" aria-hidden="true" />
-                    {curpValidado ? 'Validada' : 'Pendiente'}
-                  </span>
-                </div>
-              }
-            >
-              <div className="padron-form-grid" id="padron-seccion-curp">
-                <div className="padron-form-grid__busqueda">
-                  <div className="campo">
-                    <label htmlFor="dp-ramo" className="b1sb">Ramo</label>
-                    <InputText
-                      id="dp-ramo"
-                      className="padron-form-grid__filtro"
-                      defaultValue="06 - Hacienda y Crédito Público"
-                      disabled
-                    />
-                  </div>
-                  <div className="campo">
-                    <label htmlFor="dp-ur" className="b1sb">UR</label>
-                    <InputText
-                      id="dp-ur"
-                      className="padron-form-grid__filtro"
-                      defaultValue="000 - Secretaría de Hacienda y Crédito Público"
-                      disabled
-                    />
-                  </div>
-                </div>
-                <div className="campo">
-                  <label htmlFor="dp-curp" className="b1sb">
-                    CURP (18 caracteres) <span className="requerido">*</span>
-                  </label>
-                  <InputText
-                    id="dp-curp"
-                    maxLength={18}
-                    value={curp}
-                    invalid={intentoEnvio && curp.trim().length < 18}
-                    onChange={(e) => setCurp(e.target.value.toUpperCase())}
-                    placeholder="Ej. LORM880412MDFRRL09"
-                  />
-                  {intentoEnvio && curp.trim().length < 18 && (
-                    <span className="campo__error">Ingresa los 18 caracteres de la CURP.</span>
-                  )}
-                </div>
-                <div className="campo">
-                  <label htmlFor="fecha-inicio" className="b1sb">
-                    Fecha de inicio
-                  </label>
-                  <Calendar
-                    inputId="fecha-inicio"
-                    value={fechaInicio}
-                    onChange={(e) => setFechaInicio((e.value as Date | null) ?? null)}
-                    dateFormat="dd/mm/yy"
-                    showIcon
-                    appendTo="self"
-                  />
-                </div>
-                <div className="campo">
-                  <label htmlFor="fecha-fin" className="b1sb">
-                    Fecha de fin
-                  </label>
-                  <Calendar
-                    inputId="fecha-fin"
-                    value={fechaFin}
-                    onChange={(e) => setFechaFin((e.value as Date | null) ?? null)}
-                    dateFormat="dd/mm/yy"
-                    showIcon
-                    appendTo="self"
-                  />
-                </div>
-                <div className="campo">
-                  <label className="b1sb"> Validar posible compatibilidad</label>
-                  <SndBoton
-                    type="button"
-                    style={styleCURPButton}
-                    onClick={() => {
-                      handlerValidarCurp()
-                      setShowFormulario(true)
-                      if (curpValidado) {
-                        setIntentoEnvio(true)
-                        if (seccionPersonalCompleta) {
-                          setAcordeonesActivos([2])
-                          notificar.exito('Datos personales completados correctamente.')
-                        } else {
-                          notificar.alerta('Por favor completa los datos personales obligatorios.')
-                        }
-                      }
-                    }}
-                  >
-                   Validar
-                  </SndBoton>
-                </div>
-                {
-                  showFormulario && (
-                <div className="campo padron-form-grid__col-2">
-                  <SndMensaje tipo='alerta'>{`El prestador con CURP de ${curp} tiene compatibilidad y no presenta conflictos para el ejercicio de sus funciones`}</SndMensaje>
-                </div>
-                  )
-                }
-              </div>
-            </AccordionTab>
 
-            {/* =====================================================================
+      <form onSubmit={guardarExpediente} noValidate style={{ marginTop: 20 }}>
+        <Accordion
+          multiple
+          activeIndex={acordeonesActivos}
+          onTabChange={(e) => setAcordeonesActivos(e.index)}
+          className="padron-acordeon"
+        >
+          {/* VALIDACIÓN DE IDENTIDAD Y VIGENCIA */}
+          <AccordionTab
+            header={
+              <div className="padron-acordeon__cabecera" id="curp">
+                <div className="padron-acordeon__titulo-grupo">
+                  <span className="padron-acordeon__icono">
+                    <SndIcono nombre="snd-user--avatar" tamano={22} />
+                  </span>
+                  <div>
+                    <span className="sh0b" style={{ display: 'block' }}>
+                      Validación de CURP
+                    </span>
+                    <span className="sdr" style={{ color: 'var(--neutro600)' }}>
+                      CURP y periodo de prestación del servicio
+                    </span>
+                  </div>
+                </div>
+                <span className={`pildora pildora--${curpValidado ? 'exito' : 'alerta'} snd-pildora`}>
+                  <span className="pildora__dot" aria-hidden="true" />
+                  {curpValidado ? 'Validada' : 'Pendiente'}
+                </span>
+              </div>
+            }
+          >
+            <div className="padron-form-grid" id="padron-seccion-curp">
+              <div className="padron-form-grid__busqueda">
+                <div className="campo">
+                  <label htmlFor="dp-ramo" className="b1sb">Ramo</label>
+                  <InputText
+                    id="dp-ramo"
+                    className="padron-form-grid__filtro"
+                    defaultValue="06 - Hacienda y Crédito Público"
+                    disabled
+                  />
+                </div>
+                <div className="campo">
+                  <label htmlFor="dp-ur" className="b1sb">UR</label>
+                  <InputText
+                    id="dp-ur"
+                    className="padron-form-grid__filtro"
+                    defaultValue="000 - Secretaría de Hacienda y Crédito Público"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div className="campo">
+                <label htmlFor="dp-curp" className="b1sb">
+                  CURP (18 caracteres) <span className="requerido">*</span>
+                </label>
+                <InputText
+                  id="dp-curp"
+                  maxLength={18}
+                  value={curp}
+                  invalid={intentoEnvio && curp.trim().length < 18}
+                  onChange={(e) => setCurp(e.target.value.toUpperCase())}
+                  placeholder="Ej. LORM880412MDFRRL09"
+                />
+                {intentoEnvio && curp.trim().length < 18 && (
+                  <span className="campo__error">Ingresa los 18 caracteres de la CURP.</span>
+                )}
+              </div>
+              <div className="campo">
+                <label htmlFor="fecha-inicio" className="b1sb">
+                  Fecha de inicio
+                </label>
+                <Calendar
+                  inputId="fecha-inicio"
+                  value={fechaInicio}
+                  onChange={(e) => setFechaInicio((e.value as Date | null) ?? null)}
+                  dateFormat="dd/mm/yy"
+                  showIcon
+                  appendTo="self"
+                />
+              </div>
+              <div className="campo">
+                <label htmlFor="fecha-fin" className="b1sb">
+                  Fecha de fin
+                </label>
+                <Calendar
+                  inputId="fecha-fin"
+                  value={fechaFin}
+                  onChange={(e) => setFechaFin((e.value as Date | null) ?? null)}
+                  dateFormat="dd/mm/yy"
+                  showIcon
+                  appendTo="self"
+                />
+              </div>
+              <div className="campo">
+                <label className="b1sb"> Validar posible compatibilidad</label>
+                <SndBoton
+                  type="button"
+                  style={styleCURPButton}
+                  onClick={() => {
+                    handlerValidarCurp()
+                    setShowFormulario(true)
+                    if (curpValidado) {
+                      setIntentoEnvio(true)
+                      if (seccionPersonalCompleta) {
+                        setAcordeonesActivos([2])
+                        notificar.exito('Datos personales completados correctamente.')
+                      } else {
+                        notificar.alerta('Por favor completa los datos personales obligatorios.')
+                      }
+                    }
+                  }}
+                >
+                  Validar
+                </SndBoton>
+              </div>
+              {
+                showFormulario && (
+                  <div className="campo padron-form-grid__col-2">
+                    <SndMensaje tipo='alerta'>{`El prestador con CURP de ${curp} tiene compatibilidad y no presenta conflictos para el ejercicio de sus funciones`}</SndMensaje>
+                  </div>
+                )
+              }
+            </div>
+          </AccordionTab>
+
+          {/* =====================================================================
               ACORDEÓN 1: DATOS PERSONALES
              ===================================================================== */}
-            <AccordionTab
-              header={
-                <div className="padron-acordeon__cabecera">
-                  <div className="padron-acordeon__titulo-grupo">
+          <AccordionTab
+            header={
+              <div className="padron-acordeon__cabecera" id="datos-personales">
+                <div className="padron-acordeon__titulo-grupo">
 
-                    <span className="padron-acordeon__icono">
-                      <SndIcono nombre="snd-user--avatar" tamano={22} />
-                    </span>
-                    <div>
-                      <span className="sh0b" style={{ display: 'block' }}>
-                        1. Datos Personales
-                      </span>
-                      <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                        Nombre, apellidos y RFC con homoclave
-                      </span>
-                    </div>
-                  </div>
-                  <span className={`pildora pildora--${seccionPersonalCompleta ? 'exito' : 'alerta'} snd-pildora`}>
-                    <span className="pildora__dot" aria-hidden="true" />
-                    {seccionPersonalCompleta ? 'Completado' : 'Por capturar'}
+                  <span className="padron-acordeon__icono">
+                    <SndIcono nombre="snd-user--avatar" tamano={22} />
                   </span>
+                  <div>
+                    <span className="sh0b" style={{ display: 'block' }}>
+                      1. Datos Personales
+                    </span>
+                    <span className="sdr" style={{ color: 'var(--neutro600)' }}>
+                      Nombre, apellidos y RFC con homoclave
+                    </span>
+                  </div>
                 </div>
-              }
+                <span className={`pildora pildora--${seccionPersonalCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                  <span className="pildora__dot" aria-hidden="true" />
+                  {seccionPersonalCompleta ? 'Completado' : 'Por capturar'}
+                </span>
+              </div>
+            }
+          >
+            <div className="padron-form-grid" aria-label='form-personal' id="padron-seccion-personal">
+              <div className="campo">
+                <label htmlFor="dp-nombres" className="b1sb">
+                  Nombre(s) <span className="requerido">*</span>
+                </label>
+                <InputText
+                  id="dp-nombres"
+                  value={nombres}
+                  invalid={intentoEnvio && !nombres.trim()}
+                  disabled={!curpValidado}
+                  onChange={(e) => setNombres(e.target.value)}
+                  placeholder="Ej. María Fernanda"
+                />
+                {intentoEnvio && !nombres.trim() && (
+                  <span className="campo__error">El nombre es obligatorio.</span>
+                )}
+              </div>
+
+              <div className="campo">
+                <label htmlFor="dp-primer-apellido" className="b1sb">
+                  Primer Apellido <span className="requerido">*</span>
+                </label>
+                <InputText
+                  id="dp-primer-apellido"
+                  value={primerApellido}
+                  invalid={intentoEnvio && !primerApellido.trim()}
+                  disabled={!curpValidado}
+                  onChange={(e) => setPrimerApellido(e.target.value)}
+                  placeholder="Ej. López"
+                />
+                {intentoEnvio && !primerApellido.trim() && (
+                  <span className="campo__error">El primer apellido es obligatorio.</span>
+                )}
+              </div>
+
+              <div className="campo">
+                <label htmlFor="dp-segundo-apellido" className="b1sb">
+                  Segundo Apellido
+                </label>
+                <InputText
+                  id="dp-segundo-apellido"
+                  value={segundoApellido}
+                  disabled={!curpValidado}
+                  onChange={(e) => setSegundoApellido(e.target.value)}
+                  placeholder="Ej. Ríos"
+                />
+              </div>
+
+
+
+              <div className="campo">
+                <label htmlFor="dp-rfc" className="b1sb">
+                  RFC (con homoclave) <span className="requerido">*</span>
+                </label>
+                <InputText
+                  id="dp-rfc"
+                  maxLength={10}
+                  disabled={!curpValidado}
+                  value={rfc}
+                  invalid={intentoEnvio && rfc.trim().length < 10}
+                  onChange={(e) => setRfc(e.target.value.toUpperCase())}
+                  placeholder="Ej. LORM880412"
+                />
+                {intentoEnvio && rfc.trim().length < 10 && (
+                  <span className="campo__error">Ingresa los 10 caracteres base del RFC.</span>
+                )}
+              </div>
+
+              <div className="campo">
+                <label htmlFor="dp-nacionalidad" className="b1sb">
+                  Pais
+                </label>
+                <Dropdown
+                  inputId="dp-nacionalidad"
+                  options={OPCIONES_NACIONALIDAD}
+                  value={nacionalidad}
+                  disabled={!curpValidado}
+                  onChange={(e) => setNacionalidad(e.value)}
+                  appendTo="self"
+                />
+              </div>
+
+            </div>
+            <SndBoton
+              type="submit"
+              style={{ marginTop: '1rem' }}
+              onClick={() => {
+                setIntentoEnvio(true)
+                if (seccionPersonalCompleta) { // if (seccionPersonalCompleta)
+                  setAcordeonesActivos([2])
+                  notificar.exito('Datos personales completados correctamente.')
+                } else {
+                  notificar.alerta('Por favor completa los datos personales obligatorios.')
+                }
+              }}
             >
-              <div className="padron-form-grid" aria-label='form-personal' id="padron-seccion-personal">
-                <div className="campo">
-                  <label htmlFor="dp-nombres" className="b1sb">
-                    Nombre(s) <span className="requerido">*</span>
-                  </label>
-                  <InputText
-                    id="dp-nombres"
-                    value={nombres}
-                    invalid={intentoEnvio && !nombres.trim()}
-                    disabled={!curpValidado}
-                    onChange={(e) => setNombres(e.target.value)}
-                    placeholder="Ej. María Fernanda"
-                  />
-                  {intentoEnvio && !nombres.trim() && (
-                    <span className="campo__error">El nombre es obligatorio.</span>
-                  )}
+              Guardar datos personales
+            </SndBoton>
+          </AccordionTab>
+
+          {/* =====================================================================
+              ACORDEÓN 2: DIRECCIÓN
+             ===================================================================== */}
+          <AccordionTab
+            header={
+              <div className="padron-acordeon__cabecera" id="direccion">
+                <div className="padron-acordeon__titulo-grupo">
+                  <span className="padron-acordeon__icono">
+                    <SndIcono nombre="snd-home" tamano={22} />
+                  </span>
+                  <div>
+                    <span className="sh0b" style={{ display: 'block' }}>
+                      2. Dirección
+                    </span>
+                    <span className="sdr" style={{ color: 'var(--neutro600)' }}>
+                      Domicilio registrado para efectos contractuales
+                    </span>
+                  </div>
                 </div>
+                <span className={`pildora pildora--${seccionDireccionCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                  <span className="pildora__dot" aria-hidden="true" />
+                  {seccionDireccionCompleta ? 'Completado' : 'Por capturar'}
+                </span>
+              </div>
+            }
+          >
+            <div id="padron-seccion-direccion">
+              <SeccionDireccion
+                intentoEnvio={intentoEnvio}
+                direcciones={direcciones}
+                onDireccionesChange={setDirecciones}
+                seccionDireccionCompleta={seccionDireccionCompleta}
+                onGuardarDireccion={() => {
+                  notificar.exito('Dirección agregada correctamente.')
+                }}
+                onSiguiente={() => {
+                  setIntentoEnvio(true)
+                  if (seccionDireccionCompleta) {
+                    setAcordeonesActivos([3])
+                    notificar.exito('Datos de domicilio guardados temporalmente.')
+                  } else {
+                    notificar.alerta('Por favor completa los datos de domicilio obligatorios.')
+                  }
+                }}
+              />
+            </div>
+          </AccordionTab>
 
-                <div className="campo">
-                  <label htmlFor="dp-primer-apellido" className="b1sb">
-                    Primer Apellido <span className="requerido">*</span>
-                  </label>
-                  <InputText
-                    id="dp-primer-apellido"
-                    value={primerApellido}
-                    invalid={intentoEnvio && !primerApellido.trim()}
-                    disabled={!curpValidado}
-                    onChange={(e) => setPrimerApellido(e.target.value)}
-                    placeholder="Ej. López"
-                  />
-                  {intentoEnvio && !primerApellido.trim() && (
-                    <span className="campo__error">El primer apellido es obligatorio.</span>
-                  )}
+          {/* =====================================================================
+              ACORDEÓN 3: ESCOLARIDAD
+             ===================================================================== */}
+          <AccordionTab
+            header={
+              <div className="padron-acordeon__cabecera" id="escolaridad">
+                <div className="padron-acordeon__titulo-grupo">
+                  <span className="padron-acordeon__icono">
+                    <SndIcono nombre="snd-document" tamano={22} />
+                  </span>
+                  <div>
+                    <span className="sh0b" style={{ display: 'block' }}>
+                      3. Escolaridad
+                    </span>
+                    <span className="sdr" style={{ color: 'var(--neutro600)' }}>
+                      Área de estudio, grado máximo de estudios y registro de certificado
+                    </span>
+                  </div>
                 </div>
-
+                <span className={`pildora pildora--${seccionEscolaridadCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                  <span className="pildora__dot" aria-hidden="true" />
+                  {seccionEscolaridadCompleta ? 'Completado' : 'Por capturar'}
+                </span>
+              </div>
+            }
+          >
+            <ToggleTabla tabla={<TablaEscolaridad />} showTable={showEscolaridad}>
+              <div className="padron-form-grid" id="padron-seccion-escolaridad">
                 <div className="campo">
-                  <label htmlFor="dp-segundo-apellido" className="b1sb">
-                    Segundo Apellido
-                  </label>
-                  <InputText
-                    id="dp-segundo-apellido"
-                    value={segundoApellido}
-                    disabled={!curpValidado}
-                    onChange={(e) => setSegundoApellido(e.target.value)}
-                    placeholder="Ej. Ríos"
-                  />
-                </div>
-
-
-
-                <div className="campo">
-                  <label htmlFor="dp-rfc" className="b1sb">
-                    RFC (con homoclave) <span className="requerido">*</span>
-                  </label>
-                  <InputText
-                    id="dp-rfc"
-                    maxLength={10}
-                    disabled={!curpValidado}
-                    value={rfc}
-                    invalid={intentoEnvio && rfc.trim().length < 10}
-                    onChange={(e) => setRfc(e.target.value.toUpperCase())}
-                    placeholder="Ej. LORM880412"
-                  />
-                  {intentoEnvio && rfc.trim().length < 10 && (
-                    <span className="campo__error">Ingresa los 10 caracteres base del RFC.</span>
-                  )}
-                </div>
-
-                <div className="campo">
-                  <label htmlFor="dp-nacionalidad" className="b1sb">
-                    Pais
+                  <label htmlFor="esc-nivel" className="b1sb">
+                    Nivel Máximo de Estudios <span className="requerido">*</span>
                   </label>
                   <Dropdown
-                    inputId="dp-nacionalidad"
-                    options={OPCIONES_NACIONALIDAD}
-                    value={nacionalidad}
-                    disabled={!curpValidado}
-                    onChange={(e) => setNacionalidad(e.value)}
+                    inputId="esc-nivel"
+                    options={OPCIONES_NIVEL_ESTUDIOS}
+                    value={nivelEstudios}
+                    onChange={(e) => setNivelEstudios(e.value)}
+                    placeholder="Selecciona nivel académico"
                     appendTo="self"
                   />
                 </div>
 
+                <div className="campo padron-form-grid__col-2">
+                  <label htmlFor="esc-carrera" className="b1sb">
+                    Área de estudio <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="esc-carrera"
+                    value={carrera}
+                    invalid={intentoEnvio && !carrera.trim()}
+                    onChange={(e) => setCarrera(e.target.value)}
+                    placeholder="Ej. Licenciatura en Derecho / Ingeniería en Sistemas"
+                  />
+                  {intentoEnvio && !carrera.trim() && (
+                    <span className="campo__error">La carrera o área de conocimiento es obligatoria.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="esc-institucion" className="b1sb">
+                    Institución Educativa
+                  </label>
+                  <InputText
+                    id="esc-institucion"
+                    value={institucionEducativa}
+                    onChange={(e) => setInstitucionEducativa(e.target.value)}
+                    placeholder="Ej. Universidad Nacional Autónoma de México"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="esc-estatus" className="b1sb">
+                    Grado de avance <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    inputId="esc-estatus"
+                    options={OPCIONES_ESTATUS_ESTUDIOS}
+                    value={estatusEstudios}
+                    onChange={(e) => setEstatusEstudios(e.value)}
+                    appendTo="self"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="esc-documento" className="b1sb">
+                    Documento Comprobatorio
+                  </label>
+                  <Dropdown
+                    inputId="esc-documento"
+                    options={OPCIONES_DOCUMENTO_ACADEMICO}
+                    value={documentoComprobatorio}
+                    onChange={(e) => setDocumentoComprobatorio(e.value)}
+                    appendTo="self"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="esc-cedula" className="b1sb">
+                    Número de Certificado / Cédula Profesional
+                  </label>
+                  <InputText
+                    id="esc-cedula"
+                    maxLength={10}
+                    value={cedulaProfesional}
+                    onChange={(e) => setCedulaProfesional(e.target.value.replace(/\D/g, ''))}
+                    placeholder="Ej. 08945123"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="esc-anio" className="b1sb">
+                    Año de Titulación
+                  </label>
+                  <InputText
+                    id="esc-anio"
+                    maxLength={4}
+                    value={anioTitulacion}
+                    onChange={(e) => setAnioTitulacion(e.target.value.replace(/\D/g, ''))}
+                    placeholder="Ej. 2013"
+                  />
+                </div>
               </div>
+            </ToggleTabla>
+            {!showEscolaridad ? (
               <SndBoton
-                type="submit"
+                type="button"
                 style={{ marginTop: '1rem' }}
                 onClick={() => {
                   setIntentoEnvio(true)
-                  if (seccionPersonalCompleta) { // if (seccionPersonalCompleta)
-                    setAcordeonesActivos([2])
-                    notificar.exito('Datos personales completados correctamente.')
+                  if (seccionEscolaridadCompleta) {
+                    setAcordeonesActivos([4])
+                    notificar.exito('Datos de escolaridad guardados temporalmente.')
                   } else {
-                    notificar.alerta('Por favor completa los datos personales obligatorios.')
+                    notificar.alerta('Por favor completa los datos de escolaridad obligatorios.')
                   }
                 }}
               >
-                Guardar datos personales
+                Guardar escolaridad
               </SndBoton>
-            </AccordionTab>
+            ) : (
+              <SndBoton
+                type="button"
+                style={{ marginTop: '1rem' }}
+                onClick={() => {
+                  setShowEscolaridad(false)
+                }}
+              >
+                Escolaridad nueva
+              </SndBoton>
+            )}
+          </AccordionTab>
 
-            {/* =====================================================================
-              ACORDEÓN 2: DIRECCIÓN
-             ===================================================================== */}
-            <AccordionTab
-              header={
-                <div className="padron-acordeon__cabecera">
-                  <div className="padron-acordeon__titulo-grupo">
-                    <span className="padron-acordeon__icono">
-                      <SndIcono nombre="snd-home" tamano={22} />
-                    </span>
-                    <div>
-                      <span className="sh0b" style={{ display: 'block' }}>
-                        2. Dirección
-                      </span>
-                      <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                        Domicilio registrado para efectos contractuales
-                      </span>
-                    </div>
-                  </div>
-                  <span className={`pildora pildora--${seccionDireccionCompleta ? 'exito' : 'alerta'} snd-pildora`}>
-                    <span className="pildora__dot" aria-hidden="true" />
-                    {seccionDireccionCompleta ? 'Completado' : 'Por capturar'}
-                  </span>
-                </div>
-              }
-            >
-              <div id="padron-seccion-direccion">
-                <SeccionDireccion
-                  intentoEnvio={intentoEnvio}
-                  direcciones={direcciones}
-                  onDireccionesChange={setDirecciones}
-                  seccionDireccionCompleta={seccionDireccionCompleta}
-                  onGuardarDireccion={() => {
-                    notificar.exito('Dirección agregada correctamente.')
-                  }}
-                  onSiguiente={() => {
-                    setIntentoEnvio(true)
-                    if (seccionDireccionCompleta) {
-                      setAcordeonesActivos([3])
-                      notificar.exito('Datos de domicilio guardados temporalmente.')
-                    } else {
-                      notificar.alerta('Por favor completa los datos de domicilio obligatorios.')
-                    }
-                  }}
-                />
-              </div>
-            </AccordionTab>
-
-            {/* =====================================================================
-              ACORDEÓN 3: ESCOLARIDAD
-             ===================================================================== */}
-            <AccordionTab
-              header={
-                <div className="padron-acordeon__cabecera">
-                  <div className="padron-acordeon__titulo-grupo">
-                    <span className="padron-acordeon__icono">
-                      <SndIcono nombre="snd-document" tamano={22} />
-                    </span>
-                    <div>
-                      <span className="sh0b" style={{ display: 'block' }}>
-                        3. Escolaridad
-                      </span>
-                      <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                        Área de estudio, grado máximo de estudios y registro de certificado
-                      </span>
-                    </div>
-                  </div>
-                  <span className={`pildora pildora--${seccionEscolaridadCompleta ? 'exito' : 'alerta'} snd-pildora`}>
-                    <span className="pildora__dot" aria-hidden="true" />
-                    {seccionEscolaridadCompleta ? 'Completado' : 'Por capturar'}
-                  </span>
-                </div>
-              }
-            >
-              <ToggleTabla tabla={<TablaEscolaridad />} showTable={showEscolaridad}>
-                <div className="padron-form-grid" id="padron-seccion-escolaridad">
-                  <div className="campo">
-                    <label htmlFor="esc-nivel" className="b1sb">
-                      Nivel Máximo de Estudios <span className="requerido">*</span>
-                    </label>
-                    <Dropdown
-                      inputId="esc-nivel"
-                      options={OPCIONES_NIVEL_ESTUDIOS}
-                      value={nivelEstudios}
-                      onChange={(e) => setNivelEstudios(e.value)}
-                      placeholder="Selecciona nivel académico"
-                      appendTo="self"
-                    />
-                  </div>
-
-                  <div className="campo padron-form-grid__col-2">
-                    <label htmlFor="esc-carrera" className="b1sb">
-                      Área de estudio <span className="requerido">*</span>
-                    </label>
-                    <InputText
-                      id="esc-carrera"
-                      value={carrera}
-                      invalid={intentoEnvio && !carrera.trim()}
-                      onChange={(e) => setCarrera(e.target.value)}
-                      placeholder="Ej. Licenciatura en Derecho / Ingeniería en Sistemas"
-                    />
-                    {intentoEnvio && !carrera.trim() && (
-                      <span className="campo__error">La carrera o área de conocimiento es obligatoria.</span>
-                    )}
-                  </div>
-
-                  <div className="campo">
-                    <label htmlFor="esc-institucion" className="b1sb">
-                      Institución Educativa
-                    </label>
-                    <InputText
-                      id="esc-institucion"
-                      value={institucionEducativa}
-                      onChange={(e) => setInstitucionEducativa(e.target.value)}
-                      placeholder="Ej. Universidad Nacional Autónoma de México"
-                    />
-                  </div>
-
-                  <div className="campo">
-                    <label htmlFor="esc-estatus" className="b1sb">
-                      Grado de avance <span className="requerido">*</span>
-                    </label>
-                    <Dropdown
-                      inputId="esc-estatus"
-                      options={OPCIONES_ESTATUS_ESTUDIOS}
-                      value={estatusEstudios}
-                      onChange={(e) => setEstatusEstudios(e.value)}
-                      appendTo="self"
-                    />
-                  </div>
-
-                  <div className="campo">
-                    <label htmlFor="esc-documento" className="b1sb">
-                      Documento Comprobatorio
-                    </label>
-                    <Dropdown
-                      inputId="esc-documento"
-                      options={OPCIONES_DOCUMENTO_ACADEMICO}
-                      value={documentoComprobatorio}
-                      onChange={(e) => setDocumentoComprobatorio(e.value)}
-                      appendTo="self"
-                    />
-                  </div>
-
-                  <div className="campo">
-                    <label htmlFor="esc-cedula" className="b1sb">
-                      Número de Certificado / Cédula Profesional
-                    </label>
-                    <InputText
-                      id="esc-cedula"
-                      maxLength={10}
-                      value={cedulaProfesional}
-                      onChange={(e) => setCedulaProfesional(e.target.value.replace(/\D/g, ''))}
-                      placeholder="Ej. 08945123"
-                    />
-                  </div>
-
-                  <div className="campo">
-                    <label htmlFor="esc-anio" className="b1sb">
-                      Año de Titulación
-                    </label>
-                    <InputText
-                      id="esc-anio"
-                      maxLength={4}
-                      value={anioTitulacion}
-                      onChange={(e) => setAnioTitulacion(e.target.value.replace(/\D/g, ''))}
-                      placeholder="Ej. 2013"
-                    />
-                  </div>
-                </div>
-              </ToggleTabla>
-              {!showEscolaridad ? (
-                <SndBoton
-                  type="button"
-                  style={{ marginTop: '1rem' }}
-                  onClick={() => {
-                    setIntentoEnvio(true)
-                    if (seccionEscolaridadCompleta) {
-                      setAcordeonesActivos([4])
-                      notificar.exito('Datos de escolaridad guardados temporalmente.')
-                    } else {
-                      notificar.alerta('Por favor completa los datos de escolaridad obligatorios.')
-                    }
-                  }}
-                >
-                  Guardar escolaridad
-                </SndBoton>
-              ) : (
-                <SndBoton
-                  type="button"
-                  style={{ marginTop: '1rem' }}
-                  onClick={() => {
-                    setShowEscolaridad(false)
-                  }}
-                >
-                  Escolaridad nueva
-                </SndBoton>
-              )}
-            </AccordionTab>
-
-            {/* =====================================================================
+          {/* =====================================================================
               ACORDEÓN 4: EXPERIENCIA LABORAL
              ===================================================================== */}
-            <AccordionTab
-              header={
-                <div className="padron-acordeon__cabecera">
-                  <div className="padron-acordeon__titulo-grupo">
-                    <span className="padron-acordeon__icono">
-                      <SndIcono nombre="snd-calendar" tamano={22} />
-                    </span>
-                    <div>
-                      <span className="sh0b" style={{ display: 'block' }}>
-                        4. Experiencia Laboral
-                      </span>
-                      <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                        Área de experiencia, Años de experiencia
-                      </span>
-                    </div>
-                  </div>
-                  <span className={`pildora pildora--${seccionExperienciaCompleta ? 'exito' : 'alerta'} snd-pildora`}>
-                    <span className="pildora__dot" aria-hidden="true" />
-                    {seccionExperienciaCompleta ? 'Completado' : 'Por capturar'}
+          <AccordionTab
+            header={
+              <div className="padron-acordeon__cabecera" id="experiencia">
+                <div className="padron-acordeon__titulo-grupo">
+                  <span className="padron-acordeon__icono">
+                    <SndIcono nombre="snd-calendar" tamano={22} />
                   </span>
-                </div>
-              }
-            >
-              <ToggleTabla tabla={<TablaExperiencia />} showTable={showExperiencia}>
-                <div className="padron-form-grid" id="padron-seccion-experiencia">
-                  <div className="campo">
-                    <label htmlFor="exp-institucion" className="b1sb">
-                      Institución
-                    </label>
-                    <InputText
-                      id="exp-institucion"
-                      value={institucionLaboral}
-                      onChange={(e) => setInstitucionLaboral(e.target.value)}
-                      placeholder="Ej. Secretaría de Hacienda"
-                    />
-                  </div>
-
-                  <div className="campo">
-                    <label htmlFor="exp-sector" className="b1sb">
-                      Sector <span className="requerido">*</span>
-                    </label>
-                    <Dropdown
-                      inputId="exp-sector"
-                      options={OPCIONES_SECTOR_LABORAL}
-                      value={sectorLaboral}
-                      onChange={(e) => setSectorLaboral(e.value)}
-                      appendTo="self"
-                    />
-                  </div>
-
-                  <div className="campo">
-                    <label htmlFor="exp-puesto" className="b1sb">
-                      Puesto Desempeñado
-                    </label>
-                    <InputText
-                      id="exp-puesto"
-                      value={puestoDesempenado}
-                      onChange={(e) => setPuestoDesempenado(e.target.value)}
-                      placeholder="Ej. Jefe de Departamento"
-                    />
-                  </div>
-
-                  <div className="campo">
-                    <label htmlFor="exp-area" className="b1sb">
-                      Área de Adscripción
-                    </label>
-                    <InputText
-                      id="exp-area"
-                      value={areaAdscripcion}
-                      onChange={(e) => setAreaAdscripcion(e.target.value)}
-                      placeholder="Ej. Dirección General"
-                    />
-                  </div>
-
-                  <div className="campo">
-                    <label htmlFor="exp-anios" className="b1sb">
-                      Años de Experiencia en el Ramo <span className="requerido">*</span>
-                    </label>
-                    <InputText
-                      id="exp-anios"
-                      maxLength={2}
-                      value={aniosExperiencia}
-                      invalid={intentoEnvio && !aniosExperiencia.trim()}
-                      onChange={(e) => setAniosExperiencia(e.target.value.replace(/\D/g, ''))}
-                      placeholder="Ej. 5"
-                    />
-                    {intentoEnvio && !aniosExperiencia.trim() && (
-                      <span className="campo__error">Indica los años de experiencia comprobable.</span>
-                    )}
-                  </div>
-
-                  <div className="campo padron-form-grid__col-3">
-                    <label htmlFor="exp-funciones" className="b1sb">
-                      Comentarios / Funciones Principales <span className="requerido">*</span>
-                    </label>
-                    <textarea
-                      id="exp-funciones"
-                      className={`padron-textarea ${intentoEnvio && !funcionesPrincipales.trim() ? 'padron-textarea--invalido' : ''}`}
-                      value={funcionesPrincipales}
-                      onChange={(e) => setFuncionesPrincipales(e.target.value)}
-                      placeholder="Describe las actividades técnicas, administrativas o profesionales desempeñadas..."
-                    />
-                    {intentoEnvio && !funcionesPrincipales.trim() && (
-                      <span className="campo__error">
-                        La descripción de funciones principales es obligatoria para acreditar experiencia.
-                      </span>
-                    )}
+                  <div>
+                    <span className="sh0b" style={{ display: 'block' }}>
+                      4. Experiencia Laboral
+                    </span>
+                    <span className="sdr" style={{ color: 'var(--neutro600)' }}>
+                      Área de experiencia, Años de experiencia
+                    </span>
                   </div>
                 </div>
-              </ToggleTabla>
-              {!showExperiencia ? (
-                <SndBoton
-                  type="button"
-                  style={{ marginTop: '1rem' }}
-                  onClick={() => {
-                    setIntentoEnvio(true)
-                    if (seccionExperienciaCompleta) {
-                      setAcordeonesActivos([1])
-                      notificar.exito('Datos de experiencia laboral guardados temporalmente.')
-                    } else {
-                      notificar.alerta('Por favor completa los datos de experiencia laboral obligatorios.')
-                    }
-                  }}
-                >
-                  Guardar experiencia laboral
-                </SndBoton>
-              ) : (
-                <SndBoton
-                  type="button"
-                  style={{ marginTop: '1rem' }}
-                  onClick={() => {
-                    setShowExperiencia(false)
-                  }}
-                >
-                  Experiencia nueva
-                </SndBoton>
-              )}
-            </AccordionTab>
-          </Accordion>
-
-          {/* BARRA INFERIOR DE ACCIONES DEL FORMULARIO */}
-          <article className="honorarios-tarjeta" style={{ marginTop: 12 }}>
-            <div className="honorarios-detalle-barra">
-              <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                Los campos marcados con <span className="requerido">*</span> son obligatorios para integrar el expediente
-                en el Padrón de Prestadores de Servicio.
-              </span>
-
-              <div className="fila fila--derecha">
-                <SndBoton variante="secundario" type="button" onClick={limpiarFormulario}>
-                  Limpiar formulario
-                </SndBoton>
-                <SndBoton type="submit">
-                  <SndIcono nombre="snd-checkmark--filled" tamano={20} />
-                  Guardar en el Padrón
-                </SndBoton>
+                <span className={`pildora pildora--${seccionExperienciaCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                  <span className="pildora__dot" aria-hidden="true" />
+                  {seccionExperienciaCompleta ? 'Completado' : 'Por capturar'}
+                </span>
               </div>
+            }
+          >
+            <ToggleTabla tabla={<TablaExperiencia />} showTable={showExperiencia}>
+              <div className="padron-form-grid" id="padron-seccion-experiencia">
+                <div className="campo">
+                  <label htmlFor="exp-institucion" className="b1sb">
+                    Institución
+                  </label>
+                  <InputText
+                    id="exp-institucion"
+                    value={institucionLaboral}
+                    onChange={(e) => setInstitucionLaboral(e.target.value)}
+                    placeholder="Ej. Secretaría de Hacienda"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="exp-sector" className="b1sb">
+                    Sector <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    inputId="exp-sector"
+                    options={OPCIONES_SECTOR_LABORAL}
+                    value={sectorLaboral}
+                    onChange={(e) => setSectorLaboral(e.value)}
+                    appendTo="self"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="exp-puesto" className="b1sb">
+                    Puesto Desempeñado
+                  </label>
+                  <InputText
+                    id="exp-puesto"
+                    value={puestoDesempenado}
+                    onChange={(e) => setPuestoDesempenado(e.target.value)}
+                    placeholder="Ej. Jefe de Departamento"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="exp-area" className="b1sb">
+                    Área de Adscripción
+                  </label>
+                  <InputText
+                    id="exp-area"
+                    value={areaAdscripcion}
+                    onChange={(e) => setAreaAdscripcion(e.target.value)}
+                    placeholder="Ej. Dirección General"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="exp-anios" className="b1sb">
+                    Años de Experiencia en el Ramo <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="exp-anios"
+                    maxLength={2}
+                    value={aniosExperiencia}
+                    invalid={intentoEnvio && !aniosExperiencia.trim()}
+                    onChange={(e) => setAniosExperiencia(e.target.value.replace(/\D/g, ''))}
+                    placeholder="Ej. 5"
+                  />
+                  {intentoEnvio && !aniosExperiencia.trim() && (
+                    <span className="campo__error">Indica los años de experiencia comprobable.</span>
+                  )}
+                </div>
+
+                <div className="campo padron-form-grid__col-3">
+                  <label htmlFor="exp-funciones" className="b1sb">
+                    Comentarios / Funciones Principales <span className="requerido">*</span>
+                  </label>
+                  <textarea
+                    id="exp-funciones"
+                    className={`padron-textarea ${intentoEnvio && !funcionesPrincipales.trim() ? 'padron-textarea--invalido' : ''}`}
+                    value={funcionesPrincipales}
+                    onChange={(e) => setFuncionesPrincipales(e.target.value)}
+                    placeholder="Describe las actividades técnicas, administrativas o profesionales desempeñadas..."
+                  />
+                  {intentoEnvio && !funcionesPrincipales.trim() && (
+                    <span className="campo__error">
+                      La descripción de funciones principales es obligatoria para acreditar experiencia.
+                    </span>
+                  )}
+                </div>
+              </div>
+            </ToggleTabla>
+            {!showExperiencia ? (
+              <SndBoton
+                type="button"
+                style={{ marginTop: '1rem' }}
+                onClick={() => {
+                  setIntentoEnvio(true)
+                  if (seccionExperienciaCompleta) {
+                    setAcordeonesActivos([1])
+                    notificar.exito('Datos de experiencia laboral guardados temporalmente.')
+                  } else {
+                    notificar.alerta('Por favor completa los datos de experiencia laboral obligatorios.')
+                  }
+                }}
+              >
+                Guardar experiencia laboral
+              </SndBoton>
+            ) : (
+              <SndBoton
+                type="button"
+                style={{ marginTop: '1rem' }}
+                onClick={() => {
+                  setShowExperiencia(false)
+                }}
+              >
+                Experiencia nueva
+              </SndBoton>
+            )}
+          </AccordionTab>
+        </Accordion>
+
+        {/* BARRA INFERIOR DE ACCIONES DEL FORMULARIO */}
+        <article className="honorarios-tarjeta" style={{ marginTop: 12 }}>
+          <div className="honorarios-detalle-barra">
+            <span className="sdr" style={{ color: 'var(--neutro600)' }}>
+              Los campos marcados con <span className="requerido">*</span> son obligatorios para integrar el expediente
+              en el Padrón de Prestadores de Servicio.
+            </span>
+
+            <div className="fila fila--derecha">
+              <SndBoton variante="secundario" type="button" onClick={limpiarFormulario}>
+                Limpiar formulario
+              </SndBoton>
+              <SndBoton type="submit">
+                <SndIcono nombre="snd-checkmark--filled" tamano={20} />
+                Guardar en el Padrón
+              </SndBoton>
             </div>
-          </article>
-        </form>
+          </div>
+        </article>
+      </form>
 
       {/* MODAL DE CARGA MASIVA */}
       <ModalCargaMasiva
