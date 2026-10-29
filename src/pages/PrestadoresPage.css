@@ -12,8 +12,8 @@
 .prestadores-layout {
   display: flex;
   align-items: flex-start;
-  gap: 24px;
-  padding: 24px;
+  gap: 4px;
+  padding: 4px;
   box-sizing: border-box;
   /* Ocupa todo el ancho disponible del <main> del SND (que es grid item). */
   width: 100%;

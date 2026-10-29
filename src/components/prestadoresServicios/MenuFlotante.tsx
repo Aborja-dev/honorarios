@@ -51,16 +51,7 @@ export function MenuFlotante({
       className={cn('menuMain', colapsado && 'menuMain--colapsado', className)}
       aria-label={etiqueta}
     >
-      <button
-        type="button"
-        className="menuMain__gatillo"
-        aria-haspopup="menu"
-        aria-expanded={!colapsado}
-        onClick={() => onColapsar(!colapsado)}
-      >
-        <span className="oculto">{colapsado ? 'Mostrar menú' : 'Ocultar menú'}</span>
-        <SndIcono nombre="snd-chevron--left" className="menuMain__gatilloIco" tamano={16} />
-      </button>
+
 
       {titulo && (
         <div className="menuMain__header">

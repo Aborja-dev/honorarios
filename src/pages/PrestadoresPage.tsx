@@ -96,7 +96,7 @@ export const PrestadoresPage = () => {
           titulo="Secciones del expediente"
           items={SECCIONES}
           activa={anclaActiva}
-          colapsado={menuColapsado}
+          colapsado={true}
           onColapsar={setMenuColapsado}
         />
       </aside>
