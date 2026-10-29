@@ -28,6 +28,7 @@ const PadronPrestadoresServicio = lazy(() => import('./pages/PadronPrestadoresSe
 const ContratosHonorarios = lazy(() => import('./pages/admin/ContratosHonorarios'))
 const ModeloContrato = lazy(() => import('./pages/admin/ModeloContrato'))
 const AltaModelosContratos = lazy(() => import('./pages/AltaModelosContratos'))
+const FormalizacionContratos = lazy(() => import('./pages/FormalizacionContratos'))
 
 // Vistas del prestador de servicios (pages/user/)
 const PortalPrestador = lazy(() => import('./pages/user/PortalPrestador'))
@@ -88,6 +89,7 @@ export default function App() {
               <Route path="/admin/contratos" element={<ContratosHonorarios />} />
               <Route path="/admin/modelo-contrato" element={<ModeloContrato />} />
               <Route path="/alta-modelos-contratos" element={<AltaModelosContratos />} />
+              <Route path="/formalizacion-contratos" element={<FormalizacionContratos />} />
 
               {/* Vistas del prestador de servicios */}
               <Route path="/user/portal" element={<PortalPrestador />} />

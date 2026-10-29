@@ -43,6 +43,9 @@ export default function ContratosHonorarios() {
           </p>
         </div>
         <div className="fila">
+          <SndBotonEnlace variante="primario" to="/formalizacion-contratos">
+            Formalización de contratos
+          </SndBotonEnlace>
           <SndBotonEnlace variante="secundario" to="/prueba-fiel">
             Bandeja e.firma
           </SndBotonEnlace>
