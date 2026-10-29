@@ -26,7 +26,7 @@
   border: 1px solid var(--neutro400, #dddddd);
   background: var(--neutro100, #ffffff);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
+ /*  overflow: hidden; */
 }
 .padron-acordeon .p-accordion-header .p-accordion-header-link {
   padding: 18px 22px;

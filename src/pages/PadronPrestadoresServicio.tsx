@@ -377,10 +377,7 @@ export default function PadronPrestadoresServicio({
                     </span>
                   </div>
                 </div>
-                <span className={`pildora pildora--${curpValidado ? 'exito' : 'alerta'} snd-pildora`}>
-                  <span className="pildora__dot" aria-hidden="true" />
-                  {curpValidado ? 'Validada' : 'Pendiente'}
-                </span>
+
               </div>
             }
           >
@@ -621,7 +618,7 @@ export default function PadronPrestadoresServicio({
                       2. Dirección
                     </span>
                     <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Domicilio registrado para efectos contractuales
+                      Domicilio registrado del prestador
                     </span>
                   </div>
                 </div>
@@ -680,8 +677,9 @@ export default function PadronPrestadoresServicio({
               </div>
             }
           >
-            <ToggleTabla tabla={<TablaEscolaridad />} showTable={showEscolaridad}>
-              <div className="padron-form-grid" id="padron-seccion-escolaridad">
+            <div id="padron-seccion-escolaridad">
+              <ToggleTabla tabla={<TablaEscolaridad />} showTable={showEscolaridad}>
+              <div className="padron-form-grid">
                 <div className="campo">
                   <label htmlFor="esc-nivel" className="b1sb">
                     Nivel Máximo de Estudios <span className="requerido">*</span>
@@ -777,6 +775,7 @@ export default function PadronPrestadoresServicio({
                 </div>
               </div>
             </ToggleTabla>
+            </div>
             {!showEscolaridad ? (
               <SndBoton
                 type="button"
@@ -832,8 +831,9 @@ export default function PadronPrestadoresServicio({
               </div>
             }
           >
-            <ToggleTabla tabla={<TablaExperiencia />} showTable={showExperiencia}>
-              <div className="padron-form-grid" id="padron-seccion-experiencia">
+            <div id="padron-seccion-experiencia">
+              <ToggleTabla tabla={<TablaExperiencia />} showTable={showExperiencia}>
+              <div className="padron-form-grid">
                 <div className="campo">
                   <label htmlFor="exp-institucion" className="b1sb">
                     Institución
@@ -919,6 +919,7 @@ export default function PadronPrestadoresServicio({
                 </div>
               </div>
             </ToggleTabla>
+            </div>
             {!showExperiencia ? (
               <SndBoton
                 type="button"
@@ -953,8 +954,8 @@ export default function PadronPrestadoresServicio({
         <article className="honorarios-tarjeta" style={{ marginTop: 12 }}>
           <div className="honorarios-detalle-barra">
             <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-              Los campos marcados con <span className="requerido">*</span> son obligatorios para integrar el expediente
-              en el Padrón de Prestadores de Servicio.
+              Los campos marcados con <span className="requerido">*</span> son obligatorios para el registro
+              en el padrón de prestadores de servicio.
             </span>
 
             <div className="fila fila--derecha">

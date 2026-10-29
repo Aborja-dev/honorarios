@@ -23,6 +23,7 @@ export default function SeccionDireccion({
   onSiguiente,
 }: SeccionDireccionProps) {
   const [showDireccion, setShowDireccion] = useState(true)
+  const [alias, setAlias] = useState('')
   const [codigoPostal, setCodigoPostal] = useState('')
   const [calle, setCalle] = useState('')
   const [numeroExterior, setNumeroExterior] = useState('')
@@ -33,6 +34,7 @@ export default function SeccionDireccion({
   const [entidadFederativa, setEntidadFederativa] = useState<string | null>('Ciudad de México')
   const [referenciasDomicilio, setReferenciasDomicilio] = useState('')
   const [indiceEdicion, setIndiceEdicion] = useState<number | null>(null)
+  const [onEdit, setOnEdit] = useState(false) 
 
   const handleDireccionCompleto = (direccionValidada?: DireccionItem) => {
     const direccion: DireccionItem = direccionValidada
@@ -42,6 +44,7 @@ export default function SeccionDireccion({
         }
       : {
           id: indiceEdicion !== null ? direcciones[indiceEdicion]?.id : undefined,
+          alias: alias.trim(),
           calle,
           numeroExterior,
           numeroInterior,
@@ -66,9 +69,11 @@ export default function SeccionDireccion({
     if (onGuardarDireccion) {
       onGuardarDireccion()
     }
+    setOnEdit(false)
   }
 
   const clearDirecciones = () => {
+    setAlias('')
     setCodigoPostal('')
     setCalle('')
     setNumeroExterior('')
@@ -82,6 +87,7 @@ export default function SeccionDireccion({
   }
 
   const handleEditar = (direccion: DireccionItem, index: number) => {
+    setAlias(direccion.alias || '')
     setCalle(direccion.calle || '')
     setNumeroExterior(direccion.numeroExterior || '')
     setNumeroInterior(direccion.numeroInterior || '')
@@ -93,6 +99,7 @@ export default function SeccionDireccion({
     setReferenciasDomicilio(direccion.referenciasDomicilio || '')
     setIndiceEdicion(index)
     setShowDireccion(false)
+    setOnEdit(true)
   }
 
   const handleEliminar = (index: number) => {
@@ -119,6 +126,8 @@ export default function SeccionDireccion({
         showTable={showDireccion}
       >
         <FormDireccion
+          alias={alias}
+          onAliasChange={setAlias}
           calle={calle}
           onCalleChange={setCalle}
           numeroExterior={numeroExterior}
@@ -140,6 +149,7 @@ export default function SeccionDireccion({
             handleDireccionCompleto(direccion)
           }}
           textoBoton={indiceEdicion !== null ? 'Actualizar dirección' : 'Guardar dirección'}
+          isEdit={onEdit}
         />
       </ToggleTabla>
       {showDireccion && (

@@ -19,6 +19,12 @@
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  /*
+    Altura fija al viewport: el panel no crece con el contenido, así la pagina
+    deja de desplazarse y el scroll ocurre dentro del formulario.
+  */
+  height: calc(100vh - var(--snd-alto-encabezado, 100px));
+  overflow: hidden;
 }
 
 .prestadores-layout__menu {
@@ -26,12 +32,16 @@
   /* Ancho explícito: sin él, el flex lo comprime a min-content y el menú se ve vacío. */
   width: 16rem;
   min-width: 16rem;
+  /*
+    Fijo a la ventana: el menú deja de participar en el flujo del flex, por eso
+    `.prestadores-layout__contenido` reserva el espacio con un margen a la
+    izquierda (más abajo). Se coloca donde estaba: a la izquierda del contenido.
+  */
+  position: fixed;
+  top: 35%;
+  right: 1%;
   /* Anima el ancho al colapsar y extender; el menú interno siempre mide 100%. */
   transition: width 220ms ease, min-width 220ms ease;
-  /* Se fija bajo el encabezado mientras se recorre el formulario largo. */
-  position: sticky;
-  top: 16px;
-  align-self: flex-start;
   /*
     Sin `overflow` aquí ni en la tarjeta: el gatillo está en `right: -14px` y
     cualquier recorte lo cortaría. Al declarar `overflow-y`, el eje X deja de
@@ -39,9 +49,76 @@
   */
 }
 
+/*
+  El menú está fijo a la derecha de la ventana, así que el contenido no reserva
+  espacio por la izquierda; solo se le deja un margen derecho para que la tarjeta
+  del menú no quede encima del formulario en pantallas anchas.
+*/
 .prestadores-layout__contenido {
   flex: 1 1 auto;
   min-width: 0;
+  margin-left: 0;
+  margin-right: calc(4.5rem + 24px);
+  transition: margin-right 220ms ease;
+  /*
+    Scroll propio: el panel tiene altura fija, así que el desbordamiento del
+    formulario se desplaza aquí y no en la página.
+  */
+  /* 100% de la altura fija del layout, menos su padding. */
+  height: calc(100% - 8px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Desplazamiento suave también para el scroll interno. */
+  scroll-behavior: smooth;
+}
+.prestadores-layout:has(.menuMain:not(.menuMain--colapsado)) .prestadores-layout__contenido {
+  margin-right: calc(16rem + 24px);
+}
+
+/*
+  Barra de desplazamiento del panel del formulario, acorde al estilo del menú:
+  pista clara, pulgar guinda y esquinas redondeadas. Se declaran las dos
+  sintaxis: `scrollbar-*` (Firefox) y `::-webkit-scrollbar` (Chrome, Edge,
+  Safari), que no se heredan entre sí.
+*/
+.prestadores-layout__contenido {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gama300, #c98ea3) transparent;
+}
+.prestadores-layout__contenido::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.prestadores-layout__contenido::-webkit-scrollbar-track {
+  background: transparent;
+}
+.prestadores-layout__contenido::-webkit-scrollbar-thumb {
+  background: var(--gama300, #c98ea3);
+  border-radius: 9999px;
+  /* Deja aire entre el pulgar y los bordes de la pista. */
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.prestadores-layout__contenido::-webkit-scrollbar-thumb:hover {
+  background: var(--principal, #9B2247);
+  background-clip: padding-box;
+}
+/* El menú fijo tampoco muestra barra cuando su contenido no desborda. */
+.prestadores-layout__menu .menuMain {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gama300, #c98ea3) transparent;
+}
+.prestadores-layout__menu .menuMain::-webkit-scrollbar {
+  width: 8px;
+}
+.prestadores-layout__menu .menuMain::-webkit-scrollbar-track {
+  background: transparent;
+}
+.prestadores-layout__menu .menuMain::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 /* ---------- Tarjeta del menú ---------- */
@@ -245,14 +322,20 @@
     flex-direction: column;
     padding: 16px;
   }
+  /* En pantallas angostas el menú vuelve al flujo, arriba del formulario. */
   .prestadores-layout__menu {
     position: static;
+    left: auto;
     width: 100%;
     min-width: 0;
     max-height: none;
     overflow: visible;
     /* Sin animación de ancho: aquí siempre ocupa la fila completa. */
     transition: none;
+  }
+  .prestadores-layout__contenido,
+  .prestadores-layout:has(.menuMain--colapsado) .prestadores-layout__contenido {
+    margin-left: 0;
   }
   .prestadores-layout__menu .menuMain,
   .prestadores-layout__menu .menuMain--colapsado {

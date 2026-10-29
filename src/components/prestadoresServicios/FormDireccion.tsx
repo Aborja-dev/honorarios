@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
-import { SndBoton } from '../snd'
+import { SndBoton, SndMensaje } from '../snd'
 import type { DireccionItem } from './TablaDireccion'
 
 const OPCIONES_PAIS = [
@@ -53,6 +53,8 @@ const ENTIDADES_FEDERATIVAS = [
 ].map((e) => ({ label: e, value: e }))
 
 interface FormDireccionProps {
+  alias: string
+  onAliasChange: (value: string) => void
   calle: string
   onCalleChange: (value: string) => void
   numeroExterior: string
@@ -78,6 +80,8 @@ interface FormDireccionProps {
 }
 
 export default function FormDireccion({
+  alias,
+  onAliasChange,
   calle,
   onCalleChange,
   numeroExterior,
@@ -100,11 +104,13 @@ export default function FormDireccion({
   textoBoton = 'Guardar dirección',
   onSeccionCompletaChange,
   onDatosChange,
-}: FormDireccionProps) {
+  isEdit
+}: any) {
   const [intentoEnvio, setIntentoEnvio] = useState(false)
 
   const seccionDireccionCompleta = Boolean(
-    codigoPostal.trim() &&
+    alias.trim() &&
+      codigoPostal.trim() &&
       calle.trim() &&
       numeroExterior.trim() &&
       colonia.trim() &&
@@ -122,6 +128,7 @@ export default function FormDireccion({
   useEffect(() => {
     if (onDatosChange) {
       onDatosChange({
+        alias: alias.trim(),
         calle: calle.trim(),
         numeroExterior: numeroExterior.trim(),
         numeroInterior: numeroInterior.trim(),
@@ -134,6 +141,7 @@ export default function FormDireccion({
       })
     }
   }, [
+    alias,
     calle,
     numeroExterior,
     numeroInterior,
@@ -144,17 +152,6 @@ export default function FormDireccion({
     pais,
     onDatosChange,
   ])
-  const validarForm = (): boolean => {
-    return (
-      calle.trim() !== '' &&
-      numeroExterior.trim() !== '' &&
-      codigoPostal.trim() !== '' &&
-      colonia.trim() !== '' &&
-      pais.trim() !== '' &&
-      entidadFederativa !== null &&
-      municipioAlcaldia.trim() !== ''
-    )
-  }
 
   // No auto-limpiar al render; la lógica de nuevo se maneja desde el padre
 
@@ -164,6 +161,7 @@ export default function FormDireccion({
       return
     }
     const newDireccion: DireccionItem = {
+      alias: alias.trim(),
       calle: calle.trim(),
       numeroExterior: numeroExterior.trim(),
       numeroInterior: numeroInterior.trim(),
@@ -184,8 +182,26 @@ export default function FormDireccion({
   }
   return (
     <>
-      <div className="padron-form-grid">
-      <div className="campo padron-form-grid__col-2">
+      {isEdit && <SndMensaje tipo='info'>Estas modificando una direccion</SndMensaje>}
+      <div className="padron-form-grid" style={{marginTop: "12px"}}>
+        <div className="campo">
+          <label htmlFor="dir-alias" className="b1sb">
+            Alias <span className="requerido">*</span>
+          </label>
+          <InputText
+            id="dir-alias"
+            value={alias}
+            invalid={intentoEnvio && !alias.trim()}
+            onChange={(e) => onAliasChange(e.target.value)}
+            placeholder="Ej. Casa, Oficina, Domicilio fiscal"
+          />
+          {intentoEnvio && !alias.trim() && (
+            <span className="campo__error">
+              El alias es obligatorio para identificar la dirección.
+            </span>
+          )}
+        </div>
+      <div className="campo">
         <label htmlFor="dir-calle" className="b1sb">
           Calle o Avenida <span className="requerido">*</span>
         </label>
