@@ -2,6 +2,7 @@ import React from 'react'
 
 export interface DireccionItem {
   id?: string | number
+  alias?: string,
   calle: string
   numeroExterior: string
   numeroInterior?: string
@@ -45,15 +46,9 @@ export const TablaDireccion: React.FC<TablaDireccionProps> = ({
               backgroundColor: 'var(--principal, #9B2247)',
             }}
           >
-            <th style={thStyle}>Calle o Avenida</th>
-            <th style={thStyle}>Núm. Ext.</th>
-            <th style={thStyle}>Núm. Int.</th>
-            <th style={thStyle}>C.P.</th>
-            <th style={thStyle}>Colonia</th>
-            <th style={thStyle}>Municipio / Alcaldía</th>
+            <th style={thStyle}>Alias</th>
+            <th style={thStyle}>Dirección</th>
             <th style={thStyle}>Estado</th>
-            <th style={thStyle}>País</th>
-            {/* <th style={thStyle}>Referencias</th> */}
             {tieneAcciones && <th style={{ ...thStyle, textAlign: 'center' }}>Acciones</th>}
           </tr>
         </thead>
@@ -80,15 +75,16 @@ export const TablaDireccion: React.FC<TablaDireccionProps> = ({
                   borderBottom: '1px solid var(--neutro400, #dddddd)',
                 }}
               >
-                <td style={tdStyle}>{dir.calle || '-'}</td>
-                <td style={tdStyle}>{dir.numeroExterior || '-'}</td>
-                <td style={tdStyle}>{dir.numeroInterior || '-'}</td>
-                <td style={tdStyle}>{dir.codigoPostal || '-'}</td>
-                <td style={tdStyle}>{dir.colonia || '-'}</td>
-                <td style={tdStyle}>{dir.municipioAlcaldia || '-'}</td>
+                <td style={tdStyle}>{dir.alias || `Dirección ${index +1}`}</td>
+                <td style={tdStyle}>{`
+                  ${dir.calle || '-'}
+                  ${dir.numeroExterior || '-'}
+                  ${dir.colonia || '-'}
+                  ${dir.municipioAlcaldia || '-'}
+                  `}</td>
                 <td style={tdStyle}>{dir.entidadFederativa || '-'}</td>
-                <td style={tdStyle}>{dir.pais || '-'}</td>
-                {/* <td style={tdStyle}>{dir.referenciasDomicilio || '-'}</td> */}
+                
+                
                 {tieneAcciones && (
                   <td style={{ ...tdStyle, textAlign: 'center' }}>
                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
