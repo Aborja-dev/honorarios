@@ -9,7 +9,7 @@ import '../../components/honorarios/Honorarios.css'
 import { useTitulo } from '../../hooks'
 import { SUBMODULOS_HONORARIOS, honorariosService } from '../../services'
 import { sinAcentos } from '../../utils'
-
+import { useNavigate } from 'react-router-dom'
 /**
  * Vista dedicada del submódulo "Modelo de contrato" (`pages/admin/ModeloContrato.tsx`).
  */
@@ -17,7 +17,7 @@ export default function ModeloContrato() {
   useTitulo('Modelo de Contrato · Módulo de Honorarios')
   const [busqueda, setBusqueda] = useState('')
   const [modalAbierto, setModalAbierto] = useState(false)
-
+  const navigate = useNavigate()
   const info = SUBMODULOS_HONORARIOS[2]
   const registros = useMemo(() => {
     const base = honorariosService.obtenerRegistrosPorSubmodulo('modelo')
@@ -49,7 +49,9 @@ export default function ModeloContrato() {
         registros={registros}
         busqueda={busqueda}
         onBusqueda={setBusqueda}
-        onNuevoRegistro={() => setModalAbierto(true)}
+        onNuevoRegistro={() => {
+          navigate("/alta-modelos-contratos")
+        }}
       />
 
       <div style={{ marginTop: 20 }}>

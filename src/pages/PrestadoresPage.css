@@ -20,9 +20,22 @@
   max-width: 100%;
   min-width: 0;
   /*
-    Altura fija al viewport: el panel no crece con el contenido, así la pagina
-    deja de desplazarse y el scroll ocurre dentro del formulario.
+    MODO DEFECTO (`VITE_SCROLL=off`): sin altura fija. El layout crece con el
+    formulario y el desplazamiento ocurre en la página (ventana), igual que en
+    el resto de pantallas del SND.
+    El modo con scroll interno vive en `.prestadores-layout--scroll-interno`
+    (más abajo), que se aplica solo cuando la bandera está activa.
   */
+  height: auto;
+  overflow: visible;
+}
+
+/*
+  MODO SCROLL INTERNO (`VITE_SCROLL=on`, valor por defecto de la app):
+  altura fija al viewport, la página deja de desplazarse y el scroll ocurre
+  dentro del panel del formulario (`.prestadores-layout__contenido`).
+*/
+.prestadores-layout--scroll-interno {
   height: calc(100vh - var(--snd-alto-encabezado, 100px));
   overflow: hidden;
 }
@@ -60,16 +73,43 @@
   margin-left: 0;
   margin-right: calc(4.5rem + 24px);
   transition: margin-right 220ms ease;
-  /*
-    Scroll propio: el panel tiene altura fija, así que el desbordamiento del
-    formulario se desplaza aquí y no en la página.
-  */
+  /* Desplazamiento suave para ambos modos (panel o ventana). */
+  scroll-behavior: smooth;
+}
+
+/*
+  MODO SCROLL INTERNO (`VITE_SCROLL=on`): el panel tiene altura fija y el
+  desbordamiento del formulario se desplaza aquí y no en la página.
+  En el modo por defecto (`off`) el panel crece con el contenido y aquí no hay
+  scroll: el desplazamiento lo hace la ventana.
+*/
+.prestadores-layout--scroll-interno .prestadores-layout__contenido {
   /* 100% de la altura fija del layout, menos su padding. */
   height: calc(100% - 8px);
   overflow-y: auto;
   overflow-x: hidden;
-  /* Desplazamiento suave también para el scroll interno. */
-  scroll-behavior: smooth;
+}
+
+/* En modo page-scroll el panel nunca debe recortar su contenido. */
+.prestadores-layout:not(.prestadores-layout--scroll-interno) .prestadores-layout__contenido {
+  height: auto;
+  overflow: visible;
+}
+
+/*
+  MODO PAGE-SCROLL: el menú sigue fijo a la ventana —así se mantiene visible
+  mientras la página se desplaza— y se le da una altura máxima para que nunca
+  rebase el viewport con su propia barra.
+*/
+.prestadores-layout:not(.prestadores-layout--scroll-interno) .prestadores-layout__menu {
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.45) transparent;
+}
+.prestadores-layout:not(.prestadores-layout--scroll-interno) .prestadores-layout__menu .menuMain {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.45) transparent;
 }
 .prestadores-layout:has(.menuMain:not(.menuMain--colapsado)) .prestadores-layout__contenido {
   margin-right: calc(16rem + 24px);
@@ -79,20 +119,20 @@
   Barra de desplazamiento del panel del formulario, acorde al estilo del menú:
   pista clara, pulgar guinda y esquinas redondeadas. Se declaran las dos
   sintaxis: `scrollbar-*` (Firefox) y `::-webkit-scrollbar` (Chrome, Edge,
-  Safari), que no se heredan entre sí.
+  Safari), que no se heredan entre sí. Solo aplican al modo scroll interno.
 */
-.prestadores-layout__contenido {
+.prestadores-layout--scroll-interno .prestadores-layout__contenido {
   scrollbar-width: thin;
   scrollbar-color: var(--gama300, #c98ea3) transparent;
 }
-.prestadores-layout__contenido::-webkit-scrollbar {
+.prestadores-layout--scroll-interno .prestadores-layout__contenido::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
-.prestadores-layout__contenido::-webkit-scrollbar-track {
+.prestadores-layout--scroll-interno .prestadores-layout__contenido::-webkit-scrollbar-track {
   background: transparent;
 }
-.prestadores-layout__contenido::-webkit-scrollbar-thumb {
+.prestadores-layout--scroll-interno .prestadores-layout__contenido::-webkit-scrollbar-thumb {
   background: var(--gama300, #c98ea3);
   border-radius: 9999px;
   /* Deja aire entre el pulgar y los bordes de la pista. */
@@ -344,5 +384,11 @@
   .prestadores-layout__menu:has(.menuMain--colapsado) {
     width: 100%;
     min-width: 0;
+  }
+  /* En pantallas angostas el menú está en el flujo: no necesita altura máxima
+     ni recorte en ninguno de los dos modos. */
+  .prestadores-layout:not(.prestadores-layout--scroll-interno) .prestadores-layout__menu {
+    max-height: none;
+    overflow: visible;
   }
 }

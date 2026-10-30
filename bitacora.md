@@ -51,3 +51,19 @@ Registro automático de cambios realizados por el agente.
 **Aprendizaje:** Se reutilizó la clase `fila` para conservar el espaciado y permitir adaptación en pantallas angostas. El typecheck conserva errores preexistentes en el proyecto.
 
 ---
+
+## [2026-10-30 17:50:00] Bandera VITE_SCROLL para el scroll interno del Padrón
+
+**Acción:** Agregada la variable de entorno `VITE_SCROLL` (`on`/`off`, sin definir = `on`) que enciende o apaga el scroll interno del panel del Padrón de Prestadores.
+**Archivos:** src/app/config.ts, src/app/index.ts, src/vite-env.d.ts, src/pages/PrestadoresPage.tsx, src/pages/PrestadoresPage.css, bitacora.md
+**Aprendizaje:** El scroll interno no estaba en `PadronPrestadoresServicio.css` (ese archivo no tiene ninguna regla de scroll) sino en `PrestadoresPage.css`: el layout tenía altura fija `100vh − encabezado` y el panel desbordaba con `overflow-y: auto`. Esas reglas se movieron bajo el modificador `.prestadores-layout--scroll-interno`, que se aplica solo con la bandera activa; sin la bandera, el panel crece y el scroll pasa a la ventana. La navegación por anclas del menú de secciones ahora decide panel o ventana según la misma bandera. Se tipó la variable en `src/vite-env.d.ts` porque el proyecto no tenía tipos de Vite. El build real no se pudo correr: Vite necesita `execFile` para resolver rutas y el sandbox lo corta con `spawn EPERM`; la evaluación de la bandera se verificó con un script de Node aparte.
+
+---
+
+## [2026-10-30 18:05:00] Scripts npm para arrancar/compilar con VITE_SCROLL=off
+
+**Acción:** Agregados `dev:scroll-off` y `build:scroll-off` en `package.json`, respaldados por `scripts/con-scroll.mjs`, que fija `VITE_SCROLL` en el proceso hijo y llama al Vite local.
+**Archivos:** scripts/con-scroll.mjs, package.json, bitacora.md
+**Aprendizaje:** `spawn('vite', …, { shell: true })` no sirve: `vite` no está en el PATH fuera de los scripts npm y Node avisa con `DEP0190`. La solución es resolver `vite/package.json` con `createRequire` y lanzar `process.execPath` con la ruta del binario, sin shell: funciona en cualquier terminal, con rutas que tienen espacios y propaga el código de salida. Se probó con un Vite falso en una carpeta temporal (los cuatro casos dan el código esperado).
+
+---

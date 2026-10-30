@@ -10,6 +10,8 @@
   "scripts": {
     "dev": "vite",
     "start": "vite",
+    "dev:scroll-off": "node scripts/con-scroll.mjs off dev",
+    "build:scroll-off": "node scripts/con-scroll.mjs off build",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b",

@@ -4,6 +4,7 @@ import {
   MenuFlotante,
   type ItemMenuFlotante,
 } from '../components/prestadoresServicios/MenuFlotante'
+import { SCROLL_INTERNO_PADRON, CLASE_SCROLL_INTERNO_PADRON } from '../app/config'
 import './PrestadoresPage.css'
 
 /**
@@ -117,11 +118,13 @@ export const PrestadoresPage = () => {
       const tab = destino.closest('.p-accordion-tab') as HTMLElement | null
       const referencia = tab ?? destino
       /*
-        El scroll ya no ocurre en la ventana sino en el panel del formulario
-        (`.prestadores-layout__contenido`), que tiene altura fija. Se calcula la
-        posición relativa a ese contenedor y se desplaza él.
+        Con `VITE_SCROLL=off` el panel ya no desplaza por dentro (crece con el
+        formulario), así que el destino es la ventana. Con scroll interno se
+        desplaza el contenedor, que es el que tiene altura fija.
       */
-      const panel = referencia.closest('.prestadores-layout__contenido') as HTMLElement | null
+      const panel = SCROLL_INTERNO_PADRON
+        ? (referencia.closest('.prestadores-layout__contenido') as HTMLElement | null)
+        : null
       if (panel) {
         const desplazamiento =
           referencia.getBoundingClientRect().top -
@@ -183,7 +186,16 @@ export const PrestadoresPage = () => {
         />
       </aside>
 
-      <div className="prestadores-layout">
+      {/* Clase modificadora de la bandera `VITE_SCROLL`: activa el scroll interno
+          del panel (`on`, por defecto) o deja que la página entera se desplace
+          (`off`). Las reglas viven en PrestadoresPage.css. */}
+      <div
+        className={
+          SCROLL_INTERNO_PADRON
+            ? `prestadores-layout ${CLASE_SCROLL_INTERNO_PADRON}`
+            : 'prestadores-layout'
+        }
+      >
         <div className="prestadores-layout__contenido">
           <PadronPrestadoresServicio
             acordeonesActivos={acordeonesActivos}
