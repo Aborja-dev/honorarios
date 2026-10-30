@@ -73,9 +73,6 @@ export default function ContratosHonorarios() {
           </p>
         </div>
         <div className="fila">
-          <SndBotonEnlace variante="primario" to="/formalizacion-contratos">
-            Formalización de contratos
-          </SndBotonEnlace>
 
           <SndBotonEnlace variante="secundario" to="/">
             Volver al tablero
@@ -222,7 +219,7 @@ export default function ContratosHonorarios() {
               <SndIcono nombre="snd-download" tamano={20} />
               Exportar
             </SndBoton>
-            <SndBoton onClick={() => setModalAbierto(true)}>Nuevo registro</SndBoton>
+            <SndBotonEnlace to={"/formalizacion-contratos"}>Nuevo registro</SndBotonEnlace>
           </div>
         </div>
 

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
+import { useNavigate } from 'react-router-dom'
 import {
   BandejaSubmodulo,
   ModalRegistroHonorarios,
@@ -47,7 +48,7 @@ export default function PadronPrestadores() {
   const [segundoApellidoBusqueda, setSegundoApellidoBusqueda] = useState('')
   const [curpBusqueda, setCurpBusqueda] = useState('')
   const [rfcBusqueda, setRfcBusqueda] = useState('')
-
+  const navigate = useNavigate()
   const info = SUBMODULOS_HONORARIOS[0]
   const registros = useMemo(() => {
     const base = honorariosService.obtenerRegistrosPorSubmodulo('padron')
@@ -218,7 +219,9 @@ export default function PadronPrestadores() {
         registros={registros}
         busqueda={busqueda}
         onBusqueda={setBusqueda}
-        onNuevoRegistro={() => setModalAbierto(true)}
+        onNuevoRegistro={() => {
+          navigate("/padron-prestadores-servicio")
+        }}
       />
 
       <div style={{ marginTop: 20 }}>

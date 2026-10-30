@@ -38,9 +38,6 @@ export default function ModeloContrato() {
           </p>
         </div>
         <div className="fila">
-          <SndBotonEnlace variante="primario" to="/alta-modelos-contratos">
-            Alta de modelos de contratos
-          </SndBotonEnlace>
           <SndBotonEnlace variante="secundario" to="/">
             Volver al tablero
           </SndBotonEnlace>
