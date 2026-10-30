@@ -295,8 +295,7 @@ export default function ContratosHonorarios() {
       <div style={{ marginTop: 20 }}>
         <SndMensaje tipo="alerta">
           <p>
-            Recuerda verificar el oficio de suficiencia presupuestal de la Partida 12101 antes de enviar un lote de
-            contratos a firma electrónica.
+            Recuerda verificar que los datos correspndan al periodo en curso.
           </p>
         </SndMensaje>
       </div>
