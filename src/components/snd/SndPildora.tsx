@@ -12,7 +12,6 @@ export interface SndPildoraProps {
 }
 
 export function SndPildora({ tipo = 'neutro', punto = true, children }: SndPildoraProps) {
-  return null
   return (
     <span className={`pildora pildora--${tipo} snd-pildora`}>
       {punto && <span className="pildora__dot" aria-hidden="true" />}

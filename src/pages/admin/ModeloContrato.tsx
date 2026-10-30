@@ -34,12 +34,17 @@ export default function ModeloContrato() {
             Modelo de Contrato
           </h1>
           <p className="sh0m color--principal" style={{ margin: '4px 0 0' }}>
-            Catálogo de plantillas jurídicas y clausulados dictaminados para Honorarios
+
           </p>
         </div>
-        <SndBotonEnlace variante="secundario" to="/">
-          Volver al tablero
-        </SndBotonEnlace>
+        <div className="fila">
+          <SndBotonEnlace variante="primario" to="/alta-modelos-contratos">
+            Alta de modelos de contratos
+          </SndBotonEnlace>
+          <SndBotonEnlace variante="secundario" to="/">
+            Volver al tablero
+          </SndBotonEnlace>
+        </div>
       </div>
 
       <BandejaSubmodulo

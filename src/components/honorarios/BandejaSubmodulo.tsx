@@ -28,10 +28,10 @@ export function BandejaSubmodulo({
       <div className="honorarios-detalle-barra">
         <div>
           <h2 className="h2b" style={{ margin: 0 }}>
-            {submodulo.titulo}
+            Resultado
           </h2>
           <p className="sdr" style={{ margin: '4px 0 0' }}>
-            {submodulo.subtitulo} · Mostrando {registros.length} registros
+            Mostrando {registros.length} registros
           </p>
         </div>
         <div className="fila">
@@ -40,7 +40,7 @@ export function BandejaSubmodulo({
             valor={busqueda}
             onValor={onBusqueda}
             etiqueta="Filtrar tabla del submódulo"
-            placeholder="Filtrar por folio, nombre o unidad…"
+            placeholder="Filtrar por Id Prestador, nombre o CURP"
             ancho="22rem"
           />
           <SndBoton
@@ -64,11 +64,52 @@ export function BandejaSubmodulo({
           stripedRows
           emptyMessage={`No se encontraron registros para «${busqueda}».`}
         >
-          <Column field="folio" header="Folio / Clave" sortable />
-          <Column field="nombre" header="Prestador / Plantilla" sortable />
-          <Column field="unidad" header="Unidad Administrativa" sortable />
-          <Column field="concepto" header="Concepto / Régimen" />
-          <Column field="vigencia" header="Vigencia" />
+          <Column field="folio" header="Id Prestador" sortable />
+          <Column field="nombre" header="Nombre" sortable />
+          <Column field="unidad" header="CURP" sortable />
+          <Column
+            field="concepto"
+            header="Acciones"
+            headerStyle={{ textAlign: 'center' }}
+            bodyStyle={{ textAlign: 'center' }}
+            body={(fila: RegistroSubmodulo) => (
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                <button
+                  type="button"
+                  style={{
+                    background: 'none',
+                    border: '1px solid var(--neutro400, #cccccc)',
+                    borderRadius: '8px',
+                    padding: '4px 8px',
+                    cursor: 'pointer',
+                    fontSize: '0.8rem',
+                    color: 'var(--neutro800, #333)',
+                  }}
+                  title="Modificar registro"
+                  onClick={() => notificar.info(`Editando registro ${fila.folio}: ${fila.nombre}`)}
+                >
+                  Modificar
+                </button>
+                <button
+                  type="button"
+                  style={{
+                    background: 'none',
+                    border: '1px solid var(--principal, #9B2247)',
+                    borderRadius: '8px',
+                    padding: '4px 8px',
+                    cursor: 'pointer',
+                    fontSize: '0.8rem',
+                    color: 'var(--principal, #9B2247)',
+                  }}
+                  title="Eliminar registro"
+                  onClick={() => notificar.info(`Eliminar registro ${fila.folio}: ${fila.nombre}`)}
+                >
+                  Eliminar
+                </button>
+              </div>
+            )}
+          />
+
           <Column
             field="estado"
             header="Estatus"

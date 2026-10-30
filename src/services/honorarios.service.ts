@@ -91,7 +91,7 @@ export const TRIMESTRES_HONORARIOS: DatosTrimestre[] = [
 export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
     {
     id: 'modelo',
-    titulo: landingTextos.tituloValidarCurp,
+    titulo: landingTextos.tituloModelo,
     subtitulo: 'Plantillas Jurídicas Autorizadas',
     rutaDedicada: '/validar-identidad',
     metrica: '',
@@ -111,7 +111,7 @@ export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
     estadoTexto: 'Habilitado',
     estadoTipo: 'exito',
   },
-    {
+  {
     id: 'suficiencia',
     titulo: landingTextos.tituloModelo,
     subtitulo: 'Plantillas Jurídicas Autorizadas',
@@ -138,10 +138,10 @@ export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
 export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]> = {
   padron: [
     {
-      folio: 'PAD-2026-0104',
+      folio: '000000104',
       nombre: 'María Fernanda López Ríos',
       rfc: 'LORM880412Hdf',
-      unidad: 'Unidad de Administración y Finanzas',
+      unidad: 'LORM990228MDFPSR05',
       concepto: 'Especialista en Control Presupuestal · Capítulo 1000',
       vigencia: '01/01/2026 - 31/12/2026',
       montoMensual: '$38,500.00',
@@ -149,10 +149,10 @@ export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]
       tipoPildora: 'exito',
     },
     {
-      folio: 'PAD-2026-0108',
+      folio: '000000108',
       nombre: 'Carlos Alberto Méndez Soto',
       rfc: 'MESC900921Mdf',
-      unidad: 'Dirección de Tecnologías de la Información',
+      unidad: 'DMESC900921MDFAA00',
       concepto: 'Arquitecto de Sistemas Gubernamentales · Asimilados',
       vigencia: '16/01/2026 - 31/12/2026',
       montoMensual: '$44,200.00',
@@ -160,10 +160,10 @@ export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]
       tipoPildora: 'info',
     },
     {
-      folio: 'PAD-2026-0115',
+      folio: '000000115',
       nombre: 'Laura Patricia Gómez Vega',
       rfc: 'GOVL910214Mdf',
-      unidad: 'Unidad de Asuntos Jurídicos',
+      unidad: 'GOVL910214MDFZZ00',
       concepto: 'Analista de Normatividad Contractual · Capítulo 1000',
       vigencia: '01/02/2026 - 31/12/2026',
       montoMensual: '$34,000.00',
@@ -171,10 +171,10 @@ export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]
       tipoPildora: 'exito',
     },
     {
-      folio: 'PAD-2026-0122',
+      folio: '000000122',
       nombre: 'Jorge Eduardo Ramírez Cruz',
       rfc: 'RACJ850730Hdf',
-      unidad: 'Dirección General de Recursos Humanos',
+      unidad: 'DRACJ850730HDFZZ00',
       concepto: 'Coordinador de Capacitación y Servicio Profesional',
       vigencia: '01/03/2026 - 30/11/2026',
       montoMensual: '$36,800.00',
@@ -184,9 +184,9 @@ export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]
   ],
   contratos: [
     {
-      folio: 'CTO-HON-2026-0841',
+      folio: '0000000841',
       nombre: 'María Fernanda López Ríos',
-      unidad: 'Unidad de Administración y Finanzas',
+      unidad: 'ULORM990228MDFPSR05',
       concepto: 'Contrato de Prestación de Servicios Profesionales Cap. 1000',
       vigencia: '01/07/2026 - 31/12/2026',
       montoMensual: '$38,500.00',
@@ -194,9 +194,9 @@ export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]
       tipoPildora: 'exito',
     },
     {
-      folio: 'CTO-HON-2026-0849',
+      folio: '0000000849',
       nombre: 'Carlos Alberto Méndez Soto',
-      unidad: 'Dirección de Tecnologías de la Información',
+      unidad: 'DDMESC900921MDFAA00',
       concepto: 'Contrato de Honorarios Asimilados a Salarios',
       vigencia: '01/07/2026 - 31/12/2026',
       montoMensual: '$44,200.00',
@@ -204,9 +204,9 @@ export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]
       tipoPildora: 'info',
     },
     {
-      folio: 'CTO-HON-2026-0854',
+      folio: '0000000854',
       nombre: 'Roberto Hernández Villalobos',
-      unidad: 'Unidad de Asuntos Jurídicos',
+      unidad: 'GOVL910214MDFZZ000',
       concepto: 'Contrato de Asesoría Especializada en Dictaminación',
       vigencia: '16/07/2026 - 31/10/2026',
       montoMensual: '$41,000.00',
@@ -214,9 +214,9 @@ export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]
       tipoPildora: 'alerta',
     },
     {
-      folio: 'CTO-HON-2026-0860',
+      folio: '0000000860',
       nombre: 'Ana Sofía Domínguez Lara',
-      unidad: 'Dirección General de Recursos Humanos',
+      unidad: 'DOLA021090DFZZA000',
       concepto: 'Contrato de Servicios Profesionales por Obra Determinada',
       vigencia: '01/08/2026 - 31/12/2026',
       montoMensual: '$32,500.00',
