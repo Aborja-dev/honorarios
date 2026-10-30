@@ -39,10 +39,7 @@ export function CifrasYEstadisticas({
         <article className="honorarios-tarjeta">
           <div className="honorarios-tarjeta__encabezado">
             <h2 className="sh0b honorarios-tarjeta__titulo">{landingTextos.tituloAsignacion}</h2>
-            <SndTooltip
-              texto="Total de contratos de honorarios activos y porcentaje de suficiencia presupuestal ejercida en el trimestre seleccionado."
-              posicion="abajo-derecha"
-            />
+
           </div>
 
           <div className="honorarios-anillo-contenedor">
@@ -62,10 +59,7 @@ export function CifrasYEstadisticas({
         <article className="honorarios-tarjeta">
           <div className="honorarios-tarjeta__encabezado">
             <h2 className="sh0b honorarios-tarjeta__titulo">{landingTextos.tituloEstatus}</h2>
-            <SndTooltip
-              texto="Distribución porcentual del estado actual de los contratos registrados en el ejercicio."
-              posicion="abajo-derecha"
-            />
+
           </div>
 
           <div className="honorarios-anillo-contenedor">

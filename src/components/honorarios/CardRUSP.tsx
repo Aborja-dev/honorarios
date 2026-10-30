@@ -22,7 +22,6 @@ const CardRUSP = () => {
             </div>
 
             <div className="honorarios-submodulo__pie">
-                <SndPildora tipo="exito">Habilitado</SndPildora>
                 <div className="fila" style={{ gap: 8 }}>
                     <SndBoton variante="primario">
                         {landingTextos.botonCifrasRusp}

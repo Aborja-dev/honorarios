@@ -43,9 +43,7 @@ const estados = {
           <article className="honorarios-tarjeta">
             <div className="honorarios-tarjeta__encabezado">
               <h2 className="sh0b honorarios-tarjeta__titulo">Consulta de Identidad</h2>
-              <SndPildora tipo={validado ? 'exito' : 'info'}>
-                {validado ? 'Verificado' : 'Pendiente'}
-              </SndPildora>
+
             </div>
 
             <form className="formulario" onSubmit={verificar} noValidate>

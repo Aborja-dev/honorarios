@@ -392,6 +392,7 @@ export function SeccionDireccion({
         onSiguiente && (
           <SndBoton
             type="button"
+            variante="secundario"
             onClick={() => seccionDireccionCompleta && onSiguiente()}
             disabled={!seccionDireccionCompleta}
           >

@@ -91,7 +91,7 @@ export const TRIMESTRES_HONORARIOS: DatosTrimestre[] = [
 export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
     {
     id: 'modelo',
-    titulo: landingTextos.tituloModelo,
+    titulo: landingTextos.tituloValidarCurp,
     subtitulo: 'Plantillas Jurídicas Autorizadas',
     rutaDedicada: '/validar-identidad',
     metrica: '',
@@ -115,7 +115,7 @@ export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
     id: 'suficiencia',
     titulo: landingTextos.tituloModelo,
     subtitulo: 'Plantillas Jurídicas Autorizadas',
-    rutaDedicada: '/admin/modelo-contrato',
+    rutaDedicada: '/alta-modelos-contratos',
     metrica: '',
     detalle: landingTextos.descModelo,
     icono: 'snd-edit',
@@ -126,7 +126,7 @@ export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
     id: 'contratos',
     titulo: landingTextos.tituloContrato,
     subtitulo: 'Gestión y Ciclo Contractual',
-    rutaDedicada: '/admin/contratos',
+    rutaDedicada: '/formalizacion-contratos',
     metrica: '248 vigentes',
     detalle: landingTextos.descContrato,
     icono: 'snd-document',

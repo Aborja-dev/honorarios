@@ -33,7 +33,7 @@ export function PanelSubmodulos({
         <div>
           <h2 className="h2b honorarios-encabezado-seccion__titulo">{landingTextos.seccionHonorarios}</h2>
         </div>
-        <SndPildora tipo="info">{submoduloActual.titulo}</SndPildora>
+        
       </div>
 
       <div className="honorarios-submodulos-layout">
@@ -64,7 +64,7 @@ export function PanelSubmodulos({
                 </div>
 
                 <div className="honorarios-submodulo__pie">
-                  <SndPildora tipo={sub.estadoTipo}>{sub.estadoTexto}</SndPildora>
+      
                   <div className="fila" style={{ gap: 8 }}>
                     <SndBoton
                       style={{
