@@ -33,3 +33,4 @@ Thumbs.db
 # Para publicarlo: borrar esta línea (y si ya se agregó con `git add`, usar `git add -f README.md`).
 README.md
 *.md
+bitacora.md

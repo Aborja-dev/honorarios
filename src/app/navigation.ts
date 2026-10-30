@@ -10,6 +10,8 @@ export const MENU_LATERAL_HONORARIOS: ItemMenuLateral[] = [
   { texto: 'Padrón de Prestadores de Servicio', icono: 'snd-document', ruta: '/padron-prestadores-servicio' },
   { texto: 'Contratos de Honorarios', icono: 'snd-document', ruta: '/admin/contratos' },
   { texto: 'Modelo de Contrato', icono: 'snd-edit', ruta: '/admin/modelo-contrato' },
+  { texto: 'Alta de Modelos de Contrato', icono: 'snd-edit', ruta: '/alta-modelos-contratos' },
+  { texto: 'Formalización de Contratos', icono: 'snd-checkmark--filled', ruta: '/formalizacion-contratos' },
   { texto: 'Mis Entregables', icono: 'snd-calendar', ruta: '/user/entregables' },
   { texto: 'Firma e.firma (FIEL)', icono: 'snd-checkmark--filled', ruta: '/prueba-fiel' },
   { texto: 'Validador de Compatibilidad', icono: 'snd-user', ruta: '/validar-identidad' },
@@ -23,5 +25,7 @@ export const MENU_SUPERIOR_HONORARIOS: ItemNavegacion[] = [
   { texto: 'Padrón', ruta: '/admin/padron' },
   { texto: 'Contratos', ruta: '/admin/contratos' },
   { texto: 'Modelo de Contrato', ruta: '/admin/modelo-contrato' },
+  { texto: 'Alta de Modelos', ruta: '/alta-modelos-contratos' },
+  { texto: 'Formalización', ruta: '/formalizacion-contratos' },
   { texto: 'Portal Prestador', ruta: '/user/portal' },
 ]
