@@ -133,23 +133,20 @@ export function SeccionGenerica({
       renderTabla={({ filas: visibles, onEditar, onEliminar }) => (
         <TablaAcciones
           filas={visibles}
+          columnas={columnas.map((columna) => ({
+            encabezado: columna.encabezado,
+            celda: (fila: Record<string, unknown>, indice: number) =>
+              columna.valor
+                ? columna.valor(fila, indice)
+                : columna.clave
+                  ? texto(fila[columna.clave]) || '-'
+                  : '-',
+          }))}
           vacia={vacia}
           anchoMinimo={`${Math.max(columnas.length * 10, 40)}rem`}
           onEditar={onEditar}
           onEliminar={onEliminar}
-        >
-          {columnas.map((columna, i) => (
-            <TablaAcciones.Columna key={i} encabezado={columna.encabezado}>
-              {(fila: Record<string, unknown>, indice: number) =>
-                columna.valor
-                  ? columna.valor(fila, indice)
-                  : columna.clave
-                    ? texto(fila[columna.clave]) || '-'
-                    : '-'
-              }
-            </TablaAcciones.Columna>
-          ))}
-        </TablaAcciones>
+        />
       )}
       renderFormulario={({ valores, onCambio, intentoEnvio }) => (
         <div className="padron-form-grid">

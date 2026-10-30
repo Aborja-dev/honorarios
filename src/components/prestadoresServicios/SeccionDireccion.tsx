@@ -4,6 +4,7 @@ import { InputText } from 'primereact/inputtext'
 import { SndBoton, SndMensaje } from '../snd'
 import { SeccionLista } from './SeccionLista'
 import { TablaAcciones } from './TablaAcciones'
+import { COLUMNAS_DIRECCION } from './TablaDireccion'
 import { nuevoId } from '../../utils/cn'
 
 /**
@@ -322,26 +323,13 @@ function TablaDireccion({
   return (
     <TablaAcciones
       filas={direcciones}
+      columnas={COLUMNAS_DIRECCION}
       vacia="No hay direcciones registradas."
       onEditar={onEditar}
       onEliminar={onEliminar}
       textoEditar="Editar dirección"
       textoEliminar="Eliminar dirección"
-    >
-      <TablaAcciones.Columna encabezado="Alias">
-        {(dir: DireccionItem, i) => dir.alias || `Dirección ${i + 1}`}
-      </TablaAcciones.Columna>
-      <TablaAcciones.Columna encabezado="Dirección">
-        {(dir: DireccionItem) =>
-          [dir.calle, dir.numeroExterior, dir.colonia, dir.municipioAlcaldia]
-            .filter(Boolean)
-            .join(', ') || '-'
-        }
-      </TablaAcciones.Columna>
-      <TablaAcciones.Columna encabezado="Estado">
-        {(dir: DireccionItem) => dir.entidadFederativa || '-'}
-      </TablaAcciones.Columna>
-    </TablaAcciones>
+    />
   )
 }
 

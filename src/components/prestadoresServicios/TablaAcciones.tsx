@@ -1,18 +1,21 @@
-import { Children, isValidElement, type CSSProperties, type ReactElement, type ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 
 /**
- * Tabla de datos con acciones por renglón (Editar / Eliminar).
+ * Columna de `TablaAcciones`, declarada como **dato** y no como componente.
  *
- * Es el corazón visual compartido por todas las secciones del padrón que
- * funcionan como maestro-detalle. Cada sección solo declara sus columnas
- * (`<TablaAcciones.Columna encabezado="Alias">{(fila) => ...}</TablaAcciones.Columna>`)
- * y este componente se encarga del encabezado, el estado vacío y la celda de
- * acciones. Así los textos y el formato de cada columna viven en su sección y
- * la mecánica de la tabla vive en un solo archivo.
+ * Antes las columnas se escribían como `<TablaAcciones.Columna>…</TablaAcciones.Columna>`,
+ * un componente que devolvía `null` y que la tabla leía por sus `props`. Ese
+ * patrón obligaba a anidar JSX manualmente y fue el origen de un `<thead>` mal
+ * cerrado que invalidaba el módulo entero (y con él, el botón Editar). Como
+ * dato, una columna es imposible de anidar mal y añadir una es una línea.
  */
+export interface ColumnaTabla<T> {
+  encabezado: ReactNode
+  celda: (fila: T, indice: number) => ReactNode
+}
 
 /**
- * La restricción deliberadamente laxa: acepta `DireccionItem`,
+ * Restricción deliberadamente laxa: acepta `DireccionItem`,
  * `EscolaridadItem`, etc. sin exigir una propiedad común, porque
  * `{ [clave: string]: unknown }` rechaza interfaces sin índice implícito.
  */
@@ -20,18 +23,22 @@ import { Children, isValidElement, type CSSProperties, type ReactElement, type R
 type Fila = any
 
 export interface TablaAccionesProps<T extends Fila = Fila> {
-  /** Renglones a pintar. También alimenta las columnas declarativas. */
+  /** Renglones a pintar. */
   filas: readonly T[]
+  /** Columnas, en orden de presentación. */
+  columnas: readonly ColumnaTabla<T>[]
   /** Mensaje que ocupa toda la tabla cuando no hay filas. */
   vacia: ReactNode
-  /** Columnas declaradas como hijos: `<TablaAcciones.Columna encabezado={...}>{(fila, i) => ...}</TablaAcciones.Columna>`. */
-  children?: ReactNode
-  /** Alternativa programática a los hijos. */
-  columnas?: readonly TablaAccionesColumna<T>[]
   /** Ancho mínimo de la tabla, para mantener legibilidad en móvil. */
   anchoMinimo?: string
-  /** Si no se entrega ningún manejador, se omite la columna de acciones. */
-  onEditar?: (fila: T, indice: number) => void
+  /**
+   * Índice que se pasa a `onEditar`. Se resuelve del arreglo **completo** de
+   * renglones, no de `filas`: si la tabla muestra una vista filtrada, el
+   * manejador sigue recibiendo la posición real en el estado del padre.
+   */
+  indiceDeFila?: (fila: T, indice: number) => number
+  /** Se dispara con el índice real del renglón pulsado en "Editar". */
+  onEditar?: (indice: number) => void
   onEliminar?: (indice: number) => void
   /** Texto (y `title` de accesibilidad) del botón de editar. */
   textoEditar?: string
@@ -39,50 +46,21 @@ export interface TablaAccionesProps<T extends Fila = Fila> {
   textoEliminar?: string
 }
 
-export interface TablaAccionesColumna<T extends Fila = Fila> {
-  encabezado: ReactNode
-  celda: (fila: T, indice: number) => ReactNode
-}
-
-export interface TablaAccionesColumnaProps<T extends Fila = Fila> {
-  encabezado: ReactNode
-  children: (fila: T, indice: number) => ReactNode
-}
-
-/**
- * Declaración de una columna. No pinta nada por sí misma: `TablaAcciones` lee
- * sus props y las convierte en `<th>`/`<td>`. Permite escribir las columnas de
- * forma declarativa sin anidar a mano cada fila.
- */
-function Columna<T extends Fila>(_props: TablaAccionesColumnaProps<T>) {
-  return null
-}
-
-function esColumna(nodo: ReactNode): nodo is ReactElement<TablaAccionesColumnaProps> {
-  return isValidElement(nodo) && nodo.type === Columna
-}
-
 export function TablaAcciones<T extends Fila = Fila>({
   filas,
-  vacia,
-  children,
   columnas,
+  vacia,
   anchoMinimo = '40rem',
+  indiceDeFila,
   onEditar,
   onEliminar,
   textoEditar = 'Editar',
   textoEliminar = 'Eliminar',
 }: TablaAccionesProps<T>) {
-  const declaradas: TablaAccionesColumna<T>[] = [
-    ...(columnas ?? []),
-    ...[...Children.toArray(children)].filter(esColumna).map(({ props }) => ({
-      encabezado: props.encabezado,
-      celda: props.children,
-    })),
-  ]
-
+  // La columna de acciones solo aparece si hay algo que hacer.
   const tieneAcciones = Boolean(onEditar || onEliminar)
-  const totalColumnas = Math.max(declaradas.length + (tieneAcciones ? 1 : 0), 1)
+  const totalColumnas = Math.max(columnas.length + (tieneAcciones ? 1 : 0), 1)
+  const indiceReal = (fila: T, indice: number) => (indiceDeFila ? indiceDeFila(fila, indice) : indice)
 
   return (
     <div className="contenedor-tabla" style={{ marginTop: '1rem' }}>
@@ -97,8 +75,8 @@ export function TablaAcciones<T extends Fila = Fila>({
       >
         <thead>
           <tr style={{ backgroundColor: 'var(--principal, #9B2247)' }}>
-            {declaradas.map((columna, indice) => (
-              <th key={indice} style={thStyle}>
+            {columnas.map((columna, i) => (
+              <th key={i} style={thStyle}>
                 {columna.encabezado}
               </th>
             ))}
@@ -126,7 +104,7 @@ export function TablaAcciones<T extends Fila = Fila>({
                 key={claveDeFila(fila, indice)}
                 style={{ borderBottom: '1px solid var(--neutro400, #dddddd)' }}
               >
-                {declaradas.map((columna, i) => (
+                {columnas.map((columna, i) => (
                   <td key={i} style={tdStyle}>
                     {columna.celda(fila, indice)}
                   </td>
@@ -137,7 +115,7 @@ export function TablaAcciones<T extends Fila = Fila>({
                       {onEditar && (
                         <button
                           type="button"
-                          onClick={() => onEditar(fila, indice)}
+                          onClick={() => onEditar(indiceReal(fila, indice))}
                           style={btnAccionStyle}
                           title={textoEditar}
                         >
@@ -147,7 +125,7 @@ export function TablaAcciones<T extends Fila = Fila>({
                       {onEliminar && (
                         <button
                           type="button"
-                          onClick={() => onEliminar(indice)}
+                          onClick={() => onEliminar(indiceReal(fila, indice))}
                           style={{ ...btnAccionStyle, color: 'var(--rojo500, #9B0F15)' }}
                           title={textoEliminar}
                         >
@@ -171,9 +149,6 @@ function claveDeFila(fila: Fila, indice: number) {
   const id = fila?.id
   return id ?? indice
 }
-
-TablaAcciones.Columna = Columna
-export { Columna as ColumnaTablaAcciones }
 
 const thStyle: CSSProperties = {
   padding: '0.75rem 1rem',

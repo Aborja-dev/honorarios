@@ -631,7 +631,6 @@ export default function PadronPrestadoresServicio({
           >
             <div id="padron-seccion-direccion">
               <SeccionDireccion
-                intentoEnvio={intentoEnvio}
                 direcciones={direcciones}
                 onDireccionesChange={setDirecciones}
                 seccionDireccionCompleta={seccionDireccionCompleta}

@@ -1,20 +1,38 @@
 import React from 'react'
 import type { DireccionItem } from './SeccionDireccion'
-import { TablaAcciones } from './TablaAcciones'
+import { TablaAcciones, type ColumnaTabla } from './TablaAcciones'
 
 /**
- * Tabla de direcciones registradas. Es un envoltorio delgado sobre
- * `TablaAcciones`: solo declara sus columnas y sus textos.
- *
- * Desde la refactorización de secciones, la sección de dirección pinta su
- * propia tabla (para no acoplar el grid al montaje de un componente suelto),
- * pero este archivo se conserva para quien necesite la tabla de forma aislada.
+ * Tabla de direcciones registradas, para quien necesite la tabla de forma
+ * aislada. Es un envoltorio delgado sobre `TablaAcciones`: solo declara sus
+ * columnas y sus textos.
  */
+
 export type { DireccionItem }
+
+/** Columnas de la tabla de direcciones, en un solo lugar reutilizable. */
+export const COLUMNAS_DIRECCION: ColumnaTabla<DireccionItem>[] = [
+  {
+    encabezado: 'Alias',
+    celda: (dir, i) => dir.alias || `Dirección ${i + 1}`,
+  },
+  {
+    encabezado: 'Dirección',
+    celda: (dir) =>
+      [dir.calle, dir.numeroExterior, dir.colonia, dir.municipioAlcaldia]
+        .filter(Boolean)
+        .join(', ') || '-',
+  },
+  {
+    encabezado: 'Estado',
+    celda: (dir) => dir.entidadFederativa || '-',
+  },
+]
 
 interface TablaDireccionProps {
   direcciones: readonly DireccionItem[]
-  onEditar?: (direccion: DireccionItem, index: number) => void
+  /** Recibe el índice del renglón dentro de `direcciones`. */
+  onEditar?: (index: number) => void
   onEliminar?: (index: number) => void
 }
 
@@ -25,26 +43,13 @@ export const TablaDireccion: React.FC<TablaDireccionProps> = ({
 }) => (
   <TablaAcciones
     filas={direcciones}
+    columnas={COLUMNAS_DIRECCION}
     vacia="No hay direcciones registradas."
     onEditar={onEditar}
     onEliminar={onEliminar}
     textoEditar="Editar dirección"
     textoEliminar="Eliminar dirección"
-  >
-    <TablaAcciones.Columna encabezado="Alias">
-      {(dir: DireccionItem, i) => dir.alias || `Dirección ${i + 1}`}
-    </TablaAcciones.Columna>
-    <TablaAcciones.Columna encabezado="Dirección">
-      {(dir: DireccionItem) =>
-        [dir.calle, dir.numeroExterior, dir.colonia, dir.municipioAlcaldia]
-          .filter(Boolean)
-          .join(', ') || '-'
-      }
-    </TablaAcciones.Columna>
-    <TablaAcciones.Columna encabezado="Estado">
-      {(dir: DireccionItem) => dir.entidadFederativa || '-'}
-    </TablaAcciones.Columna>
-  </TablaAcciones>
+  />
 )
 
 export default TablaDireccion
