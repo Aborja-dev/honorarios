@@ -1187,7 +1187,7 @@ export default function FormalizacionContratos() {
 
               <div className="campo">
                 <label htmlFor="fc-chk-servicio-igual" className="b1sb">
-                  Servicio Igual
+                  Servicios Iguales
                 </label>
                 <Checkbox
                   inputId="fc-chk-servicio-igual"
@@ -1210,7 +1210,7 @@ export default function FormalizacionContratos() {
 
               <div className="campo">
                 <label htmlFor="fc-existe-plaza" className="b1sb">
-                  Existe Plaza Honorarios
+                  Existe Plaza Estructura
                 </label>
                 <Checkbox
                   inputId="fc-existe-plaza"

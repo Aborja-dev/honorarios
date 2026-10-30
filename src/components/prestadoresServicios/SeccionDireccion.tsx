@@ -147,7 +147,7 @@ export function FormDireccion({
 
   return (
     <>
-      {editar && <SndMensaje tipo="info">Estás modificando una dirección.</SndMensaje>}
+      {editar ? <SndMensaje tipo="info">Estás modificando una dirección.</SndMensaje> : <SndMensaje tipo="exito">Se va a agregar una nueva direccion</SndMensaje>}
       <div className="padron-form-grid" style={{ marginTop: '12px' }}>
         <div className="campo">
           <label htmlFor="dir-alias" className="b1sb">
