@@ -27,7 +27,7 @@ const SectionContext = createContext<SectionContextType<unknown> | undefined>(un
 
 export interface SectionProviderProps<T = unknown> {
   children: ReactNode
-  /** Renglones con los que arranca la sección. */
+  /** Renglones con los que arranca la sección del padron. */
   itemsIniciales?: T[]
   /** Valores de ejemplo para pintar el formulario, si se quieren precargados. */
   valoresIniciales?: T | null
