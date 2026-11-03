@@ -14,6 +14,8 @@ export interface ItemMenuFlotante {
   /** Marca de avance; pinta el punto de color del renglón. */
   estado?: 'completado' | 'pendiente'
   tooltip: string
+  /** Forzar estado activo directamente en el ítem (opcional; si se omite, se compara con `activa`). */
+  active?: boolean
 }
 
 export interface MenuFlotanteProps {
@@ -44,7 +46,6 @@ export function MenuFlotante({
   etiqueta = 'Navegación entre secciones',
   activa,
   colapsado,
-  onColapsar,
   className,
 }: MenuFlotanteProps) {
   return (
@@ -62,7 +63,7 @@ export function MenuFlotante({
 
       <ul className="menuMain__lista">
         {items.map((item) => {
-          const esActiva = item.ancla === activa
+          const esActiva = item.active ?? (item.ancla === activa)
           return (
             <li key={item.ancla} className="menuMain__item" title={item.tooltip}>
               <a

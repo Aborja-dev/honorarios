@@ -67,3 +67,35 @@ Registro automático de cambios realizados por el agente.
 **Aprendizaje:** `spawn('vite', …, { shell: true })` no sirve: `vite` no está en el PATH fuera de los scripts npm y Node avisa con `DEP0190`. La solución es resolver `vite/package.json` con `createRequire` y lanzar `process.execPath` con la ruta del binario, sin shell: funciona en cualquier terminal, con rutas que tienen espacios y propaga el código de salida. Se probó con un Vite falso en una carpeta temporal (los cuatro casos dan el código esperado).
 
 ---
+
+## [2026-10-30 18:20:00] Renglón activo del menú de secciones con el estilo del SND
+
+**Acción:** Reemplazado el estilo del renglón activo del menú flotante del Padrón: antes era guinda sobre el fondo guinda del menú y casi no se distinguía; ahora usa el lenguaje del menú lateral del SND, con fondo claro, texto en el color principal y barra lateral de 3px.
+**Archivos:** src/pages/PrestadoresPage.css, bitacora.md
+**Aprendizaje:** El marcado ya estaba bien: `MenuFlotante` pone `menuMain__link--active` y `aria-current="location"` en el ancla activa; el problema era solo de contraste. Se añadieron selectores para la clase **y** para `[aria-current]`, porque al crecer el selector se ganaba especificidad sobre `.menuMain__link:hover` y el hover del activo se quedaba blanco. También se eliminó una regla suelta que pintaba el punto de avance en blanco translúcido: sobre fondo claro, el punto debe conservar su color real.
+
+---
+
+## [2026-11-03 10:20:00] Control de sección activa en menú flotante
+
+**Acción:** Elevado `anclaActiva` a estado React en `PrestadoresPage` y actualizado `MenuFlotante` para soportar `item.active ?? (item.ancla === activa)`.
+**Archivos:** src/components/prestadoresServicios/MenuFlotante.tsx, src/pages/PrestadoresPage.tsx, bitacora.md
+**Aprendizaje:** `anclaActiva` se derivaba con `Math.min(...indicesAbiertos)`, lo que impedía que al clickear cualquier otra sección se activara la clase `.menuMain__link--active` mientras el primer acordeón estuviese abierto. Al manejar `anclaActiva` como estado y actualizarlo tanto en `irASeccion` como en `onAcordeonesChange`, el menú responde en tiempo real a la navegación.
+
+---
+
+## [2026-11-03 10:40:00] Causa real del "background que se borraba" en el menú flotante
+
+**Acción:** El renglón activo del menú flotante ahora usa `--gama400` con `!important` y ya no lleva barra lateral; se retiró el `box-shadow` que la dibujaba.
+**Archivos:** src/pages/PrestadoresPage.css, src/pages/PrestadoresPage.tsx, bitacora.md
+**Aprendizaje:** La hoja del SND (`https://framework-gb.cdn.gob.mx/snd/v1/snd-guinda.css`, espejo accesible del CDN de snd.gob.mx, que responde 403) tiene su propia regla `.menuMain__link[aria-current] { background: var(--gama400) }`. Como `MenuFlotante` marca el activo con `aria-current="location"`, el SND repintaba el fondo por encima del CSS del proyecto (la hoja del CDN se carga al final). Además el SND aclara con `--gama400` (`--pguinda400` #BA6783), no con blanco, y `--gama400` solo existe en el CDN, por eso hay que encadenar respaldos. El color necesita `!important` porque `a:hover`, `a:active` y `a:visited` del SND lo traen. El menú de secciones anula el filete blanco del SND y no añade borde propio, para diferenciarse del menú lateral.
+
+---
+
+## [2026-11-03 10:55:00] Interfaz `DireccionItem` completa y tipos de apoyo
+
+**Acción:** Ampliada la interfaz de dirección con los 10 campos del formulario documentados uno por uno, y añadidos los tipos `EntidadFederativa`, `IdDireccion`, `CampoDireccion` y `DireccionCompleta`, más `DIRECCION_VACIA` y el guard `esDireccionCompleta`.
+**Archivos:** src/components/prestadoresServicios/SeccionDireccion.tsx, bitacora.md
+**Aprendizaje:** Los campos ya coincidían uno a uno con los inputs de `FormDireccion`; lo que faltaba era documentación y tipos de apoyo. `CampoDireccion` se deriva con `Exclude<keyof DireccionItem, 'id'>` para que al agregar un campo al tipo no haya que tocar otra lista. Al mover `DIRECCION_VACIA` arriba del catálogo de entidades quedó duplicada: el typecheck lo detectó con `TS2451` y se eliminó la copia posterior.
+
+---

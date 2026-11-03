@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import PadronPrestadoresServicio from './PadronPrestadoresServicio'
 import {
   MenuFlotante,
@@ -85,15 +85,17 @@ export const PrestadoresPage = () => {
   // Estado de los acordeones, elevado aquí para compartirlo con el menú.
   const [acordeonesActivos, setAcordeonesActivos] = useState<number | number[]>([0])
 
-  const indicesAbiertos = Array.isArray(acordeonesActivos)
-    ? acordeonesActivos
-    : [acordeonesActivos]
 
-  /** Índice de la primera sección abierta; 0 si no hay ninguna. */
-  const primerAbierto = indicesAbiertos.length ? Math.min(...indicesAbiertos) : 0
 
-  /** Ancla activa: la del acordeón abierto con menor índice. */
-  const anclaActiva: string | undefined = SECCIONES[primerAbierto]?.ancla
+
+
+
+
+
+  // Ancla activa para resaltar el ítem correspondiente en el menú flotante
+  const [anclaActiva, setAnclaActiva] = useState<string | undefined>(SECCIONES[0]?.ancla)
+  /** Ref del panel con scroll interno: hace falta para observar su desplazamiento. */
+  const refContenido = useRef<HTMLDivElement | null>(null)
 
   /**
    * Ancla a la que hay que desplazarse. Se guarda en estado (no se llama al
@@ -145,12 +147,54 @@ export const PrestadoresPage = () => {
   }, [anclaPendiente, acordeonesActivos])
 
   /**
+   * El renglón activo sigue **lo que se ve**, no solo el último clic: al abrir
+   * un acordeón a mano o al desplazarse, se marca la primera sección visible.
+   *
+   * No usa scroll listeners porque el scroll sucede en la ventana o en el panel
+   * según `VITE_SCROLL`. Un `IntersectionObserver` con `rootMargin` negativa
+   * arriba hace que la sección "visible" sea la primera que toca la línea del
+   * borde superior; se recalcula también cuando cambian los acordeones.
+   */
+  useEffect(() => {
+    const raiz = SCROLL_INTERNO_PADRON ? refContenido.current : null
+    if (SCROLL_INTERNO_PADRON && !raiz) return
+
+    const observer = new IntersectionObserver(
+      (entradas) => {
+        const visible = entradas
+          .filter((entrada) => entrada.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0]
+        if (!visible) return
+        const ancla = (visible.target as HTMLElement).dataset.ancla
+        if (ancla) setAnclaActiva(ancla)
+      },
+      {
+        root: raiz,
+        /* La franja de detección va del borde superior visible a ~40% de la altura. */
+        rootMargin: `-${MARGEN_DESPLAZAMIENTO_PANEL}px 0px -60% 0px`,
+        threshold: 0,
+      },
+    )
+
+    for (const seccion of SECCIONES) {
+      const elemento = document.getElementById(seccion.ancla)
+      if (!elemento) continue
+      elemento.dataset.ancla = seccion.ancla
+      observer.observe(elemento)
+    }
+
+    return () => observer.disconnect()
+  }, [acordeonesActivos])
+
+  /**
    * Abre la sección y agenda el desplazamiento a ella. Devuelve `false` si el
    * ancla no corresponde a ninguna sección, para dejar actuar al anchor nativo.
    */
   const irASeccion = (ancla: string) => {
     const indice = INDICE_POR_ANCLA[ancla]
     if (indice === undefined) return false
+
+    setAnclaActiva(ancla)
 
     // Se abre el acordeón, dejando abiertas las demás.
     setAcordeonesActivos((actuales) => {
@@ -196,10 +240,27 @@ export const PrestadoresPage = () => {
             : 'prestadores-layout'
         }
       >
-        <div className="prestadores-layout__contenido">
+        <div className="prestadores-layout__contenido" ref={refContenido}>
           <PadronPrestadoresServicio
             acordeonesActivos={acordeonesActivos}
-            onAcordeonesChange={setAcordeonesActivos}
+            onAcordeonesChange={(indices) => {
+              setAcordeonesActivos(indices)
+              /*
+                Al abrir un acordeón a mano se marca como activo ese, que es lo
+                que el usuario acaba de abrir. Cerrar todos no borra la marca:
+                el renglón que se estaba viendo sigue siendo la referencia.
+              */
+              const lista = Array.isArray(indices)
+                ? indices
+                : indices !== null && indices !== undefined
+                  ? [indices]
+                  : []
+              const ultimo = lista[lista.length - 1]
+              if (ultimo !== undefined) {
+                const ancla = SECCIONES[ultimo]?.ancla
+                if (ancla) setAnclaActiva(ancla)
+              }
+            }}
           />
         </div>
       </div>

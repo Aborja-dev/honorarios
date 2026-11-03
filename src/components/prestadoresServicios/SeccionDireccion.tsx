@@ -7,23 +7,89 @@ import { TablaAcciones } from './TablaAcciones'
 import { COLUMNAS_DIRECCION } from './TablaDireccion'
 import { nuevoId } from '../../utils/cn'
 
+/* =========================================================================
+ * Modelo de dirección del prestador
+ * ========================================================================= */
+
 /**
- * Modelo de una dirección del prestador. Antes vivía en `TablaDireccion.tsx`
- * (la tabla no debería ser dueña del tipo de dominio); se re-exporta desde ahí
- * para no romper los imports existentes.
+ * `entidadFederativa` distingue "no seleccionada" (`null`) de cadena vacía.
+ * El `Dropdown` de PrimeReact usa `null` para ningún valor, y la validación
+ * compara contra `null` explícitamente.
+ */
+export type EntidadFederativa = string | null
+
+/**
+ * `id` de la fila. Para direcciones nuevas es el `nuevoId('dir')` que genera
+ * `SeccionDireccion`; las que vienen del backend conservan su `id` del servicio.
+ */
+export type IdDireccion = string | number
+
+/**
+ * Dirección del prestador, con **todos** los campos que captura
+ * `FormDireccion` (espejo 1:1 de sus inputs, extras incluidos).
+ *
+ * Convenciones:
+ * - `alias` es la única etiqueta que da contexto al usuario
+ *   ("Casa", "Oficina", "Domicilio fiscal"); es opcional en el tipo porque una
+ *   dirección a medio capturar no la tiene, pero `DIRECCION_VACIA` la deja en
+ *   `''` y `validarDireccion` la exige para guardar.
+ * - `numeroInterior` y `referenciasDomicilio` no se validan: el formulario los
+ *   deja vacíos a propósito.
+ * - `id` es opcional porque al construir una dirección desde el formulario el
+ *   identificador todavía no existe.
  */
 export interface DireccionItem {
-  id?: string | number
+  /** Identificador de la fila; lo asigna el servicio o `SeccionDireccion`. */
+  id?: IdDireccion
+  /** Etiqueta corta que identifica la dirección. Obligatoria para guardar. */
   alias?: string
+  /** Calle o avenida. Obligatoria. */
   calle: string
+  /** Número exterior de la calle. Obligatorio (admite "S/N"). */
   numeroExterior: string
+  /** Número interior, piso o departamento. Opcional. */
   numeroInterior?: string
+  /** Código postal, solo dígitos (el formulario filtra no numéricos). Obligatorio. */
   codigoPostal: string
+  /** Colonia o localidad. Obligatoria. */
   colonia: string
+  /** Municipio o alcaldía. Obligatoria. */
   municipioAlcaldia: string
-  entidadFederativa: string | null
+  /** Entidad federativa seleccionada del catálogo. Obligatoria. */
+  entidadFederativa: EntidadFederativa
+  /** País seleccionado del catálogo. Obligatorio. */
   pais: string
+  /** Referencias para llegar al domicilio. Opcional. */
   referenciasDomicilio?: string
+}
+
+/** Claves editables de la dirección, derivadas del tipo para no desincronizarse. */
+export type CampoDireccion = Exclude<keyof DireccionItem, 'id'>
+
+/**
+ * Dirección en blanco: el "schema" de lo que captura el formulario y el valor
+ * inicial de un alta. Poner aquí cada campo evita olvidar uno al crear la
+ * sección o al limpiar el borrador.
+ */
+export const DIRECCION_VACIA: DireccionItem = {
+  alias: '',
+  calle: '',
+  numeroExterior: '',
+  numeroInterior: '',
+  codigoPostal: '',
+  colonia: '',
+  municipioAlcaldia: '',
+  entidadFederativa: 'Ciudad de México',
+  pais: 'México',
+  referenciasDomicilio: '',
+}
+
+/** Dirección utilizable como valor de un formulario, con todos los campos presentes. */
+export type DireccionCompleta = Required<Omit<DireccionItem, 'id'>> & { id?: IdDireccion }
+
+/** `true` cuando se llenaron los campos obligatorios para guardar la dirección. */
+export function esDireccionCompleta(direccion: DireccionItem): direccion is DireccionCompleta {
+  return validarDireccion(direccion) === null
 }
 
 const OPCIONES_PAIS = [
@@ -73,20 +139,6 @@ const ENTIDADES_FEDERATIVAS = [
   'Yucatán',
   'Zacatecas',
 ].map((e) => ({ label: e, value: e }))
-
-/** Dirección en blanco: el "schema" de lo que captura el formulario. */
-export const DIRECCION_VACIA: DireccionItem = {
-  alias: '',
-  calle: '',
-  numeroExterior: '',
-  numeroInterior: '',
-  codigoPostal: '',
-  colonia: '',
-  municipioAlcaldia: '',
-  entidadFederativa: 'Ciudad de México',
-  pais: 'México',
-  referenciasDomicilio: '',
-}
 
 /** Campos que deben venir llenos para considerar la dirección completa. */
 function validarDireccion(direccion: DireccionItem): string | null {
