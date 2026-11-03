@@ -17,6 +17,7 @@ import App from './App'
 import { NotificacionesProvider } from './components/snd'
 import { TemaProvider } from './hooks'
 import { registrarLocaleEs } from './lib'
+import { SectionProvider } from './components/personalizados/SectionContext'
 
 registrarLocaleEs()
 
@@ -26,7 +27,9 @@ createRoot(document.getElementById('root')!).render(
       <TemaProvider>
         <NotificacionesProvider>
           <BrowserRouter>
-            <App />
+            <SectionProvider>
+              <App />
+            </SectionProvider>
           </BrowserRouter>
         </NotificacionesProvider>
       </TemaProvider>

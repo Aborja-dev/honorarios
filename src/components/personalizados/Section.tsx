@@ -1,4 +1,5 @@
 import { useReducer } from "react"
+import { useSection } from "./SectionContext"
 
 export interface SectionUIState<T> {
     activeView: "form" | "table"
@@ -39,12 +40,12 @@ export const SectionEvents = {
 type State = SectionUIState<DireccionCampos>
 
 export type SectionEventNames = typeof SectionEvents[keyof typeof SectionEvents]
-interface Action {
+export interface Action {
     type: SectionEventNames
     payload?: any
 }
 
-const INITIAL_STATE: State = {
+export const INITIAL_STATE: SectionUIState<undefined> = {
     activeView: "table",
     errors: null,
     formState: "untouched",
@@ -52,7 +53,7 @@ const INITIAL_STATE: State = {
     formMode: "create"
 }
 
-export const sectionReducer = (state: State, action: Action): State => {
+export const sectionReducer = (state: SectionUIState<undefined>, action: Action): SectionUIState<undefined> => {
     switch (action.type) {
         case "DEFAULT": {
             return {
@@ -109,7 +110,7 @@ export interface SectionProps {
 }
 
 export function Section({ children, addButtonLabel, completed, icon, onCompleted, subtitle, table, title, values }: SectionProps) {
-    const [state, dispatch] = useReducer(sectionReducer, INITIAL_STATE);
+    const {state, dispatch} = useSection();
     const completeHandler = () => {
         if (values.length > 1) onCompleted(true)
     }
@@ -123,15 +124,7 @@ export function Section({ children, addButtonLabel, completed, icon, onCompleted
 }
 
 /*
-  ---------------------------------------------------------------------------
-  Maqueta de Experiencia laboral
-  ---------------------------------------------------------------------------
-  `Table`, `Form` y `Experiencia` eran stubs vacíos. Ahora reutilizan la
-  maqueta de diseño extraída del Padrón de Prestadores (acordeón 4). Es **solo
-  diseño**: sin estado, sin validación y con los manejadores desactivados.
 
-  El componente está en `./ExperienciaMaqueta` para no mezclar la máquina de
-  estados de `Section` con la maqueta visual.
   ---------------------------------------------------------------------------
 */
 export {
