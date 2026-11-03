@@ -1,4 +1,4 @@
-import { useReducer } from "react"
+import { useEffect, useReducer, useState } from "react"
 import { useSection } from "./SectionContext"
 
 export interface SectionUIState<T> {
@@ -101,24 +101,67 @@ export interface SectionProps {
     title: string
     subtitle: string
     icon: any
-    completed: boolean
+
     table: React.ReactNode
     children: React.ReactNode
     onCompleted: (ok: boolean) => void
     addButtonLabel: string
-    values: any[]
+    values: any[],
+    collapsed: boolean
 }
 
-export function Section({ children, addButtonLabel, completed, icon, onCompleted, subtitle, table, title, values }: SectionProps) {
-    const {state, dispatch} = useSection();
+export function Section({ children, addButtonLabel, icon, onCompleted, subtitle, table, title, values, collapsed }: SectionProps) {
+    const { state, dispatch } = useSection();
     const completeHandler = () => {
         if (values.length > 1) onCompleted(true)
     }
+    const calculateCompleted = (): boolean=>{
+        if (!state.values) return false
+        return state.values > 0 ? true : false
+    }
+    useEffect(()=>{
+        dispatch({type: "DEFAULT"})
+    },[])
+    
+    const completo = calculateCompleted()
+
     return (
-        <section>
-            {children}
-            <button onClick={()=>(dispatch({type: "ADD_ITEM"}))}>{addButtonLabel}</button>
-            <button onClick={completeHandler}>Siguiente</button>
+        <section className="padron-acordeon">
+            <div className="padron-acordeon-tab" data-abierta={collapsed || undefined}>
+                <div className="padron-acordeon__cabecera">
+                    <div className="padron-acordeon__titulo-grupo">
+                        <span className="padron-acordeon__icono">
+                            {icon}
+                        </span>
+                        <div>
+                            <span className="sh0b" style={{ display: 'block' }}>{title}</span>
+                            <span className="sdr" style={{ color: 'var(--neutro600)' }}>{subtitle}</span>
+                        </div>
+                    </div>
+                    <span className={`pildora pildora--${completo ? 'exito' : 'alerta'} snd-pildora`}>
+                        <span className="pildora__dot" aria-hidden="true" />
+                        {completo ? 'Completado' : 'Por capturar'}
+                    </span>
+                </div>
+
+                <div className="padron-acordeon__contenido">
+                    {state.activeView === 'table' && table}
+                    {state.activeView === 'form' && children}
+                </div>
+
+                <div className="padron-acordeon__pie">
+                    <button
+                        type="button"
+                        className="boton__secundario"
+                        onClick={() => dispatch({ type: 'ADD_ITEM' })}
+                    >
+                        {addButtonLabel}
+                    </button>
+                    <button type="button" className="boton__primario" onClick={completeHandler}>
+                        Siguiente
+                    </button>
+                </div>
+            </div>
         </section>
     );
 }
@@ -127,11 +170,3 @@ export function Section({ children, addButtonLabel, completed, icon, onCompleted
 
   ---------------------------------------------------------------------------
 */
-export {
-    ExperienciaMaqueta,
-    ExperienciaMaqueta as Experiencia,
-    TablaExperienciaMaqueta,
-    TablaExperienciaMaqueta as Table,
-    FormExperienciaMaqueta,
-    FormExperienciaMaqueta as Form,
-} from './ExperienciaMaqueta'
