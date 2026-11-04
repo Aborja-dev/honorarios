@@ -12,11 +12,11 @@ import {
 import '../components/honorarios/Honorarios.css'
 import './PadronPrestadoresServicio.css'
 import { useTitulo } from '../hooks'
-import { type DireccionItem } from '../components/prestadoresServicios/TablaDireccion'
-import SeccionDireccion from '../components/prestadoresServicios/SeccionDireccion'
-import TablaEscolaridad from '../components/prestadoresServicios/TablaEscolaridad'
-import TablaExperiencia from '../components/prestadoresServicios/TablaExperiencia'
-import { ToggleTabla } from '../components/prestadoresServicios/ToogleTabla'
+import { type DireccionItem } from './PadronPrestadores/sections/TablaDireccion'
+import SeccionDireccion from './PadronPrestadores/sections/SeccionDireccion'
+import { SeccionEscolaridad } from './PadronPrestadores/sections/Escolaridad'
+import { Experiencia, type ExperienciaItem } from './PadronPrestadores/sections/Experiencia'
+import type { FilaEscolaridad } from '../components/SeccionGenerica'
 import { DATOS_EJEMPLO_DIRECCIONES, DATOS_PERSONALES_PRUEBA } from './PadronPrestadoresServicio.mock'
 import { Calendar } from 'primereact/calendar'
 
@@ -26,36 +26,10 @@ const OPCIONES_NACIONALIDAD = [
 ]
 const DATOS_EJEMPLO: DireccionItem[] = DATOS_EJEMPLO_DIRECCIONES
 
-const OPCIONES_NIVEL_ESTUDIOS = [
-  { label: 'Bachillerato / Equivalente', value: 'BACHILLERATO' },
-  { label: 'Técnico Superior Universitario', value: 'TSU' },
-  { label: 'Licenciatura / Ingeniería', value: 'LICENCIATURA' },
-  { label: 'Especialidad', value: 'ESPECIALIDAD' },
-  { label: 'Maestría', value: 'MAESTRIA' },
-  { label: 'Doctorado', value: 'DOCTORADO' },
-]
-
-const OPCIONES_ESTATUS_ESTUDIOS = [
-  { label: 'Titulado(a) con Cédula', value: 'TITULADO' },
-  { label: 'En trámite de titulación', value: 'TRAMITE' },
-  { label: 'Pasante / Carta de pasante', value: 'PASANTE' },
-  { label: 'Certificado total de estudios', value: 'CERTIFICADO' },
-]
-
-const OPCIONES_DOCUMENTO_ACADEMICO = [
-  { label: 'Cédula Profesional Electrónica', value: 'CEDULA' },
-  { label: 'Título Profesional', value: 'TITULO' },
-  { label: 'Acta de Examen Profesional', value: 'ACTA' },
-  { label: 'Constancia Oficial de Estudios', value: 'CONSTANCIA' },
-]
-
-const OPCIONES_SECTOR_LABORAL = [
-  { label: 'Sector Público Federal (APF)', value: 'PUBLICO_FEDERAL' },
-  { label: 'Sector Público Estatal / Municipal', value: 'PUBLICO_LOCAL' },
-  { label: 'Sector Privado', value: 'PRIVADO' },
-  { label: 'Académico / Investigación', value: 'ACADEMICO' },
-  { label: 'Organismo Autónomo / Social', value: 'AUTONOMO' },
-]
+/*
+  Los catálogos de escolaridad (nivel, estatus, documento) y el de sector
+  laboral se mudaron a `PadronPrestadores/sections`, junto a sus campos.
+*/
 
 
 /**
@@ -113,49 +87,45 @@ export default function PadronPrestadoresServicio({
   const [rfc, setRfc] = useState('')
   const [nacionalidad, setNacionalidad] = useState<string | null>('MEXICANA')
 
-
-  const [homoclave, setHomoclave] = useState('')
-  const [fechaNacimiento, setFechaNacimiento] = useState<Date | null>(null)
-  const [genero, setGenero] = useState<string | null>('M')
-  const [estadoCivil, setEstadoCivil] = useState<string | null>('SOLTERO')
-  const [correo, setCorreo] = useState('')
-  const [telefonoCelular, setTelefonoCelular] = useState('')
-  const [telefonoFijo, setTelefonoFijo] = useState('')
-
-  // 2. Estado: Dirección
-  const [codigoPostal, setCodigoPostal] = useState('')
-  const [calle, setCalle] = useState('')
-  const [numeroExterior, setNumeroExterior] = useState('')
-  const [numeroInterior, setNumeroInterior] = useState('')
-  const [colonia, setColonia] = useState('')
-  const [pais, setPais] = useState('México')
-  const [municipioAlcaldia, setMunicipioAlcaldia] = useState('')
-  const [entidadFederativa, setEntidadFederativa] = useState<string | null>('Ciudad de México')
-  const [referenciasDomicilio, setReferenciasDomicilio] = useState('')
+  /*
+    Dirección, escolaridad y experiencia ya viven en sus secciones
+    (`PadronPrestadores/sections`). Aquí solo se conserva lo que la página sigue
+    leyendo: la lista de direcciones (validación del expediente) y las fechas de
+    vigencia del acordeón de CURP.
+  */
+  const [direcciones, setDirecciones] = useState<DireccionItem[]>(DATOS_EJEMPLO)
   const [fechaInicio, setFechaInicio] = useState<Date | null>(null)
   const [fechaFin, setFechaFin] = useState<Date | null>(null)
-  // 3. Estado: Escolaridad
-  const [nivelEstudios, setNivelEstudios] = useState<string | null>('LICENCIATURA')
-  const [carrera, setCarrera] = useState('')
-  const [institucionEducativa, setInstitucionEducativa] = useState('')
-  const [estatusEstudios, setEstatusEstudios] = useState<string | null>('TITULADO')
-  const [documentoComprobatorio, setDocumentoComprobatorio] = useState<string | null>('CEDULA')
-  const [cedulaProfesional, setCedulaProfesional] = useState('')
-  const [anioTitulacion, setAnioTitulacion] = useState('')
 
-  // 4. Estado: Experiencia Laboral
-  const [institucionLaboral, setInstitucionLaboral] = useState('')
-  const [sectorLaboral, setSectorLaboral] = useState<string | null>('PUBLICO_FEDERAL')
-  const [puestoDesempenado, setPuestoDesempenado] = useState('')
-  const [areaAdscripcion, setAreaAdscripcion] = useState('')
-  const [fechaInicioLaboral, setFechaInicioLaboral] = useState<Date | null>(null)
-  const [fechaFinLaboral, setFechaFinLaboral] = useState<Date | null>(null)
-  const [aniosExperiencia, setAniosExperiencia] = useState('')
-  const [funcionesPrincipales, setFuncionesPrincipales] = useState('')
+  /* Renglones con los que arranca la sección de experiencia. Después de eso,
+     la sección es dueña de su lista (vive en su SectionProvider). */
+  const experienciasIniciales: ExperienciaItem[] = [
+    {
+      id: 1,
+      institucionLaboral: 'Secretaría Anticorrupción y Buen Gobierno',
+      sectorLaboral: 'PUBLICO_FEDERAL',
+      puestoDesempenado: 'Especialista en Análisis Normativo',
+      areaAdscripcion: 'Dirección General',
+      aniosExperiencia: '6',
+      funcionesPrincipales:
+        'Revisión técnico-jurídica de expedientes de prestadores de servicios profesionales por honorarios.',
+    },
+  ]
 
-  const [showEscolaridad, setShowEscolaridad] = useState(true)
-  const [showExperiencia, setShowExperiencia] = useState(true)
-  const [direcciones, setDirecciones] = useState<DireccionItem[]>(DATOS_EJEMPLO)
+  /* Renglones de escolaridad: los controla la página, como los de dirección.
+     La sección sigue el mismo flujo tabla → formulario → guardar. */
+  const [escolaridad, setEscolaridad] = useState<FilaEscolaridad[]>([
+    {
+      id: 1,
+      nivelEstudios: 'LICENCIATURA',
+      carrera: 'Licenciatura en Derecho',
+      institucionEducativa: 'UNAM',
+      estatusEstudios: 'TITULADO',
+      documentoComprobatorio: 'CEDULA',
+      cedulaProfesional: '08945123',
+      anioTitulacion: '2013',
+    },
+  ])
 
   const [showFormulario, setShowFormulario] = useState(false)
   // Validaciones por sección
@@ -168,13 +138,13 @@ export default function PadronPrestadoresServicio({
 
   const seccionDireccionCompleta = direcciones.length > 0
 
-  const seccionEscolaridadCompleta = Boolean(
-    nivelEstudios && carrera.trim() && estatusEstudios,
-  )
-
-  const seccionExperienciaCompleta = Boolean(
-    sectorLaboral && aniosExperiencia.trim() && funcionesPrincipales.trim(),
-  )
+  /*
+    Escolaridad y experiencia viven en sus secciones, que calculan su propio
+    "completado". La página no puede leerlo, así que estas dos banderas quedan en
+    falso hasta que se conecte el aviso de cada sección (`onCompletaChange`).
+  */
+  const seccionEscolaridadCompleta = false
+  const seccionExperienciaCompleta = false
 
   const totalSeccionesCompletas = [
     seccionPersonalCompleta,
@@ -188,38 +158,15 @@ export default function PadronPrestadoresServicio({
 
 
   const limpiarFormulario = () => {
+    /* Solo se limpia lo que todavía vive en la página; cada sección limpia su
+       propia captura al pulsar Cancelar. */
     setNombres('')
     setPrimerApellido('')
     setSegundoApellido('')
     setCurp('')
     setRfc('')
-    setHomoclave('')
-    setFechaNacimiento(null)
-    setCorreo('')
-    setTelefonoCelular('')
-    setTelefonoFijo('')
-
-    setCodigoPostal('')
-    setCalle('')
-    setNumeroExterior('')
-    setNumeroInterior('')
-    setColonia('')
-    setPais('México')
-    setMunicipioAlcaldia('')
-    setReferenciasDomicilio('')
-
-    setCarrera('')
-    setInstitucionEducativa('')
-    setCedulaProfesional('')
-    setAnioTitulacion('')
-
-    setInstitucionLaboral('')
-    setPuestoDesempenado('')
-    setAreaAdscripcion('')
-    setFechaInicioLaboral(null)
-    setFechaFinLaboral(null)
-    setAniosExperiencia('')
-    setFuncionesPrincipales('')
+    setFechaInicio(null)
+    setFechaFin(null)
 
     setIntentoEnvio(false)
     setFolioGenerado(null)
@@ -677,131 +624,18 @@ export default function PadronPrestadoresServicio({
             }
           >
             <div id="padron-seccion-escolaridad">
-              <ToggleTabla tabla={<TablaEscolaridad />} showTable={showEscolaridad}>
-              <div className="padron-form-grid">
-                <div className="campo">
-                  <label htmlFor="esc-nivel" className="b1sb">
-                    Nivel Máximo de Estudios <span className="requerido">*</span>
-                  </label>
-                  <Dropdown
-                    inputId="esc-nivel"
-                    options={OPCIONES_NIVEL_ESTUDIOS}
-                    value={nivelEstudios}
-                    onChange={(e) => setNivelEstudios(e.value)}
-                    placeholder="Selecciona nivel académico"
-                    appendTo="self"
-                  />
-                </div>
-
-                <div className="campo padron-form-grid__col-2">
-                  <label htmlFor="esc-carrera" className="b1sb">
-                    Área de estudio <span className="requerido">*</span>
-                  </label>
-                  <InputText
-                    id="esc-carrera"
-                    value={carrera}
-                    invalid={intentoEnvio && !carrera.trim()}
-                    onChange={(e) => setCarrera(e.target.value)}
-                    placeholder="Ej. Licenciatura en Derecho / Ingeniería en Sistemas"
-                  />
-                  {intentoEnvio && !carrera.trim() && (
-                    <span className="campo__error">La carrera o área de conocimiento es obligatoria.</span>
-                  )}
-                </div>
-
-                <div className="campo">
-                  <label htmlFor="esc-institucion" className="b1sb">
-                    Institución Educativa
-                  </label>
-                  <InputText
-                    id="esc-institucion"
-                    value={institucionEducativa}
-                    onChange={(e) => setInstitucionEducativa(e.target.value)}
-                    placeholder="Ej. Universidad Nacional Autónoma de México"
-                  />
-                </div>
-
-                <div className="campo">
-                  <label htmlFor="esc-estatus" className="b1sb">
-                    Grado de avance <span className="requerido">*</span>
-                  </label>
-                  <Dropdown
-                    inputId="esc-estatus"
-                    options={OPCIONES_ESTATUS_ESTUDIOS}
-                    value={estatusEstudios}
-                    onChange={(e) => setEstatusEstudios(e.value)}
-                    appendTo="self"
-                  />
-                </div>
-
-                <div className="campo">
-                  <label htmlFor="esc-documento" className="b1sb">
-                    Documento Comprobatorio
-                  </label>
-                  <Dropdown
-                    inputId="esc-documento"
-                    options={OPCIONES_DOCUMENTO_ACADEMICO}
-                    value={documentoComprobatorio}
-                    onChange={(e) => setDocumentoComprobatorio(e.value)}
-                    appendTo="self"
-                  />
-                </div>
-
-                <div className="campo">
-                  <label htmlFor="esc-cedula" className="b1sb">
-                    Número de Certificado / Cédula Profesional
-                  </label>
-                  <InputText
-                    id="esc-cedula"
-                    maxLength={10}
-                    value={cedulaProfesional}
-                    onChange={(e) => setCedulaProfesional(e.target.value.replace(/\D/g, ''))}
-                    placeholder="Ej. 08945123"
-                  />
-                </div>
-
-                <div className="campo">
-                  <label htmlFor="esc-anio" className="b1sb">
-                    Año de Titulación
-                  </label>
-                  <InputText
-                    id="esc-anio"
-                    maxLength={4}
-                    value={anioTitulacion}
-                    onChange={(e) => setAnioTitulacion(e.target.value.replace(/\D/g, ''))}
-                    placeholder="Ej. 2013"
-                  />
-                </div>
-              </div>
-            </ToggleTabla>
+              <SeccionEscolaridad
+                registros={escolaridad}
+                onRegistrosChange={setEscolaridad}
+                onGuardar={(_fila, edicion) => {
+                  notificar.exito(
+                    edicion
+                      ? 'Escolaridad actualizada correctamente.'
+                      : 'Escolaridad agregada correctamente.',
+                  )
+                }}
+              />
             </div>
-            {!showEscolaridad ? (
-              <SndBoton
-                type="button"
-                style={{ marginTop: '1rem' }}
-                onClick={() => {
-                  setIntentoEnvio(true)
-                  if (seccionEscolaridadCompleta) {
-                    setAcordeonesActivos([4])
-                    notificar.exito('Datos de escolaridad guardados temporalmente.')
-                  } else {
-                    notificar.alerta('Por favor completa los datos de escolaridad obligatorios.')
-                  }
-                }}
-              >
-                Guardar escolaridad
-              </SndBoton>
-            ) : (
-              <SndBoton
-                type="button"
-                style={{ marginTop: '1rem' }}
-                onClick={() => {
-                  setShowEscolaridad(false)
-                }}
-              >
-                Escolaridad nueva
-              </SndBoton>
-            )}
           </AccordionTab>
 
           {/* =====================================================================
@@ -831,121 +665,18 @@ export default function PadronPrestadoresServicio({
             }
           >
             <div id="padron-seccion-experiencia">
-              <ToggleTabla tabla={<TablaExperiencia />} showTable={showExperiencia}>
-              <div className="padron-form-grid">
-                <div className="campo">
-                  <label htmlFor="exp-institucion" className="b1sb">
-                    Institución
-                  </label>
-                  <InputText
-                    id="exp-institucion"
-                    value={institucionLaboral}
-                    onChange={(e) => setInstitucionLaboral(e.target.value)}
-                    placeholder="Ej. Secretaría de Hacienda"
-                  />
-                </div>
-
-                <div className="campo">
-                  <label htmlFor="exp-sector" className="b1sb">
-                    Sector <span className="requerido">*</span>
-                  </label>
-                  <Dropdown
-                    inputId="exp-sector"
-                    options={OPCIONES_SECTOR_LABORAL}
-                    value={sectorLaboral}
-                    onChange={(e) => setSectorLaboral(e.value)}
-                    appendTo="self"
-                  />
-                </div>
-
-                <div className="campo">
-                  <label htmlFor="exp-puesto" className="b1sb">
-                    Puesto Desempeñado
-                  </label>
-                  <InputText
-                    id="exp-puesto"
-                    value={puestoDesempenado}
-                    onChange={(e) => setPuestoDesempenado(e.target.value)}
-                    placeholder="Ej. Jefe de Departamento"
-                  />
-                </div>
-
-                <div className="campo">
-                  <label htmlFor="exp-area" className="b1sb">
-                    Área de Adscripción
-                  </label>
-                  <InputText
-                    id="exp-area"
-                    value={areaAdscripcion}
-                    onChange={(e) => setAreaAdscripcion(e.target.value)}
-                    placeholder="Ej. Dirección General"
-                  />
-                </div>
-
-                <div className="campo">
-                  <label htmlFor="exp-anios" className="b1sb">
-                    Años de Experiencia en el Ramo <span className="requerido">*</span>
-                  </label>
-                  <InputText
-                    id="exp-anios"
-                    maxLength={2}
-                    value={aniosExperiencia}
-                    invalid={intentoEnvio && !aniosExperiencia.trim()}
-                    onChange={(e) => setAniosExperiencia(e.target.value.replace(/\D/g, ''))}
-                    placeholder="Ej. 5"
-                  />
-                  {intentoEnvio && !aniosExperiencia.trim() && (
-                    <span className="campo__error">Indica los años de experiencia comprobable.</span>
-                  )}
-                </div>
-
-                <div className="campo padron-form-grid__col-3">
-                  <label htmlFor="exp-funciones" className="b1sb">
-                    Comentarios / Funciones Principales <span className="requerido">*</span>
-                  </label>
-                  <textarea
-                    id="exp-funciones"
-                    className={`padron-textarea ${intentoEnvio && !funcionesPrincipales.trim() ? 'padron-textarea--invalido' : ''}`}
-                    value={funcionesPrincipales}
-                    onChange={(e) => setFuncionesPrincipales(e.target.value)}
-                    placeholder="Describe las actividades técnicas, administrativas o profesionales desempeñadas..."
-                  />
-                  {intentoEnvio && !funcionesPrincipales.trim() && (
-                    <span className="campo__error">
-                      La descripción de funciones principales es obligatoria para acreditar experiencia.
-                    </span>
-                  )}
-                </div>
-              </div>
-            </ToggleTabla>
+              <Experiencia
+                itemsIniciales={experienciasIniciales}
+                onGuardar={(_fila, edicion) => {
+                  notificar.exito(
+                    edicion
+                      ? 'Experiencia laboral actualizada correctamente.'
+                      : 'Experiencia laboral agregada correctamente.',
+                  )
+                }}
+                onCompleted={() => setAcordeonesActivos([1])}
+              />
             </div>
-            {!showExperiencia ? (
-              <SndBoton
-                type="button"
-                style={{ marginTop: '1rem' }}
-                onClick={() => {
-                  setIntentoEnvio(true)
-                  if (seccionExperienciaCompleta) {
-                    setAcordeonesActivos([1])
-                    notificar.exito('Datos de experiencia laboral guardados temporalmente.')
-                  } else {
-                    notificar.alerta('Por favor completa los datos de experiencia laboral obligatorios.')
-                  }
-                }}
-              >
-                Guardar experiencia laboral
-              </SndBoton>
-            ) : (
-              <SndBoton
-                type="button"
-                style={{ marginTop: '1rem' }}
-                onClick={() => {
-                  setShowExperiencia(false)
-                }}
-              >
-                Experiencia nueva
-              </SndBoton>
-            )}
           </AccordionTab>
         </Accordion>
 

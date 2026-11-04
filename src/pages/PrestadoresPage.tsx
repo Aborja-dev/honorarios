@@ -3,7 +3,7 @@ import PadronPrestadoresServicio from './PadronPrestadoresServicio'
 import {
   MenuFlotante,
   type ItemMenuFlotante,
-} from '../components/prestadoresServicios/MenuFlotante'
+} from '../components/MenuFlotante'
 import { SCROLL_INTERNO_PADRON, CLASE_SCROLL_INTERNO_PADRON } from '../app/config'
 import './PrestadoresPage.css'
 

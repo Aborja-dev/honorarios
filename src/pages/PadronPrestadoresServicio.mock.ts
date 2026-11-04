@@ -1,4 +1,4 @@
-import type { DireccionItem } from '../components/prestadoresServicios/TablaDireccion'
+import type { DireccionItem } from './PadronPrestadores/sections/TablaDireccion'
 
 export const DATOS_EJEMPLO_DIRECCIONES: DireccionItem[] = [
   {

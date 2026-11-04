@@ -1,5 +1,5 @@
-import { cn } from '../../utils/cn'
-import { SndIcono } from '../snd'
+import { cn } from '../utils/cn'
+import { SndIcono } from './snd'
 
 /** Una sección del formulario a la que lleva el menú. */
 export interface ItemMenuFlotante {

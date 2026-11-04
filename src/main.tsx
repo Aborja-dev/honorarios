@@ -17,7 +17,7 @@ import App from './App'
 import { NotificacionesProvider } from './components/snd'
 import { TemaProvider } from './hooks'
 import { registrarLocaleEs } from './lib'
-import { SectionProvider } from './components/personalizados/SectionContext'
+import { SectionProvider } from './components/personalizados/SectionProvider'
 
 registrarLocaleEs()
 

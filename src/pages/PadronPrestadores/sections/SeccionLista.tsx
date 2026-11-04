@@ -1,5 +1,5 @@
 import { useCallback, useState, type ReactNode } from 'react'
-import { SndBoton } from '../snd'
+import { SndBoton } from '../../../components/snd'
 
 /**
  * Núcleo maestro-detalle de las secciones del padrón.

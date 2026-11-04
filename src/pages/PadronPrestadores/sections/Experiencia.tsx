@@ -2,12 +2,10 @@ import React from 'react'
 import { Calendar } from 'primereact/calendar'
 import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
-import { SndIcono, SndMensaje } from '../../../components'
-import { Section } from '../../../components/personalizados/Section'
-import {
-  SectionProvider as SectionContainer,
-  useSection,
-} from '../../../components/personalizados/SectionContext'
+import { SndBoton, SndIcono, SndMensaje } from '../../../components'
+import { SectionContainer } from '../../../components/personalizados/SectionContainer'
+import { SectionProvider } from '../../../components/personalizados/SectionProvider'
+import { useSection } from '../../../lib/context'
 
 /**
  * Sección "Experiencia laboral" del Padrón.
@@ -206,6 +204,21 @@ export function ExperienciaForm() {
   const aniosVacios = intentoEnvio && !valores.aniosExperiencia.trim()
   const funcionesVacias = intentoEnvio && !valores.funcionesPrincipales.trim()
 
+  /**
+   * Guardar: valida el borrador y despacha `HAS_ERRORS` o `SAVE_ITEM`, que es
+   * lo que hace volver a la tabla. El aviso al padre lo emite el contenedor.
+   */
+  const guardar = () => {
+    const mensaje = validarExperiencia(valores)
+    if (mensaje) {
+      dispatch({ type: 'HAS_ERRORS', payload: [{ field: 'aniosExperiencia', message: mensaje }] })
+      return
+    }
+    dispatch({ type: 'SAVE_ITEM' })
+  }
+
+  const cancelar = () => dispatch({ type: 'CANCEL' })
+
   return (
     <>
       {editar ? (
@@ -328,6 +341,19 @@ export function ExperienciaForm() {
           )}
         </div>
       </div>
+
+      {state.errors && state.errors.length > 0 && (
+        <p className="campo__error">{state.errors[0].message}</p>
+      )}
+
+      <div className="fila" style={{ marginTop: '1rem' }}>
+        <SndBoton type="button" onClick={guardar}>
+          {editar ? 'Actualizar experiencia' : 'Guardar experiencia laboral'}
+        </SndBoton>
+        <SndBoton variante="secundario" type="button" onClick={cancelar}>
+          Cancelar
+        </SndBoton>
+      </div>
     </>
   )
 }
@@ -343,6 +369,8 @@ export interface ExperienciaProps {
   abierta?: boolean
   /** Se avisa cuando el usuario pulsa "Siguiente" con al menos un renglón. */
   onCompleted?: (ok: boolean) => void
+  /** Se avisa después de cada guardado exitoso (alta o actualización). */
+  onGuardar?: (fila: ExperienciaItem, edicion: boolean) => void
 }
 
 /**
@@ -353,24 +381,31 @@ export interface ExperienciaProps {
  * sin que quien use `<Experiencia />` tenga que montar el provider a mano.
  *
  * ```tsx
- * <Experiencia itemsIniciales={experiencias} abierta />
+ * <Experiencia itemsIniciales={experiencias} abierta onGuardar={...} />
  * ```
  */
-export function Experiencia({ itemsIniciales = [], abierta = true, onCompleted }: ExperienciaProps) {
+export function Experiencia({
+  itemsIniciales = [],
+  abierta = true,
+  onCompleted,
+  onGuardar,
+}: ExperienciaProps) {
   return (
-    <SectionContainer<ExperienciaItem> itemsIniciales={itemsIniciales}>
-      <Section
+    <SectionProvider<ExperienciaItem> itemsIniciales={itemsIniciales}>
+      <SectionContainer<ExperienciaItem>
         title="4. Experiencia Laboral"
         subtitle="Área de experiencia, Años de experiencia"
         icon={<SndIcono nombre="snd-calendar" tamano={22} />}
         addButtonLabel="Experiencia nueva"
         collapsed={!abierta}
         onCompleted={onCompleted}
+        /* El contenedor detecta la transición form → table y avisa al padre. */
+        onGuardarSeccion={onGuardar}
         table={<ExperienciaTabla />}
       >
         <ExperienciaForm />
-      </Section>
-    </SectionContainer>
+      </SectionContainer>
+    </SectionProvider>
   )
 }
 

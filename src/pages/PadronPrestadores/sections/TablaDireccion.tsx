@@ -1,6 +1,6 @@
 import React from 'react'
 import type { DireccionItem } from './SeccionDireccion'
-import { TablaAcciones, type ColumnaTabla } from './TablaAcciones'
+import { TablaAcciones, type ColumnaTabla } from '../../../components/TablaAcciones'
 
 /**
  * Tabla de direcciones registradas, para quien necesite la tabla de forma

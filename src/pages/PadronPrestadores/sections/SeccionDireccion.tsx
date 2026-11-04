@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
-import { SndBoton, SndMensaje } from '../snd'
+import { SndBoton, SndMensaje } from '../../../components/snd'
 import { SeccionLista } from './SeccionLista'
-import { TablaAcciones } from './TablaAcciones'
+import { TablaAcciones } from '../../../components/TablaAcciones'
 import { COLUMNAS_DIRECCION } from './TablaDireccion'
-import { nuevoId } from '../../utils/cn'
+import { nuevoId } from '../../../utils/cn'
 
 /* =========================================================================
  * Modelo de dirección del prestador
@@ -200,7 +200,7 @@ export function FormDireccion({
   return (
     <>
       {editar ? <SndMensaje tipo="info">Estás modificando una dirección.</SndMensaje> : <SndMensaje tipo="exito">Se va a agregar una nueva direccion</SndMensaje>}
-      <div className="padron-form-grid" style={{ marginTop: '12px' }}>
+      <div className="padron-form-grid">
         <div className="campo">
           <label htmlFor="dir-alias" className="b1sb">
             Alias <span className="requerido">*</span>

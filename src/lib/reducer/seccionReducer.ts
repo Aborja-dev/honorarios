@@ -1,13 +1,19 @@
-import { useCallback, useEffect } from 'react'
-import { useSection } from './SectionContext'
-
 /**
- * Modelo de la sección y reducer genérico de la máquina tabla ↔ formulario.
+ * Reducer de la máquina tabla ↔ formulario de una sección maestro-detalle.
  *
- * El tipo de los datos es el **parámetro `T`**: `SectionUIState<T>`, `Action<T>`
- * y `sectionReducer<T>`. Antes estaban fijados a `undefined` y por eso nadie
- * podía leer `state.values` sin obtener `never`.
+ * Vive en `lib/` y no en los componentes porque es **lógica pura**: no toca
+ * React, no pinta nada y se puede probar con un `expect(sectionReducer(...))`.
+ * Los componentes (`SectionProvider`, `SectionContainer`) solo lo conectan a
+ * `useReducer` y al contexto.
+ *
+ * El tipo de los datos es el parámetro `T`: `SectionUIState<T>`, `Action<T>` y
+ * `sectionReducer<T>` comparten el modelo, así ningún consumidor recibe `never`
+ * al leer `state.values`.
  */
+
+/* =========================================================================
+ * Estado
+ * ========================================================================= */
 
 export interface SectionUIState<T> {
   activeView: 'form' | 'table'
@@ -43,6 +49,8 @@ export const SectionEvents = {
   HAS_ERRORS: 'HAS_ERRORS',
   /** Valida y confirma los valores del borrador: `payload?: T`. */
   IS_VALID: 'IS_VALID',
+  /** Escribe el borrador en `items` y vuelve a la tabla. */
+  SAVE_ITEM: 'SAVE_ITEM',
   /** Vuelve a la tabla descartando la captura. */
   CANCEL: 'CANCEL',
   /** Carga valores sin cambiar de vista. */
@@ -132,7 +140,11 @@ export function sectionReducer<T>(
         return { ...state, items, activeView: 'table', editIndex: null, values: null, errors: null }
       }
       // Se corrige el índice si se borró uno anterior al que se edita.
-      return { ...state, items, editIndex: state.editIndex > indice ? state.editIndex - 1 : state.editIndex }
+      return {
+        ...state,
+        items,
+        editIndex: state.editIndex > indice ? state.editIndex - 1 : state.editIndex,
+      }
     }
 
     case 'HAS_ERRORS':
@@ -150,121 +162,34 @@ export function sectionReducer<T>(
         formState: 'valid',
       }
 
+    case 'SAVE_ITEM': {
+      if (state.values === null) return state
+      const guardado = state.values
+      const items = [...state.items]
+      if (state.editIndex !== null) items[state.editIndex] = guardado
+      else items.push(guardado)
+      return {
+        ...state,
+        items,
+        activeView: 'table',
+        formMode: 'create',
+        editIndex: null,
+        formState: 'valid',
+        errors: null,
+      }
+    }
+
     case 'CANCEL':
-      return { ...state, activeView: 'table', formMode: 'create', editIndex: null, errors: null, formState: 'untouched' }
+      return {
+        ...state,
+        activeView: 'table',
+        formMode: 'create',
+        editIndex: null,
+        errors: null,
+        formState: 'untouched',
+      }
 
     default:
       return state
   }
 }
-
-/* =========================================================================
- * Contenedor
- * ========================================================================= */
-
-export interface SectionProps {
-  title: string
-  subtitle: string
-  icon: React.ReactNode
-  /** Tabla de la sección (se pinta en `activeView === 'table'`). */
-  table: React.ReactNode
-  /** Formulario de la sección (se pinta en `activeView === 'form'`). */
-  children: React.ReactNode
-  onCompleted?: (ok: boolean) => void
-  addButtonLabel: string
-  /** Renglones guardados; si se omite se usa `state.items`. */
-  values?: unknown[]
-  /** ¿Está abierta? Cambia la piel de la cabecera. */
-  collapsed?: boolean
-}
-
-/**
- * Contenedor de sección: cabecera con ícono y píldora, cuerpo que alterna
- * tabla/formulario según el reducer, y pie con "Agregar" y "Siguiente".
- */
-export function Section({
-  children,
-  addButtonLabel,
-  icon,
-  onCompleted,
-  subtitle,
-  table,
-  title,
-  values,
-  collapsed = false,
-}: SectionProps) {
-  const { state, dispatch } = useSection<unknown>()
-
-  const completo = (values ?? state.items).length > 0
-
-  // Al montarse se respeta el estado del reducer; lo único que se normaliza es
-  // la vista, por si el contenedor se remonta con una captura a medias.
-  useEffect(() => {
-    if (state.activeView === 'form' && state.values === null) {
-      dispatch({ type: 'DEFAULT' })
-    }
-    // Solo al montar: el estado es del provider, no de este contenedor.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const completeHandler = useCallback(() => {
-    if (completo) onCompleted?.(true)
-  }, [completo, onCompleted])
-
-  return (
-    <section className="padron-acordeon">
-      <div className="padron-acordeon-tab" data-abierta={collapsed || undefined}>
-        <div className="padron-acordeon__cabecera">
-          <div className="padron-acordeon__titulo-grupo">
-            <span className="padron-acordeon__icono">{icon}</span>
-            <div>
-              <span className="sh0b" style={{ display: 'block' }}>
-                {title}
-              </span>
-              <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                {subtitle}
-              </span>
-            </div>
-          </div>
-          <span className={`pildora pildora--${completo ? 'exito' : 'alerta'} snd-pildora`}>
-            <span className="pildora__dot" aria-hidden="true" />
-            {completo ? 'Completado' : 'Por capturar'}
-          </span>
-        </div>
-
-        <div className="padron-acordeon__contenido">
-          {state.activeView === 'table' && table}
-          {state.activeView === 'form' && children}
-        </div>
-
-        <div className="padron-acordeon__pie">
-          <button
-            type="button"
-            className="boton__secundario"
-            onClick={() => dispatch({ type: 'ADD_ITEM' })}
-          >
-            {addButtonLabel}
-          </button>
-          <button type="button" className="boton__primario" onClick={completeHandler}>
-            Siguiente
-          </button>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/*
-  ---------------------------------------------------------------------------
-  Maqueta de Experiencia laboral: `Table`, `Form` y `Experiencia` eran stubs
-  vacíos. Se reexportan desde `./ExperienciaMaqueta`, que es solo diseño.
-  ---------------------------------------------------------------------------
-*/
-export {
-  ExperienciaMaqueta,
-  ExperienciaMaqueta as Experiencia,
-  TablaExperienciaMaqueta,
-  TablaExperienciaMaqueta as Table,
-  FormExperienciaMaqueta,
-  FormExperienciaMaqueta as Form,
-} from './ExperienciaMaqueta'
