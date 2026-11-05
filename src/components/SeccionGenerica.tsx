@@ -2,7 +2,7 @@ import { useCallback, useState, type ReactNode } from 'react'
 import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
 import { TablaAcciones } from './TablaAcciones'
-import { SndBoton, SndMensaje } from './snd'
+import { SndBoton, SndIcono, SndMensaje } from './snd'
 import { nuevoId } from '../utils/cn'
 
 /**
@@ -336,7 +336,8 @@ export function SeccionGenerica({
         </SndBoton>
         {onSiguiente && (
           <SndBoton variante="secundario" type="button" onClick={onSiguiente}>
-            Siguiente
+            <SndIcono nombre="snd-save" tamano={18} />
+            Guardar
           </SndBoton>
         )}
       </div>

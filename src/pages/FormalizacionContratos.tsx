@@ -16,6 +16,8 @@ import {
 import '../components/honorarios/Honorarios.css'
 import { useTitulo } from '../hooks'
 import { CATEGORIAS_OPERATIVAS, UNIDADES_ADMINISTRATIVAS } from '../services'
+import MenuFlotante from '../components/MenuFlotante'
+import { BotonHome } from './BotonHome'
 
 const OPCIONES_SI_NO = [
   { label: 'Sí', value: 'SI' },
@@ -46,6 +48,45 @@ const OPCIONES_MODELO_CONTRATO = [
   { label: 'MOD-JUR-2026-01 · Modelo Estándar Capítulo 1000 (Persona Física)', value: 'MOD-JUR-2026-01' },
   { label: 'MOD-JUR-2026-02 · Modelo de Honorarios Asimilados a Salarios', value: 'MOD-JUR-2026-02' },
   { label: 'MOD-JUR-2026-03 · Modelo Convenio Modificatorio de Monto / Plazo', value: 'MOD-JUR-2026-03' },
+]
+
+
+const SECCIONES: ItemMenuFlotante[] = [
+  {
+    texto: 'Validación de CURP',
+    descripcion: 'CURP y periodo del servicio',
+    icono: 'snd-user--avatar',
+    ancla: 'padron-seccion-curp',
+    tooltip: 'Validación de CURP',
+  },
+  {
+    texto: 'Datos personales',
+    descripcion: 'Nombre, apellidos y RFC',
+    icono: 'snd-user',
+    ancla: 'padron-seccion-personal',
+    tooltip: 'Datos personales',
+  },
+  {
+    texto: 'Dirección',
+    descripcion: 'Domicilio contractual',
+    icono: 'snd-home',
+    ancla: 'padron-seccion-direccion',
+    tooltip: 'Dirección',
+  },
+  {
+    texto: 'Escolaridad',
+    descripcion: 'Grado máximo y cédula',
+    icono: 'snd-document',
+    ancla: 'padron-seccion-escolaridad',
+    tooltip: 'Escolaridad',
+  },
+  {
+    texto: 'Experiencia laboral',
+    descripcion: 'Trayectoria comprobable',
+    icono: 'snd-calendar',
+    ancla: 'padron-seccion-experiencia',
+    tooltip: 'Experiencia laboral',
+  },
 ]
 
 const OPCIONES_PAIS = [
@@ -538,6 +579,18 @@ export default function FormalizacionContratos() {
   }
 
   return (
+    <>
+          <aside
+        className="prestadores-layout__menu"
+      >
+        <MenuFlotante
+          titulo="Secciones del expediente"
+          items={SECCIONES}
+          activa={""}
+          colapsado={true}
+          onColapsar={()=>{}}
+        />
+      </aside>
     <div className="contenedor">
       <style>{ESTILOS_ACORDEON_FORMALIZACION}</style>
 
@@ -552,9 +605,7 @@ export default function FormalizacionContratos() {
           </p>
         </div>
         <div className="fila">
-          <SndBotonEnlace variante="secundario" to="/admin/contratos">
-            Ver bandeja de contratos
-          </SndBotonEnlace>
+          <BotonHome />
         </div>
       </div>
 
@@ -1713,12 +1764,13 @@ export default function FormalizacionContratos() {
             </span>
 
             <div className="fila fila--derecha">
-              <SndBoton variante="secundario" type="button" onClick={limpiarFormulario}>
-                Limpiar formulario
-              </SndBoton>
-              <SndBoton type="button" onClick={guardarFormalizacion}>
-                <SndIcono nombre="snd-checkmark--filled" tamano={20} />
+              <SndBoton type="submit">
+                <SndIcono nombre="snd-save" tamano={20} />
                 Guardar formalización de contrato
+              </SndBoton>
+              <SndBoton variante="secundario" type="button" onClick={limpiarFormulario}>
+                <SndIcono nombre="snd-renew" tamano={20} />
+                Omitir todos los cambios
               </SndBoton>
             </div>
           </div>
@@ -1731,5 +1783,6 @@ export default function FormalizacionContratos() {
         onCerrar={() => setModalCargaMasivaAbierto(false)}
       />
     </div>
+    </>
   )
 }

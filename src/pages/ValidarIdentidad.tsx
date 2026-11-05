@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Calendar } from 'primereact/calendar'
 import { InputText } from 'primereact/inputtext'
-import { SndBoton, SndBotonEnlace, SndMensaje, SndPildora, useNotificaciones } from '../components'
+import { SndBoton, SndBotonEnlace, SndIcono, SndMensaje, SndPildora, useNotificaciones } from '../components'
 import '../components/honorarios/Honorarios.css'
 import { useTitulo } from '../hooks'
 
@@ -46,7 +46,7 @@ const estados = {
 
             </div>
 
-            <form className="formulario" onSubmit={verificar} noValidate>
+            <form className="formulario" style={{maxWidth:700}} onSubmit={verificar} noValidate>
               <div className="campo">
                 <label htmlFor="val-curp" className="b1sb">
                   CURP (18 caracteres){' '}
@@ -100,13 +100,22 @@ const estados = {
               )}
 
               <div className="fila">
-                <SndBoton type="submit">Validar compatibilidad</SndBoton>
+                <SndBoton type="submit">
+                  <span><SndIcono nombre="snd-checkmark" tamano={20} /></span>
+                  Validar compatibilidad
+                  </SndBoton>
                 <SndBotonEnlace variante="secundario" to="/admin/padron">
-                  Ir al Padrón
+                <span><SndIcono nombre="snd-arrow--left" tamano={20} /></span>
+                  Ir al padrón de prestadores
                 </SndBotonEnlace>
+                <SndBoton variante="fantasma">
+                <span><SndIcono nombre="ibm--knowledge-catalog-standard" tamano={20} /></span>
+                  Carga masiva
+                </SndBoton>
               </div>
             </form>
           </article>
+          <SndMensaje tipo='alerta'>{`El prestador con CURP de ${curp} tiene compatibilidad y no presenta conflictos para el ejercicio de sus funciones`}</SndMensaje>
         </div>
 
         <div className="columna__6">

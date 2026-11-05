@@ -14,7 +14,45 @@ import {
 import '../components/honorarios/Honorarios.css'
 import { useTitulo } from '../hooks'
 import { UNIDADES_ADMINISTRATIVAS } from '../services'
-
+import MenuFlotante from '../components/MenuFlotante'
+import { BotonHome } from './BotonHome'
+const SECCIONES: ItemMenuFlotante[] = [
+  {
+    texto: 'Validación de CURP',
+    descripcion: 'CURP y periodo del servicio',
+    icono: 'snd-user--avatar',
+    ancla: 'padron-seccion-curp',
+    tooltip: 'Validación de CURP',
+  },
+  {
+    texto: 'Datos personales',
+    descripcion: 'Nombre, apellidos y RFC',
+    icono: 'snd-user',
+    ancla: 'padron-seccion-personal',
+    tooltip: 'Datos personales',
+  },
+  {
+    texto: 'Dirección',
+    descripcion: 'Domicilio contractual',
+    icono: 'snd-home',
+    ancla: 'padron-seccion-direccion',
+    tooltip: 'Dirección',
+  },
+  {
+    texto: 'Escolaridad',
+    descripcion: 'Grado máximo y cédula',
+    icono: 'snd-document',
+    ancla: 'padron-seccion-escolaridad',
+    tooltip: 'Escolaridad',
+  },
+  {
+    texto: 'Experiencia laboral',
+    descripcion: 'Trayectoria comprobable',
+    icono: 'snd-calendar',
+    ancla: 'padron-seccion-experiencia',
+    tooltip: 'Experiencia laboral',
+  },
+]
 const OPCIONES_TIPO_MODELO = [
   { label: 'Honorarios Capítulo 1000 (Persona Física)', value: 'CAP_1000' },
   { label: 'Honorarios Asimilados a Salarios (Art. 94 LISR)', value: 'ASIMILADOS' },
@@ -471,6 +509,19 @@ export default function AltaModelosContratos() {
   }
 
   return (
+    <>
+
+          <aside
+        className="prestadores-layout__menu"
+      >
+        <MenuFlotante
+          titulo="Secciones del expediente"
+          items={SECCIONES}
+          activa={""}
+          colapsado={true}
+          onColapsar={()=>{}}
+        />
+      </aside>
     <div className="contenedor">
       <style>{ESTILOS_ACORDEON_MODELO}</style>
 
@@ -485,10 +536,7 @@ export default function AltaModelosContratos() {
           </p>
         </div>
         <div className="fila">
-
-          <SndBotonEnlace variante="secundario" to="/admin/modelo-contrato">
-            Ver catálogo de modelos
-          </SndBotonEnlace>
+          <BotonHome />
         </div>
       </div>
 
@@ -1215,12 +1263,13 @@ export default function AltaModelosContratos() {
             </span>
 
             <div className="fila fila--derecha">
-              <SndBoton variante="secundario" type="button" onClick={limpiarFormulario}>
-                Limpiar formulario
-              </SndBoton>
               <SndBoton type="submit">
-                <SndIcono nombre="snd-checkmark--filled" tamano={20} />
+                <SndIcono nombre="snd-save" tamano={20} />
                 Guardar modelo de contrato
+              </SndBoton>
+              <SndBoton variante="secundario" type="button" onClick={limpiarFormulario}>
+                <SndIcono nombre="snd-renew" tamano={20} />
+                Omitir todos los cambios
               </SndBoton>
             </div>
           </div>
@@ -1233,5 +1282,6 @@ export default function AltaModelosContratos() {
         onCerrar={() => setModalCargaMasivaAbierto(false)}
       />
     </div>
+    </>
   )
 }

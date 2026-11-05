@@ -19,6 +19,7 @@ import { Experiencia, type ExperienciaItem } from './PadronPrestadores/sections/
 import type { FilaEscolaridad } from '../components/SeccionGenerica'
 import { DATOS_EJEMPLO_DIRECCIONES, DATOS_PERSONALES_PRUEBA } from './PadronPrestadoresServicio.mock'
 import { Calendar } from 'primereact/calendar'
+import { BotonHome } from './BotonHome'
 
 const OPCIONES_NACIONALIDAD = [
   { label: 'México', value: 'MEXICANA' },
@@ -241,8 +242,7 @@ export default function PadronPrestadoresServicio({
           </p>
         </div>
         <div className="fila">
-
-
+          <BotonHome />
         </div>
       </div>
 
@@ -689,12 +689,13 @@ export default function PadronPrestadoresServicio({
             </span>
 
             <div className="fila fila--derecha">
-              <SndBoton variante="secundario" type="button" onClick={limpiarFormulario}>
-                Limpiar formulario
-              </SndBoton>
               <SndBoton type="submit">
-                <SndIcono nombre="snd-checkmark--filled" tamano={20} />
+                <SndIcono nombre="snd-save" tamano={20} />
                 Guardar en el Padrón
+              </SndBoton>
+              <SndBoton variante="secundario" type="button" onClick={limpiarFormulario}>
+                <SndIcono nombre="snd-renew" tamano={20} />
+                Omitir todos los cambios
               </SndBoton>
             </div>
           </div>

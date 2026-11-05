@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
-import { SndBoton, SndMensaje } from '../../../components/snd'
+import { SndBoton, SndIcono, SndMensaje } from '../../../components/snd'
 import { SeccionLista } from './SeccionLista'
 import { TablaAcciones } from '../../../components/TablaAcciones'
 import { COLUMNAS_DIRECCION } from './TablaDireccion'
@@ -448,7 +448,8 @@ export function SeccionDireccion({
             onClick={() => seccionDireccionCompleta && onSiguiente()}
             disabled={!seccionDireccionCompleta}
           >
-            Siguiente
+            <SndIcono nombre="snd-save" tamano={18} />
+            Guardar
           </SndBoton>
         )
       }
@@ -457,3 +458,5 @@ export function SeccionDireccion({
 }
 
 export default SeccionDireccion
+
+
