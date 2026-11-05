@@ -244,6 +244,9 @@ export const REGISTROS_POR_SUBMODULO = {
       vigencia: 'Ejercicio Fiscal 2026',
       estado: 'Autorizado',
       tipoPildora: 'exito',
+      completadoTexto: "1 de 4 secciones completado",
+      completadoColor: "alerta"
+      
     },
     {
       folio: 'MOD-JUR-2026-02',
@@ -253,6 +256,8 @@ export const REGISTROS_POR_SUBMODULO = {
       vigencia: 'Ejercicio Fiscal 2026',
       estado: 'Autorizado',
       tipoPildora: 'exito',
+      completadoTexto: "1 de 4 secciones completado",
+      completadoColor: "alerta"
     },
     {
       folio: 'MOD-JUR-2026-03',
@@ -262,6 +267,8 @@ export const REGISTROS_POR_SUBMODULO = {
       vigencia: 'Ejercicio Fiscal 2026',
       estado: 'En actualización',
       tipoPildora: 'info',
+      completadoTexto: "Modelo completo",
+      completadoColor: "exito"
     },
   ],
   suficiencia: [

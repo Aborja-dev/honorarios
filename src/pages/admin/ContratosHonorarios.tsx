@@ -73,7 +73,6 @@ export default function ContratosHonorarios() {
           </p>
         </div>
         <div className="fila">
-
           <SndBotonEnlace variante="secundario" to="/">
             Volver al menu inicio
           </SndBotonEnlace>
