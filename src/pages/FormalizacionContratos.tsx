@@ -718,7 +718,19 @@ export default function FormalizacionContratos() {
                   <span className="campo__error">La institución es obligatoria.</span>
                 )}
               </div>
-
+              <div className="campo">
+                <label htmlFor="dc-unidad" className="b1sb">
+                  Unidad Administrativa <span className="requerido">*</span>
+                </label>
+                <Dropdown
+                  inputId="dc-unidad"
+                  options={UNIDADES_ADMINISTRATIVAS.map((u) => ({ label: u, value: u }))}
+                  value={unidadAdministrativa}
+                  onChange={(e) => setUnidadAdministrativa(e.value)}
+                  placeholder="Selecciona unidad administrativa"
+                  appendTo="self"
+                />
+              </div>
               <div className="campo">
                 <label htmlFor="fc-modelo" className="b1sb">
                   Modelo de contrato <span className="requerido">*</span>
@@ -1252,18 +1264,7 @@ export default function FormalizacionContratos() {
                 />
               </div>
 
-              <div className="campo padron-form-grid__col-3">
-                <label htmlFor="fc-justificacion-plaza" className="b1sb">
-                  Justificacion Plaza
-                </label>
-                <textarea
-                  id="fc-justificacion-plaza"
-                  value={justificacionPlaza}
-                  className={`padron-textarea ${intentoEnvio && !disposiciones.trim() ? 'padron-textarea--invalido' : ''}`}
-                  onChange={(e) => setJustificacionPlaza(e.target.value)}
-                  placeholder="Ej. Actividades temporales sin plaza equivalente vacante"
-                />
-              </div>
+
               {/* tabla de exepciones TablaExepciones */}
               <div className="padron-form-grid__col-3">
                 <div className="contenedor-tabla" style={{ marginTop: '0.5rem' }}>
@@ -1698,7 +1699,18 @@ export default function FormalizacionContratos() {
             <div className="padron-form-grid">
 
 
-
+              <div className="campo padron-form-grid__col-3">
+                <label htmlFor="fc-justificacion-plaza" className="b1sb">
+                  Justificacion Plaza
+                </label>
+                <textarea
+                  id="fc-justificacion-plaza"
+                  value={justificacionPlaza}
+                  className={`padron-textarea ${intentoEnvio && !disposiciones.trim() ? 'padron-textarea--invalido' : ''}`}
+                  onChange={(e) => setJustificacionPlaza(e.target.value)}
+                  placeholder="Ej. Actividades temporales sin plaza equivalente vacante"
+                />
+              </div>
 
               <div className="campo padron-form-grid__col-3">
                 <label htmlFor="fc-comentario" className="b1sb">

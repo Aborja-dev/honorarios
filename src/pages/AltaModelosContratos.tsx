@@ -659,19 +659,7 @@ export default function AltaModelosContratos() {
               </div>
 
 
-              <div className="campo">
-                <label htmlFor="dc-unidad" className="b1sb">
-                  Unidad Administrativa <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="dc-unidad"
-                  options={UNIDADES_ADMINISTRATIVAS.map((u) => ({ label: u, value: u }))}
-                  value={unidadAdministrativa}
-                  onChange={(e) => setUnidadAdministrativa(e.value)}
-                  placeholder="Selecciona unidad administrativa"
-                  appendTo="self"
-                />
-              </div>
+
 
 
 
