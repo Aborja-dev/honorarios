@@ -18,7 +18,7 @@ import { useTitulo } from '../hooks'
 import { CATEGORIAS_OPERATIVAS, UNIDADES_ADMINISTRATIVAS } from '../services'
 import MenuFlotante from '../components/MenuFlotante'
 import { BotonHome } from './BotonHome'
-
+import './PadronPrestadoresServicio.css'
 const OPCIONES_SI_NO = [
   { label: 'Sí', value: 'SI' },
   { label: 'No', value: 'NO' },
@@ -601,7 +601,7 @@ export default function FormalizacionContratos() {
             Formalización de Contratos
           </h1>
           <p className="sh0m color--principal" style={{ margin: '4px 0 0' }}>
-            Formalización de contratos de prestadores de servicios profesionales
+            
           </p>
         </div>
         <div className="fila">
@@ -678,9 +678,7 @@ export default function FormalizacionContratos() {
                     <span className="sh0b" style={{ display: 'block' }}>
                       1. Formalización de contratos · Datos Generales
                     </span>
-                    <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Ramo, institución, unidad administrativa, modelo, prestador, vigencia y ubicación
-                    </span>
+
                   </div>
                 </div>
                 <span className={`pildora pildora--${seccionGeneralesCompleta ? 'exito' : 'alerta'} snd-pildora`}>
@@ -719,20 +717,6 @@ export default function FormalizacionContratos() {
                 {intentoEnvio && !institucion.trim() && (
                   <span className="campo__error">La institución es obligatoria.</span>
                 )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-unidad" className="b1sb">
-                  Unidad administrativa <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="fc-unidad"
-                  options={UNIDADES_ADMINISTRATIVAS.map((u) => ({ label: u, value: u }))}
-                  value={unidadAdministrativa}
-                  onChange={(e) => setUnidadAdministrativa(e.value)}
-                  placeholder="Selecciona unidad administrativa"
-                  appendTo="self"
-                />
               </div>
 
               <div className="campo">
@@ -939,6 +923,7 @@ export default function FormalizacionContratos() {
                 }
               }}
             >
+              <SndIcono nombre="snd-save" tamano={18} />
               Guardar datos generales
             </SndBoton>
           </AccordionTab>
@@ -957,9 +942,7 @@ export default function FormalizacionContratos() {
                     <span className="sh0b" style={{ display: 'block' }}>
                       2. Formalización de contratos · Importes y Declaración Patrimonial
                     </span>
-                    <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Importes, exhibiciones, partida presupuestal, PEF, ISR y declaración patrimonial
-                    </span>
+
                   </div>
                 </div>
                 <span className={`pildora pildora--${seccionPresupuestalCompleta ? 'exito' : 'alerta'} snd-pildora`}>
@@ -1139,6 +1122,7 @@ export default function FormalizacionContratos() {
                 }
               }}
             >
+              <SndIcono nombre="snd-save" tamano={18} />
               Guardar importes y declaración patrimonial
             </SndBoton>
           </AccordionTab>
@@ -1157,9 +1141,7 @@ export default function FormalizacionContratos() {
                     <span className="sh0b" style={{ display: 'block' }}>
                       3. Formalización de contratos · Normatividad y Disposiciones
                     </span>
-                    <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Disposiciones, fundamento legal, lugar de trabajo
-                    </span>
+
                   </div>
                 </div>
                 <span className={`pildora pildora--${seccionNormatividadCompleta ? 'exito' : 'alerta'} snd-pildora`}>
@@ -1455,6 +1437,7 @@ export default function FormalizacionContratos() {
                 }
               }}
             >
+              <SndIcono nombre="snd-save" tamano={18} />
               Guardar normatividad y disposiciones
             </SndBoton>
           </AccordionTab>
@@ -1471,11 +1454,9 @@ export default function FormalizacionContratos() {
                   </span>
                   <div>
                     <span className="sh0b" style={{ display: 'block' }}>
-                      4. Servidores públicos que suscriben
+                      4. Formalizacion de contratos · Servidores públicos que suscriben y reciben entregables.
                     </span>
-                    <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-                      Identificación del servidor público facultado que suscribe el contrato y observaciones
-                    </span>
+
                   </div>
                 </div>
                 <span className={`pildora pildora--${seccionServidoresCompleta ? 'exito' : 'alerta'} snd-pildora`}>
@@ -1686,6 +1667,7 @@ export default function FormalizacionContratos() {
                 }
               }}
             >
+              <SndIcono nombre="snd-save" tamano={18} />
               Guardar servidor público
             </SndBoton>
           </AccordionTab>
@@ -1702,10 +1684,7 @@ export default function FormalizacionContratos() {
                   </span>
                   <div>
                     <span className="sh0b" style={{ display: 'block' }}>
-                      5. Comentarios de contrato
-                    </span>
-                    <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-
+                      5. Formalizacion de contratos · Comentarios de contrato y justificación
                     </span>
                   </div>
                 </div>
@@ -1750,6 +1729,7 @@ export default function FormalizacionContratos() {
                 }
               }}
             >
+              <SndIcono nombre="snd-save" tamano={18} />
               Guardar excepciones de contrato
             </SndBoton>
           </AccordionTab>

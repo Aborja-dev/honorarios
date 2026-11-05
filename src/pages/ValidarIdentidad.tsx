@@ -109,7 +109,7 @@ const estados = {
                   Ir al padrón de prestadores
                 </SndBotonEnlace>
                 <SndBoton variante="fantasma">
-                <span><SndIcono nombre="ibm--knowledge-catalog-standard" tamano={20} /></span>
+                <span><SndIcono nombre="snd-document" tamano={18} /></span>
                   Carga masiva
                 </SndBoton>
               </div>

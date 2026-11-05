@@ -14,8 +14,9 @@ import {
 import '../components/honorarios/Honorarios.css'
 import { useTitulo } from '../hooks'
 import { UNIDADES_ADMINISTRATIVAS } from '../services'
-import MenuFlotante from '../components/MenuFlotante'
+import MenuFlotante, { type ItemMenuFlotante } from '../components/MenuFlotante'
 import { BotonHome } from './BotonHome'
+import './PadronPrestadoresServicio.css'
 const SECCIONES: ItemMenuFlotante[] = [
   {
     texto: 'Validación de CURP',
@@ -756,6 +757,7 @@ export default function AltaModelosContratos() {
                 }
               }}
             >
+              <SndIcono nombre="snd-save" tamano={18} />
               Guardar datos contrato
             </SndBoton>
           </AccordionTab>
@@ -889,6 +891,7 @@ export default function AltaModelosContratos() {
                 }
               }}
             >
+              <SndIcono nombre="snd-save" tamano={18} />
               Guardar actividades
             </SndBoton>
           </AccordionTab>
@@ -1041,6 +1044,7 @@ export default function AltaModelosContratos() {
                 }
               }}
             >
+              <SndIcono nombre="snd-save" tamano={18} />
               Guardar entregables
             </SndBoton>
           </AccordionTab>
@@ -1144,6 +1148,7 @@ export default function AltaModelosContratos() {
                 }
               }}
             >
+              <SndIcono nombre="snd-save" tamano={18} />
               Guardar escolaridad
             </SndBoton>
           </AccordionTab>
@@ -1249,6 +1254,7 @@ export default function AltaModelosContratos() {
                 }
               }}
             >
+              <SndIcono nombre="snd-save" tamano={18} />
               Guardar experiencia laboral
             </SndBoton>
           </AccordionTab>
