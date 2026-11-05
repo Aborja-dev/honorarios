@@ -16,7 +16,7 @@ const CardRUSP = () => {
                         76%
                     </span>
                     <span className="sdr">{landingTextos.descCifrasRUSP}</span>
-                    <p className="sdr">Quincena actual</p>
+                    <p className="sdr">quincena actual</p>
                 </div>
                 <SndIcono style={{ marginLeft: 16 }} nombre="snd-document" tamano={36} className="color--principal snd-document-landing" />
             </div>

@@ -47,7 +47,7 @@ export function CifrasYEstadisticas({
           </div>
 
           <div>
-            <p style={{ textAlign: 'center', marginBottom: 8 }}>Monto autorizado</p>
+            <p style={{ textAlign: 'center', marginBottom: 8 }}>Monto ejercido a</p>
             <p className="sdr" style={{ textAlign: 'center', marginBottom: 8 }}>
               {datosTrimestre.etiqueta} <strong>{datosTrimestre.presupuestoEjercido}</strong>
             </p>

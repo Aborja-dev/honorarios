@@ -75,7 +75,7 @@ export default function ContratosHonorarios() {
         <div className="fila">
 
           <SndBotonEnlace variante="secundario" to="/">
-            Volver al tablero
+            Volver al menu inicio
           </SndBotonEnlace>
         </div>
       </div>
