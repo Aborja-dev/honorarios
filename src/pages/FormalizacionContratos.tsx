@@ -55,35 +55,35 @@ const SECCIONES: ItemMenuFlotante[] = [
   {
     texto: 'Validación de CURP',
     descripcion: 'CURP y periodo del servicio',
-    icono: 'snd-user--avatar',
+    icono: 'snd-document',
     ancla: 'padron-seccion-curp',
     tooltip: 'Validación de CURP',
   },
   {
     texto: 'Datos personales',
     descripcion: 'Nombre, apellidos y RFC',
-    icono: 'snd-user',
+    icono: 'snd-calendar',
     ancla: 'padron-seccion-personal',
     tooltip: 'Datos personales',
   },
   {
     texto: 'Dirección',
     descripcion: 'Domicilio contractual',
-    icono: 'snd-home',
+    icono: 'snd-checkmark--filled',
     ancla: 'padron-seccion-direccion',
     tooltip: 'Dirección',
   },
   {
     texto: 'Escolaridad',
     descripcion: 'Grado máximo y cédula',
-    icono: 'snd-document',
+    icono: 'snd-user',
     ancla: 'padron-seccion-escolaridad',
     tooltip: 'Escolaridad',
   },
   {
     texto: 'Experiencia laboral',
     descripcion: 'Trayectoria comprobable',
-    icono: 'snd-calendar',
+    icono: 'snd-edit',
     ancla: 'padron-seccion-experiencia',
     tooltip: 'Experiencia laboral',
   },
@@ -580,7 +580,7 @@ export default function FormalizacionContratos() {
 
   return (
     <>
-          <aside
+      <aside
         className="prestadores-layout__menu"
       >
         <MenuFlotante
@@ -588,1193 +588,1198 @@ export default function FormalizacionContratos() {
           items={SECCIONES}
           activa={""}
           colapsado={true}
-          onColapsar={()=>{}}
+          onColapsar={() => { }}
         />
       </aside>
-    <div className="contenedor">
-      <style>{ESTILOS_ACORDEON_FORMALIZACION}</style>
+      <div className='prestadores-layout'>
+        <div className="prestadores-layout__contenido">
+<div className="contenedor">
+        <style>{ESTILOS_ACORDEON_FORMALIZACION}</style>
 
-      {/* ENCABEZADO INSTITUCIONAL DE LA PANTALLA */}
-      <div className="honorarios-encabezado-seccion">
-        <div>
-          <h1 className="h1b patria" style={{ margin: 0 }}>
-            Formalización de Contratos
-          </h1>
-          <p className="sh0m color--principal" style={{ margin: '4px 0 0' }}>
-            
-          </p>
-        </div>
-        <div className="fila">
-          <BotonHome />
-        </div>
-      </div>
+        {/* ENCABEZADO INSTITUCIONAL DE LA PANTALLA */}
+        <div className="honorarios-encabezado-seccion">
+          <div>
+            <h1 className="h1b patria" style={{ margin: 0 }}>
+              Formalización de Contratos
+            </h1>
+            <p className="sh0m color--principal" style={{ margin: '4px 0 0' }}>
 
-      {/* BARRA DE PROGRESO Y CONTROLES DE ACORDEÓN */}
-      <article className="honorarios-tarjeta" style={{ marginTop: 20 }}>
-        <div className="honorarios-detalle-barra">
-          <div className="fila">
-            <span className="b1sb color--principal">Avance de captura:</span>
-            <span className={`pildora pildora--${totalSeccionesCompletas === 5 ? 'exito' : 'info'} snd-pildora`}>
-              <span className="pildora__dot" aria-hidden="true" />
-              {totalSeccionesCompletas} de 5 secciones completas
-            </span>
-            {folioGenerado && (
-              <span className="pildora pildora--exito snd-pildora">
-                <span className="pildora__dot" aria-hidden="true" />
-                Folio asignado: {folioGenerado}
-              </span>
-            )}
-          </div>
-
-          <div className="fila">
-            <SndBoton
-              variante="secundario"
-              type="button"
-              onClick={() => setModalCargaMasivaAbierto(true)}
-            >
-              <SndIcono nombre="snd-document" tamano={18} />
-              Carga masiva
-            </SndBoton>
-            <SndBoton variante="secundario" type="button" onClick={expandirTodo}>
-              Expandir las 5 secciones
-            </SndBoton>
-            <SndBoton variante="fantasma" type="button" onClick={colapsarTodo}>
-              Contraer todo
-            </SndBoton>
-          </div>
-        </div>
-      </article>
-
-      {folioGenerado && (
-        <div style={{ marginTop: 16 }}>
-          <SndMensaje tipo="exito">
-            <p>
-              <strong>El Contrato ({folioGenerado}) ha sido formalizado correctamente.</strong> Los datos de
-              formalización, servidores públicos que suscriben y excepciones han quedado registrados en el sistema.
             </p>
-          </SndMensaje>
+          </div>
+          <div className="fila">
+            <BotonHome />
+          </div>
         </div>
-      )}
 
-      {/* FORMULARIO CON LOS CINCO ACORDEONES */}
-      <div style={{ marginTop: 20 }}>
-        <Accordion
-          multiple
-          activeIndex={acordeonesActivos}
-          onTabChange={(e) => setAcordeonesActivos(e.index)}
-          className="padron-acordeon"
-        >
-          {/* =====================================================================
-              ACORDEÓN 1: FORMALIZACIÓN DE CONTRATOS (DATOS GENERALES Y VIGENCIA)
-             ===================================================================== */}
-          <AccordionTab
-            header={
-              <div className="padron-acordeon__cabecera">
-                <div className="padron-acordeon__titulo-grupo">
-                  <span className="padron-acordeon__icono">
-                    <SndIcono nombre="snd-document" tamano={22} />
-                  </span>
-                  <div>
-                    <span className="sh0b" style={{ display: 'block' }}>
-                      1. Formalización de contratos · Datos Generales
-                    </span>
-
-                  </div>
-                </div>
-                <span className={`pildora pildora--${seccionGeneralesCompleta ? 'exito' : 'alerta'} snd-pildora`}>
-                  <span className="pildora__dot" aria-hidden="true" />
-                  {seccionGeneralesCompleta ? 'Completado' : 'Por capturar'}
-                </span>
-              </div>
-            }
-          >
-            <div className="padron-form-grid">
-              <div className="campo">
-                <label htmlFor="fc-ramo" className="b1sb">
-                  Ramo <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="fc-ramo"
-                  options={OPCIONES_RAMO}
-                  value={ramo}
-                  onChange={(e) => setRamo(e.value)}
-                  placeholder="Selecciona el ramo"
-                  appendTo="self"
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-institucion" className="b1sb">
-                  Institución <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="fc-institucion"
-                  value={institucion}
-                  invalid={intentoEnvio && !institucion.trim()}
-                  onChange={(e) => setInstitucion(e.target.value)}
-                  placeholder="Ej. Secretaría Anticorrupción y Buen Gobierno"
-                />
-                {intentoEnvio && !institucion.trim() && (
-                  <span className="campo__error">La institución es obligatoria.</span>
-                )}
-              </div>
-              <div className="campo">
-                <label htmlFor="dc-unidad" className="b1sb">
-                  Unidad Administrativa <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="dc-unidad"
-                  options={UNIDADES_ADMINISTRATIVAS.map((u) => ({ label: u, value: u }))}
-                  value={unidadAdministrativa}
-                  onChange={(e) => setUnidadAdministrativa(e.value)}
-                  placeholder="Selecciona unidad administrativa"
-                  appendTo="self"
-                />
-              </div>
-              <div className="campo">
-                <label htmlFor="fc-modelo" className="b1sb">
-                  Modelo de contrato <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="fc-modelo"
-                  options={OPCIONES_MODELO_CONTRATO}
-                  value={modeloContrato}
-                  onChange={(e) => setModeloContrato(e.value)}
-                  placeholder="Selecciona el modelo de contrato"
-                  appendTo="self"
-                />
-              </div>
-
-              <div
-                className={`campo ${intentoEnvio && !prestadorServicio.trim() ? 'padron-buscador--invalido' : ''}`}
-              >
-                <label htmlFor="fc-prestador" className="b1sb">
-                  Prestador de servicio <span className="requerido">*</span>
-                </label>
-                <SndBuscador
-                  variante="principal"
-                  etiqueta="Buscar prestador de servicio"
-                  placeholder="Ej. RFC, CURP o nombre del prestador"
-                  valor={prestadorServicio}
-                  ancho="100%"
-                  onValor={setPrestadorServicio}
-                  onBuscar={(valor) => {
-                    if (valor.trim()) {
-                      notificar.info(`Buscando prestador de servicio: «${valor}».`)
-                    }
-                  }}
-                />
-                {intentoEnvio && !prestadorServicio.trim() && (
-                  <span className="campo__error">El prestador de servicio es obligatorio.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-ordinal" className="b1sb">
-                  Ordinal del contrato <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="fc-ordinal"
-                  value={ordinalContrato}
-                  invalid={intentoEnvio && !ordinalContrato.trim()}
-                  onChange={(e) => setOrdinalContrato(e.target.value.replace(/\D/g, ''))}
-                  placeholder="Ej. 1"
-                />
-                {intentoEnvio && !ordinalContrato.trim() && (
-                  <span className="campo__error">El ordinal del contrato es obligatorio.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-chk-compat" className="b1sb">
-                  Compatibilidad
-                </label>
-                <Checkbox
-                  inputId="fc-chk-compat"
-                  checked={chkCompatHon}
-                  onChange={(e) => setChkCompatHon(Boolean(e.checked))}
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-fecha-inicio" className="b1sb">
-                  Fecha inicio contrato <span className="requerido">*</span>
-                </label>
-                <Calendar
-                  inputId="fc-fecha-inicio"
-                  value={fechaInicioContrato}
-                  invalid={intentoEnvio && !fechaInicioContrato}
-                  onChange={(e) => setFechaInicioContrato((e.value as Date | null) ?? null)}
-                  dateFormat="dd/mm/yy"
-                  placeholder="dd/mm/aaaa"
-                  showIcon
-                  appendTo="self"
-                />
-                {intentoEnvio && !fechaInicioContrato && (
-                  <span className="campo__error">Selecciona la fecha de inicio del contrato.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-fecha-termino" className="b1sb">
-                  Fecha termino contrato <span className="requerido">*</span>
-                </label>
-                <Calendar
-                  inputId="fc-fecha-termino"
-                  value={fechaTerminoContrato}
-                  invalid={intentoEnvio && !fechaTerminoContrato}
-                  onChange={(e) => setFechaTerminoContrato((e.value as Date | null) ?? null)}
-                  dateFormat="dd/mm/yy"
-                  placeholder="dd/mm/aaaa"
-                  showIcon
-                  appendTo="self"
-                />
-                {intentoEnvio && !fechaTerminoContrato && (
-                  <span className="campo__error">Selecciona la fecha de término del contrato.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-estatus" className="b1sb">
-                  Estatus <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="fc-estatus"
-                  options={CATEGORIAS_OPERATIVAS.map((c) => ({ label: c, value: c }))}
-                  value={estatus}
-                  onChange={(e) => setEstatus(e.value)}
-                  placeholder="Selecciona estatus"
-                  appendTo="self"
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-anio" className="b1sb">
-                  Año del contrato <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="fc-anio"
-                  maxLength={4}
-                  value={anioContrato}
-                  invalid={intentoEnvio && !anioContrato.trim()}
-                  onChange={(e) => setAnioContrato(e.target.value.replace(/\D/g, ''))}
-                  placeholder="Ej. 2026"
-                />
-                {intentoEnvio && !anioContrato.trim() && (
-                  <span className="campo__error">El año del contrato es obligatorio.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-pertenece-oic" className="b1sb">
-                  Pertenece OIC
-                </label>
-                <Checkbox
-                  inputId="fc-pertenece-oic"
-                  checked={perteneceOic}
-                  onChange={(e) => setPerteneceOic(Boolean(e.checked))}
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-fecha-firma" className="b1sb">
-                  Fecha Firma <span className="requerido">*</span>
-                </label>
-                <Calendar
-                  inputId="fc-fecha-firma"
-                  value={fechaFirma}
-                  invalid={intentoEnvio && !fechaFirma}
-                  onChange={(e) => setFechaFirma((e.value as Date | null) ?? null)}
-                  dateFormat="dd/mm/yy"
-                  placeholder="dd/mm/aaaa"
-                  showIcon
-                  appendTo="self"
-                />
-                {intentoEnvio && !fechaFirma && (
-                  <span className="campo__error">Selecciona la fecha de firma.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-pais" className="b1sb">
-                  Pais <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="fc-pais"
-                  options={OPCIONES_PAIS}
-                  value={pais}
-                  onChange={(e) => setPais(e.value)}
-                  appendTo="self"
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-estado" className="b1sb">
-                  Estado <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="fc-estado"
-                  options={ENTIDADES_FEDERATIVAS}
-                  value={estado}
-                  onChange={(e) => setEstado(e.value)}
-                  appendTo="self"
-                />
-              </div>
-            </div>
-
-            <SndBoton
-              type="button"
-              style={{ marginTop: '1rem' }}
-              onClick={() => {
-                setIntentoEnvio(true)
-                if (seccionGeneralesCompleta) {
-                  setAcordeonesActivos([1])
-                  notificar.exito('Datos generales de formalización guardados temporalmente.')
-                } else {
-                  notificar.alerta('Por favor completa los datos generales obligatorios.')
-                }
-              }}
-            >
-              <SndIcono nombre="snd-save" tamano={18} />
-              Guardar datos generales
-            </SndBoton>
-          </AccordionTab>
-
-          {/* =====================================================================
-              ACORDEÓN 2: FORMALIZACIÓN DE CONTRATOS (PRESUPUESTO Y FISCAL)
-             ===================================================================== */}
-          <AccordionTab
-            header={
-              <div className="padron-acordeon__cabecera">
-                <div className="padron-acordeon__titulo-grupo">
-                  <span className="padron-acordeon__icono">
-                    <SndIcono nombre="snd-calendar" tamano={22} />
-                  </span>
-                  <div>
-                    <span className="sh0b" style={{ display: 'block' }}>
-                      2. Formalización de contratos · Importes y Declaración Patrimonial
-                    </span>
-
-                  </div>
-                </div>
-                <span className={`pildora pildora--${seccionPresupuestalCompleta ? 'exito' : 'alerta'} snd-pildora`}>
-                  <span className="pildora__dot" aria-hidden="true" />
-                  {seccionPresupuestalCompleta ? 'Completado' : 'Por capturar'}
-                </span>
-              </div>
-            }
-          >
-            <div className="padron-form-grid">
-              <div className="campo">
-                <label htmlFor="fc-importe-bruto" className="b1sb">
-                  Importe Total Bruto <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="fc-importe-bruto"
-                  value={importeTotalBruto}
-                  invalid={intentoEnvio && !importeTotalBruto.trim()}
-                  onChange={(e) => setImporteTotalBruto(e.target.value)}
-                  placeholder="Ej. 462000.00"
-                />
-                {intentoEnvio && !importeTotalBruto.trim() && (
-                  <span className="campo__error">El importe total bruto es obligatorio.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-periodo-d" className="b1sb">
-                  Periodo de pago <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="fc-periodo-d"
-                  options={OPCIONES_PERIODO}
-                  value={periodoD}
-                  onChange={(e) => setPeriodoD(e.value)}
-                  appendTo="self"
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-num-exhibiciones" className="b1sb">
-                  Numero de Exhibiciones <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="fc-num-exhibiciones"
-                  value={numeroExhibiciones}
-                  invalid={intentoEnvio && !numeroExhibiciones.trim()}
-                  onChange={(e) => setNumeroExhibiciones(e.target.value.replace(/\D/g, ''))}
-                  placeholder="Ej. 12"
-                />
-                {intentoEnvio && !numeroExhibiciones.trim() && (
-                  <span className="campo__error">El número de exhibiciones es obligatorio.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-monto-exhibiciones" className="b1sb">
-                  Monto po Exhibiciones <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="fc-monto-exhibiciones"
-                  value={montoPorExhibiciones}
-                  invalid={intentoEnvio && !montoPorExhibiciones.trim()}
-                  onChange={(e) => setMontoPorExhibiciones(e.target.value)}
-                  placeholder="Ej. 38500.00"
-                />
-                {intentoEnvio && !montoPorExhibiciones.trim() && (
-                  <span className="campo__error">El monto por exhibiciones es obligatorio.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-importe-mensual" className="b1sb">
-                  Importe Mensual <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="fc-importe-mensual"
-                  value={importeMensual}
-                  invalid={intentoEnvio && !importeMensual.trim()}
-                  onChange={(e) => setImporteMensual(e.target.value)}
-                  placeholder="Ej. 38500.00"
-                />
-                {intentoEnvio && !importeMensual.trim() && (
-                  <span className="campo__error">El importe mensual es obligatorio.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-partida" className="b1sb">
-                  Partida <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="fc-partida"
-                  options={OPCIONES_PARTIDA}
-                  value={partida}
-                  onChange={(e) => setPartida(e.value)}
-                  appendTo="self"
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-origen" className="b1sb">
-                  Origen <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  inputId="fc-origen"
-                  options={OPCIONES_ORIGEN}
-                  value={origen}
-                  onChange={(e) => setOrigen(e.value)}
-                  appendTo="self"
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-articulo-pef" className="b1sb">
-                  Articulo PEF <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  id="fc-articulo-pef"
-                  options={OPCIONES_PEF}
-                  value={articuloPef}
-                  invalid={intentoEnvio && !articuloPef.trim()}
-                  onChange={(e) => setArticuloPef(e.target.value)}
-
-                />
-                {intentoEnvio && !articuloPef.trim() && (
-                  <span className="campo__error">El artículo PEF es obligatorio.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-declara-isr" className="b1sb">
-                  Declara ISR
-                </label>
-                <Checkbox
-                  inputId="fc-declara-isr"
-                  checked={declaraIsr}
-                  onChange={(e) => setDeclaraIsr(Boolean(e.checked))}
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-declara-patrimonial" className="b1sb">
-                  Declaración Patrimonial
-                </label>
-                <Checkbox
-                  inputId="fc-declara-patrimonial"
-                  checked={declaracionPatrimonial}
-                  onChange={(e) => setDeclaracionPatrimonial(Boolean(e.checked))}
-                />
-              </div>
-
-              <div className="campo padron-form-grid__col-2">
-                <label htmlFor="fc-motivo-patrimonial" className="b1sb">
-                  Motivo Declaración Patrimonial
-                </label>
-                <Dropdown
-                  id="fc-motivo-patrimonial"
-                  value={motivoDeclaracionPatrimonial}
-                  options={OPCIONES_MOT_DECPAT}
-                  onChange={(e) => setMotivoDeclaracionPatrimonial(e.target.value)}
-
-                />
-              </div>
-            </div>
-
-            <SndBoton
-              type="button"
-              style={{ marginTop: '1rem' }}
-              onClick={() => {
-                setIntentoEnvio(true)
-                if (seccionPresupuestalCompleta) {
-                  setAcordeonesActivos([2])
-                  notificar.exito('Importes y Declaración Patrimonial guardados temporalmente.')
-                } else {
-                  notificar.alerta('Por favor completa los datos de importes y declaración patrimonial obligatorios.')
-                }
-              }}
-            >
-              <SndIcono nombre="snd-save" tamano={18} />
-              Guardar importes y declaración patrimonial
-            </SndBoton>
-          </AccordionTab>
-
-          {/* =====================================================================
-              ACORDEÓN 3: FORMALIZACIÓN DE CONTRATOS (NORMATIVIDAD, DICTÁMENES Y PLAZA)
-             ===================================================================== */}
-          <AccordionTab
-            header={
-              <div className="padron-acordeon__cabecera">
-                <div className="padron-acordeon__titulo-grupo">
-                  <span className="padron-acordeon__icono">
-                    <SndIcono nombre="snd-checkmark--filled" tamano={22} />
-                  </span>
-                  <div>
-                    <span className="sh0b" style={{ display: 'block' }}>
-                      3. Formalización de contratos · Normatividad y Disposiciones
-                    </span>
-
-                  </div>
-                </div>
-                <span className={`pildora pildora--${seccionNormatividadCompleta ? 'exito' : 'alerta'} snd-pildora`}>
-                  <span className="pildora__dot" aria-hidden="true" />
-                  {seccionNormatividadCompleta ? 'Completado' : 'Por capturar'}
-                </span>
-              </div>
-            }
-          >
-            <div className="padron-form-grid">
-              <div className="campo padron-form-grid__col-3">
-                <label htmlFor="fc-disposiciones" className="b1sb">
-                  Disposiciones <span className="requerido">*</span>
-                </label>
-                <textarea
-                  id="fc-disposiciones"
-                  className={`padron-textarea ${intentoEnvio && !disposiciones.trim() ? 'padron-textarea--invalido' : ''}`}
-                  value={disposiciones}
-                  onChange={(e) => setDisposiciones(e.target.value)}
-                  placeholder="Ej. Disposiciones en las materias de Recursos Humanos"
-                />
-                {intentoEnvio && !disposiciones.trim() && (
-                  <span className="campo__error">Las disposiciones son obligatorias.</span>
-                )}
-              </div>
-
-              <div className="campo padron-form-grid__col-3" >
-                <label htmlFor="fc-fundamento-legal" className="b1sb">
-                  Fundamento Legal <span className="requerido">*</span>
-                </label>
-                <textarea
-                  id="fc-fundamento-legal"
-                  className={`padron-textarea ${intentoEnvio && !disposiciones.trim() ? 'padron-textarea--invalido' : ''}`}
-                  value={fundamentoLegal}
-                  onChange={(e) => setFundamentoLegal(e.target.value)}
-                  placeholder="Ej. Art. 69 LFPRH y Código Civil Federal"
-                />
-                {intentoEnvio && !fundamentoLegal.trim() && (
-                  <span className="campo__error">El fundamento legal es obligatorio.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-lugar-trabajo" className="b1sb">
-                  Lugar Trabajo <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="fc-lugar-trabajo"
-                  value={lugarTrabajo}
-                  invalid={intentoEnvio && !lugarTrabajo.trim()}
-                  onChange={(e) => setLugarTrabajo(e.target.value)}
-                  placeholder="Ej. Av. Insurgentes Sur 1735, CDMX"
-                />
-                {intentoEnvio && !lugarTrabajo.trim() && (
-                  <span className="campo__error">El lugar de trabajo es obligatorio.</span>
-                )}
-              </div>
-
-
-
-              <div className="campo">
-                <label htmlFor="fc-dictamen-presupuestal" className="b1sb">
-                  Autorización o dictamen presupuestal <span className="requerido">*</span>
-                </label>
-                <InputText
-                  id="fc-dictamen-presupuestal"
-                  value={autorizacionDictamenPresupuestal}
-                  invalid={intentoEnvio && !autorizacionDictamenPresupuestal.trim()}
-                  onChange={(e) => setAutorizacionDictamenPresupuestal(e.target.value)}
-                  placeholder="Ej. SUF-2026-0312"
-                />
-                {intentoEnvio && !autorizacionDictamenPresupuestal.trim() && (
-                  <span className="campo__error">La autorización o dictamen presupuestal es obligatoria.</span>
-                )}
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-chk-servicio-igual" className="b1sb">
-                  Servicios Iguales
-                </label>
-                <Checkbox
-                  inputId="fc-chk-servicio-igual"
-                  checked={chkServicioIgual}
-                  onChange={(e) => setChkServicioIgual(Boolean(e.checked))}
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-oficio-excepcion" className="b1sb">
-                  Numero de Oficio Excepción
-                </label>
-                <InputText
-                  id="fc-oficio-excepcion"
-                  value={numeroOficioExcepcion}
-                  onChange={(e) => setNumeroOficioExcepcion(e.target.value)}
-                  placeholder="Ej. OF-EXC-2026-0045"
-                />
-              </div>
-
-              <div className="campo">
-                <label htmlFor="fc-existe-plaza" className="b1sb">
-                  Existe Plaza Estructura
-                </label>
-                <Checkbox
-                  inputId="fc-existe-plaza"
-                  checked={existePlazaHon}
-                  onChange={(e) => setExistePlazaHon(Boolean(e.checked))}
-                />
-              </div>
-
-
-              {/* tabla de exepciones TablaExepciones */}
-              <div className="padron-form-grid__col-3">
-                <div className="contenedor-tabla" style={{ marginTop: '0.5rem' }}>
-                  <table
-                    style={{
-                      width: '100%',
-                      minWidth: '40rem',
-                      borderCollapse: 'collapse',
-                      fontSize: '0.875rem',
-                      textAlign: 'left',
-                    }}
-                  >
-                    <thead>
-                      <tr style={{ backgroundColor: 'var(--principal, #9B2247)' }}>
-                        <th
-                          style={{
-                            padding: '0.75rem 1rem',
-                            fontWeight: 600,
-                            color: '#fff',
-                            whiteSpace: 'nowrap',
-                            border: '1px solid var(--gama800, #6F1D36)',
-                          }}
-                        >
-                          Id Exepción
-                        </th>
-                        <th
-                          style={{
-                            padding: '0.75rem 1rem',
-                            fontWeight: 600,
-                            color: '#fff',
-                            whiteSpace: 'nowrap',
-                            border: '1px solid var(--gama800, #6F1D36)',
-                          }}
-                        >
-                          Numero de fracción
-                        </th>
-                        <th
-                          style={{
-                            padding: '0.75rem 1rem',
-                            fontWeight: 600,
-                            color: '#fff',
-                            whiteSpace: 'nowrap',
-                            border: '1px solid var(--gama800, #6F1D36)',
-                          }}
-                        >
-                          Descripción
-                        </th>
-                        <th
-                          style={{
-                            padding: '0.75rem 1rem',
-                            fontWeight: 600,
-                            color: '#fff',
-                            whiteSpace: 'nowrap',
-                            border: '1px solid var(--gama800, #6F1D36)',
-                            textAlign: 'center',
-                          }}
-                        >
-                          Acciones
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr style={{ borderBottom: '1px solid var(--neutro400, #dddddd)' }}>
-                        <td
-                          style={{
-                            padding: '0.75rem 1rem',
-                            color: 'var(--neutro800, #333)',
-                            verticalAlign: 'middle',
-                            border: '1px solid var(--neutro400, #dddddd)',
-                          }}
-                        >
-                          EXC-HON-2026-01
-                        </td>
-                        <td
-                          style={{
-                            padding: '0.75rem 1rem',
-                            color: 'var(--neutro800, #333)',
-                            verticalAlign: 'middle',
-                            border: '1px solid var(--neutro400, #dddddd)',
-                          }}
-                        >
-                          Fracción I
-                        </td>
-                        <td
-                          style={{
-                            padding: '0.75rem 1rem',
-                            color: 'var(--neutro800, #333)',
-                            verticalAlign: 'middle',
-                            border: '1px solid var(--neutro400, #dddddd)',
-                          }}
-                        >
-                          Excepción autorizada para contratación de servicios profesionales por honorarios.
-                        </td>
-                        <td
-                          style={{
-                            padding: '0.75rem 1rem',
-                            color: 'var(--neutro800, #333)',
-                            verticalAlign: 'middle',
-                            border: '1px solid var(--neutro400, #dddddd)',
-                            textAlign: 'center',
-                          }}
-                        >
-                          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-                            <button
-                              type="button"
-                              style={{
-                                background: 'none',
-                                border: '1px solid var(--neutro400, #cccccc)',
-                                borderRadius: '8px',
-                                padding: '4px 8px',
-                                cursor: 'pointer',
-                                fontSize: '0.8rem',
-                                color: 'var(--neutro800, #333)',
-                              }}
-                              title="Modificar excepción"
-                            >
-                              Modificar
-                            </button>
-                            <button
-                              type="button"
-                              style={{
-                                background: 'none',
-                                border: '1px solid var(--principal, #9B2247)',
-                                borderRadius: '8px',
-                                padding: '4px 8px',
-                                cursor: 'pointer',
-                                fontSize: '0.8rem',
-                                color: 'var(--principal, #9B2247)',
-                              }}
-                              title="Agregar excepción"
-                            >
-                              Agregar
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div className="campo">
-                <label htmlFor="exc-id-excepcion" className="b1sb">
-                  Id Excepción <span className="requerido">*</span>
-                </label>
-                <Dropdown
-                  id="exc-id-excepcion"
-                  value={idExcepcion}
-                  options={OPCIONES_HON_EXEPCIONES}
-                  invalid={intentoEnvio && !idExcepcion.trim()}
-                  onChange={(e) => setIdExcepcion(e.target.value.toUpperCase())}
-                  placeholder=""
-                />
-                {intentoEnvio && !idExcepcion.trim() && (
-                  <span className="campo__error">El identificador de excepción es obligatorio.</span>
-                )}
-              </div>
-
-
-            </div>
-
-            <SndBoton
-              type="button"
-              style={{ marginTop: '1rem' }}
-              onClick={() => {
-                setIntentoEnvio(true)
-                if (seccionNormatividadCompleta) {
-                  setAcordeonesActivos([3])
-                  notificar.exito('Datos de normatividad y disposiciones guardados temporalmente.')
-                } else {
-                  notificar.alerta('Por favor completa los datos de normatividad obligatorios.')
-                }
-              }}
-            >
-              <SndIcono nombre="snd-save" tamano={18} />
-              Guardar normatividad y disposiciones
-            </SndBoton>
-          </AccordionTab>
-
-          {/* =====================================================================
-              ACORDEÓN 4: SERVIDORES PÚBLICOS QUE SUSCRIBEN
-             ===================================================================== */}
-          <AccordionTab
-            header={
-              <div className="padron-acordeon__cabecera">
-                <div className="padron-acordeon__titulo-grupo">
-                  <span className="padron-acordeon__icono">
-                    <SndIcono nombre="snd-user" tamano={22} />
-                  </span>
-                  <div>
-                    <span className="sh0b" style={{ display: 'block' }}>
-                      4. Formalizacion de contratos · Servidores públicos que suscriben y reciben entregables.
-                    </span>
-
-                  </div>
-                </div>
-                <span className={`pildora pildora--${seccionServidoresCompleta ? 'exito' : 'alerta'} snd-pildora`}>
-                  <span className="pildora__dot" aria-hidden="true" />
-                  {seccionServidoresCompleta ? 'Completado' : 'Por capturar'}
-                </span>
-              </div>
-            }
-          >
-            <div className="padron-form-grid">
-              {/* tabla de Servidores publicos que suscriben TablaServidoresPublicos */}
-              <div className="padron-form-grid__col-3">
-                <div className="contenedor-tabla" style={{ marginTop: '0.5rem' }}>
-                  <table
-                    id="TablaServidoresPublicos"
-                    style={{
-                      width: '100%',
-                      minWidth: '40rem',
-                      borderCollapse: 'collapse',
-                      fontSize: '0.875rem',
-                      textAlign: 'left',
-                    }}
-                  >
-                    <thead>
-                      <tr style={{ backgroundColor: 'var(--principal, #9B2247)' }}>
-                        <th
-                          style={{
-                            padding: '0.75rem 1rem',
-                            fontWeight: 600,
-                            color: '#fff',
-                            whiteSpace: 'nowrap',
-                            border: '1px solid var(--gama800, #6F1D36)',
-                          }}
-                        >
-                          Ordinal
-                        </th>
-                        <th
-                          style={{
-                            padding: '0.75rem 1rem',
-                            fontWeight: 600,
-                            color: '#fff',
-                            whiteSpace: 'nowrap',
-                            border: '1px solid var(--gama800, #6F1D36)',
-                          }}
-                        >
-                          Id RUSP
-                        </th>
-                        <th
-                          style={{
-                            padding: '0.75rem 1rem',
-                            fontWeight: 600,
-                            color: '#fff',
-                            whiteSpace: 'nowrap',
-                            border: '1px solid var(--gama800, #6F1D36)',
-                          }}
-                        >
-                          Nombre del servidor público
-                        </th>
-                        <th
-                          style={{
-                            padding: '0.75rem 1rem',
-                            fontWeight: 600,
-                            color: '#fff',
-                            whiteSpace: 'nowrap',
-                            border: '1px solid var(--gama800, #6F1D36)',
-                            textAlign: 'center',
-                          }}
-                        >
-                          {''}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr style={{ borderBottom: '1px solid var(--neutro400, #dddddd)' }}>
-                        <td
-                          style={{
-                            padding: '0.75rem 1rem',
-                            color: 'var(--neutro800, #333)',
-                            verticalAlign: 'middle',
-                            border: '1px solid var(--neutro400, #dddddd)',
-                          }}
-                        >
-                          1
-                        </td>
-                        <td
-                          style={{
-                            padding: '0.75rem 1rem',
-                            color: 'var(--neutro800, #333)',
-                            verticalAlign: 'middle',
-                            border: '1px solid var(--neutro400, #dddddd)',
-                          }}
-                        >
-                          000004918
-                        </td>
-                        <td
-                          style={{
-                            padding: '0.75rem 1rem',
-                            color: 'var(--neutro800, #333)',
-                            verticalAlign: 'middle',
-                            border: '1px solid var(--neutro400, #dddddd)',
-                          }}
-                        >
-                          Alejandro Morales Domínguez
-                        </td>
-                        <td
-                          style={{
-                            padding: '0.75rem 1rem',
-                            color: 'var(--neutro800, #333)',
-                            verticalAlign: 'middle',
-                            border: '1px solid var(--neutro400, #dddddd)',
-                            textAlign: 'center',
-                          }}
-                        >
-                          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-                            <button
-                              type="button"
-                              style={{
-                                background: 'none',
-                                border: '1px solid var(--neutro400, #cccccc)',
-                                borderRadius: '8px',
-                                padding: '4px 8px',
-                                cursor: 'pointer',
-                                fontSize: '0.8rem',
-                                color: 'var(--neutro800, #333)',
-                              }}
-                              title="Modificar servidor público"
-                            >
-                              Modificar
-                            </button>
-                            <button
-                              type="button"
-                              style={{
-                                background: 'none',
-                                border: '1px solid var(--principal, #9B2247)',
-                                borderRadius: '8px',
-                                padding: '4px 8px',
-                                cursor: 'pointer',
-                                fontSize: '0.8rem',
-                                color: 'var(--principal, #9B2247)',
-                              }}
-                              title="Agregar servidor público"
-                            >
-                              Agregar
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div
-                className={`campo ${intentoEnvio && !idServidorPublicoSuscribe.trim() ? 'padron-buscador--invalido' : ''}`}
-              >
-                <label htmlFor="sp-id-servidor" className="b1sb">
-                  Id Servidores publico que suscribe <span className="requerido">*</span>
-                </label>
-                <SndBuscador
-                  variante="principal"
-                  etiqueta="Buscar servidor público que suscribe"
-                  placeholder="Ej. 000004918"
-                  valor={idServidorPublicoSuscribe}
-                  ancho="100%"
-                  onValor={(valor) => setIdServidorPublicoSuscribe(valor.toUpperCase())}
-                  onBuscar={(valor) => {
-                    if (valor.trim()) {
-                      notificar.info(`Buscando servidor público: «${valor}».`)
-                    }
-                  }}
-                />
-                {intentoEnvio && !idServidorPublicoSuscribe.trim() && (
-                  <span className="campo__error">
-                    El identificador del servidor público que suscribe es obligatorio.
-                  </span>
-                )}
-              </div>
-
-              <div className="campo padron-form-grid__col-3">
-                <label htmlFor="sp-comentario" className="b1sb">
-                  Comentario <span className="requerido">*</span>
-                </label>
-                <textarea
-                  id="sp-comentario"
-                  className={`padron-textarea ${intentoEnvio && !comentarioServidorPublico.trim() ? 'padron-textarea--invalido' : ''}`}
-                  value={comentarioServidorPublico}
-                  onChange={(e) => setComentarioServidorPublico(e.target.value)}
-                  placeholder="Ingresa el comentario sobre la suscripción por parte del servidor público..."
-                />
-                {intentoEnvio && !comentarioServidorPublico.trim() && (
-                  <span className="campo__error">
-                    El comentario de servidores públicos que suscriben es obligatorio.
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <SndBoton
-              type="button"
-              style={{ marginTop: '1rem' }}
-              onClick={() => {
-                setIntentoEnvio(true)
-                if (seccionServidoresCompleta) {
-                  setAcordeonesActivos([4])
-                  notificar.exito('Servidor público que suscribe guardado temporalmente.')
-                } else {
-                  notificar.alerta('Por favor completa los datos del servidor público que suscribe.')
-                }
-              }}
-            >
-              <SndIcono nombre="snd-save" tamano={18} />
-              Guardar servidor público
-            </SndBoton>
-          </AccordionTab>
-
-          {/* =====================================================================
-              ACORDEÓN 5: EXCEPCIONES DE CONTRATO
-             ===================================================================== */}
-          <AccordionTab
-            header={
-              <div className="padron-acordeon__cabecera">
-                <div className="padron-acordeon__titulo-grupo">
-                  <span className="padron-acordeon__icono">
-                    <SndIcono nombre="snd-edit" tamano={22} />
-                  </span>
-                  <div>
-                    <span className="sh0b" style={{ display: 'block' }}>
-                      5. Formalizacion de contratos · Comentarios de contrato y justificación
-                    </span>
-                  </div>
-                </div>
-                <span className={`pildora pildora--${seccionExcepcionesCompleta ? 'exito' : 'alerta'} snd-pildora`}>
-                  <span className="pildora__dot" aria-hidden="true" />
-                  {seccionExcepcionesCompleta ? 'Completado' : 'Por capturar'}
-                </span>
-              </div>
-            }
-          >
-            <div className="padron-form-grid">
-
-
-              <div className="campo padron-form-grid__col-3">
-                <label htmlFor="fc-justificacion-plaza" className="b1sb">
-                  Justificacion Plaza
-                </label>
-                <textarea
-                  id="fc-justificacion-plaza"
-                  value={justificacionPlaza}
-                  className={`padron-textarea ${intentoEnvio && !disposiciones.trim() ? 'padron-textarea--invalido' : ''}`}
-                  onChange={(e) => setJustificacionPlaza(e.target.value)}
-                  placeholder="Ej. Actividades temporales sin plaza equivalente vacante"
-                />
-              </div>
-
-              <div className="campo padron-form-grid__col-3">
-                <label htmlFor="fc-comentario" className="b1sb">
-                  Comentario <span className="requerido">*</span>
-                </label>
-                <textarea
-                  id="fc-comentario"
-                  className={`padron-textarea ${intentoEnvio && !comentarioFormalizacion.trim() ? 'padron-textarea--invalido' : ''}`}
-                  value={comentarioFormalizacion}
-                  onChange={(e) => setComentarioFormalizacion(e.target.value)}
-                  placeholder="Ingresa comentarios adicionales sobre la formalización del contrato..."
-                />
-                {intentoEnvio && !comentarioFormalizacion.trim() && (
-                  <span className="campo__error">El comentario de formalización es obligatorio.</span>
-                )}
-              </div>
-            </div>
-
-            <SndBoton
-              type="button"
-              style={{ marginTop: '1rem' }}
-              onClick={() => {
-                setIntentoEnvio(true)
-                if (seccionExcepcionesCompleta) {
-                  notificar.exito('Datos de excepciones de contrato guardados temporalmente.')
-                } else {
-                  notificar.alerta('Por favor completa los datos de excepciones de contrato.')
-                }
-              }}
-            >
-              <SndIcono nombre="snd-save" tamano={18} />
-              Guardar excepciones de contrato
-            </SndBoton>
-          </AccordionTab>
-        </Accordion>
-
-        {/* BARRA INFERIOR DE ACCIONES DEL FORMULARIO */}
-        <article className="honorarios-tarjeta" style={{ marginTop: 12 }}>
+        {/* BARRA DE PROGRESO Y CONTROLES DE ACORDEÓN */}
+        <article className="honorarios-tarjeta" style={{ marginTop: 20 }}>
           <div className="honorarios-detalle-barra">
-            <span className="sdr" style={{ color: 'var(--neutro600)' }}>
-              Los campos marcados con <span className="requerido">*</span> son obligatorios para concluir la
-              formalización del contrato por honorarios.
-            </span>
+            <div className="fila">
+              <span className="b1sb color--principal">Avance de captura:</span>
+              <span className={`pildora pildora--${totalSeccionesCompletas === 5 ? 'exito' : 'info'} snd-pildora`}>
+                <span className="pildora__dot" aria-hidden="true" />
+                {totalSeccionesCompletas} de 5 secciones completas
+              </span>
+              {folioGenerado && (
+                <span className="pildora pildora--exito snd-pildora">
+                  <span className="pildora__dot" aria-hidden="true" />
+                  Folio asignado: {folioGenerado}
+                </span>
+              )}
+            </div>
 
-            <div className="fila fila--derecha">
-              <SndBoton type="submit">
-                <SndIcono nombre="snd-save" tamano={20} />
-                Guardar formalización de contrato
+            <div className="fila">
+              <SndBoton
+                variante="secundario"
+                type="button"
+                onClick={() => setModalCargaMasivaAbierto(true)}
+              >
+                <SndIcono nombre="snd-document" tamano={18} />
+                Carga masiva
               </SndBoton>
-              <SndBoton variante="secundario" type="button" onClick={limpiarFormulario}>
-                <SndIcono nombre="snd-renew" tamano={20} />
-                Omitir todos los cambios
+              <SndBoton variante="secundario" type="button" onClick={expandirTodo}>
+                Expandir las 5 secciones
+              </SndBoton>
+              <SndBoton variante="fantasma" type="button" onClick={colapsarTodo}>
+                Contraer todo
               </SndBoton>
             </div>
           </div>
         </article>
-      </div>
 
-      {/* MODAL DE CARGA MASIVA */}
-      <ModalCargaMasiva
-        visible={modalCargaMasivaAbierto}
-        onCerrar={() => setModalCargaMasivaAbierto(false)}
-      />
-    </div>
+        {folioGenerado && (
+          <div style={{ marginTop: 16 }}>
+            <SndMensaje tipo="exito">
+              <p>
+                <strong>El Contrato ({folioGenerado}) ha sido formalizado correctamente.</strong> Los datos de
+                formalización, servidores públicos que suscriben y excepciones han quedado registrados en el sistema.
+              </p>
+            </SndMensaje>
+          </div>
+        )}
+
+        {/* FORMULARIO CON LOS CINCO ACORDEONES */}
+        <div style={{ marginTop: 20 }}>
+          <Accordion
+            multiple
+            activeIndex={acordeonesActivos}
+            onTabChange={(e) => setAcordeonesActivos(e.index)}
+            className="padron-acordeon"
+          >
+            {/* =====================================================================
+              ACORDEÓN 1: FORMALIZACIÓN DE CONTRATOS (DATOS GENERALES Y VIGENCIA)
+             ===================================================================== */}
+            <AccordionTab
+              header={
+                <div className="padron-acordeon__cabecera">
+                  <div className="padron-acordeon__titulo-grupo">
+                    <span className="padron-acordeon__icono">
+                      <SndIcono nombre="snd-document" tamano={22} />
+                    </span>
+                    <div>
+                      <span className="sh0b" style={{ display: 'block' }}>
+                        1. Formalización de contratos · Datos Generales
+                      </span>
+
+                    </div>
+                  </div>
+                  <span className={`pildora pildora--${seccionGeneralesCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                    <span className="pildora__dot" aria-hidden="true" />
+                    {seccionGeneralesCompleta ? 'Completado' : 'Por capturar'}
+                  </span>
+                </div>
+              }
+            >
+              <div className="padron-form-grid">
+                <div className="campo">
+                  <label htmlFor="fc-ramo" className="b1sb">
+                    Ramo <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    inputId="fc-ramo"
+                    options={OPCIONES_RAMO}
+                    value={ramo}
+                    onChange={(e) => setRamo(e.value)}
+                    placeholder="Selecciona el ramo"
+                    appendTo="self"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-institucion" className="b1sb">
+                    Institución <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="fc-institucion"
+                    value={institucion}
+                    invalid={intentoEnvio && !institucion.trim()}
+                    onChange={(e) => setInstitucion(e.target.value)}
+                    placeholder="Ej. Secretaría Anticorrupción y Buen Gobierno"
+                  />
+                  {intentoEnvio && !institucion.trim() && (
+                    <span className="campo__error">La institución es obligatoria.</span>
+                  )}
+                </div>
+                <div className="campo">
+                  <label htmlFor="dc-unidad" className="b1sb">
+                    Unidad Administrativa <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    inputId="dc-unidad"
+                    options={UNIDADES_ADMINISTRATIVAS.map((u) => ({ label: u, value: u }))}
+                    value={unidadAdministrativa}
+                    onChange={(e) => setUnidadAdministrativa(e.value)}
+                    placeholder="Selecciona unidad administrativa"
+                    appendTo="self"
+                  />
+                </div>
+                <div className="campo">
+                  <label htmlFor="fc-modelo" className="b1sb">
+                    Modelo de contrato <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    inputId="fc-modelo"
+                    options={OPCIONES_MODELO_CONTRATO}
+                    value={modeloContrato}
+                    onChange={(e) => setModeloContrato(e.value)}
+                    placeholder="Selecciona el modelo de contrato"
+                    appendTo="self"
+                  />
+                </div>
+
+                <div
+                  className={`campo ${intentoEnvio && !prestadorServicio.trim() ? 'padron-buscador--invalido' : ''}`}
+                >
+                  <label htmlFor="fc-prestador" className="b1sb">
+                    Prestador de servicio <span className="requerido">*</span>
+                  </label>
+                  <SndBuscador
+                    variante="principal"
+                    etiqueta="Buscar prestador de servicio"
+                    placeholder="Ej. RFC, CURP o nombre del prestador"
+                    valor={prestadorServicio}
+                    ancho="100%"
+                    onValor={setPrestadorServicio}
+                    onBuscar={(valor) => {
+                      if (valor.trim()) {
+                        notificar.info(`Buscando prestador de servicio: «${valor}».`)
+                      }
+                    }}
+                  />
+                  {intentoEnvio && !prestadorServicio.trim() && (
+                    <span className="campo__error">El prestador de servicio es obligatorio.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-ordinal" className="b1sb">
+                    Ordinal del contrato <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="fc-ordinal"
+                    value={ordinalContrato}
+                    invalid={intentoEnvio && !ordinalContrato.trim()}
+                    onChange={(e) => setOrdinalContrato(e.target.value.replace(/\D/g, ''))}
+                    placeholder="Ej. 1"
+                  />
+                  {intentoEnvio && !ordinalContrato.trim() && (
+                    <span className="campo__error">El ordinal del contrato es obligatorio.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-chk-compat" className="b1sb">
+                    Compatibilidad
+                  </label>
+                  <Checkbox
+                    inputId="fc-chk-compat"
+                    checked={chkCompatHon}
+                    onChange={(e) => setChkCompatHon(Boolean(e.checked))}
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-fecha-inicio" className="b1sb">
+                    Fecha inicio contrato <span className="requerido">*</span>
+                  </label>
+                  <Calendar
+                    inputId="fc-fecha-inicio"
+                    value={fechaInicioContrato}
+                    invalid={intentoEnvio && !fechaInicioContrato}
+                    onChange={(e) => setFechaInicioContrato((e.value as Date | null) ?? null)}
+                    dateFormat="dd/mm/yy"
+                    placeholder="dd/mm/aaaa"
+                    showIcon
+                    appendTo="self"
+                  />
+                  {intentoEnvio && !fechaInicioContrato && (
+                    <span className="campo__error">Selecciona la fecha de inicio del contrato.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-fecha-termino" className="b1sb">
+                    Fecha termino contrato <span className="requerido">*</span>
+                  </label>
+                  <Calendar
+                    inputId="fc-fecha-termino"
+                    value={fechaTerminoContrato}
+                    invalid={intentoEnvio && !fechaTerminoContrato}
+                    onChange={(e) => setFechaTerminoContrato((e.value as Date | null) ?? null)}
+                    dateFormat="dd/mm/yy"
+                    placeholder="dd/mm/aaaa"
+                    showIcon
+                    appendTo="self"
+                  />
+                  {intentoEnvio && !fechaTerminoContrato && (
+                    <span className="campo__error">Selecciona la fecha de término del contrato.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-estatus" className="b1sb">
+                    Estatus <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    inputId="fc-estatus"
+                    options={CATEGORIAS_OPERATIVAS.map((c) => ({ label: c, value: c }))}
+                    value={estatus}
+                    onChange={(e) => setEstatus(e.value)}
+                    placeholder="Selecciona estatus"
+                    appendTo="self"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-anio" className="b1sb">
+                    Año del contrato <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="fc-anio"
+                    maxLength={4}
+                    value={anioContrato}
+                    invalid={intentoEnvio && !anioContrato.trim()}
+                    onChange={(e) => setAnioContrato(e.target.value.replace(/\D/g, ''))}
+                    placeholder="Ej. 2026"
+                  />
+                  {intentoEnvio && !anioContrato.trim() && (
+                    <span className="campo__error">El año del contrato es obligatorio.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-pertenece-oic" className="b1sb">
+                    Pertenece OIC
+                  </label>
+                  <Checkbox
+                    inputId="fc-pertenece-oic"
+                    checked={perteneceOic}
+                    onChange={(e) => setPerteneceOic(Boolean(e.checked))}
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-fecha-firma" className="b1sb">
+                    Fecha Firma <span className="requerido">*</span>
+                  </label>
+                  <Calendar
+                    inputId="fc-fecha-firma"
+                    value={fechaFirma}
+                    invalid={intentoEnvio && !fechaFirma}
+                    onChange={(e) => setFechaFirma((e.value as Date | null) ?? null)}
+                    dateFormat="dd/mm/yy"
+                    placeholder="dd/mm/aaaa"
+                    showIcon
+                    appendTo="self"
+                  />
+                  {intentoEnvio && !fechaFirma && (
+                    <span className="campo__error">Selecciona la fecha de firma.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-pais" className="b1sb">
+                    Pais <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    inputId="fc-pais"
+                    options={OPCIONES_PAIS}
+                    value={pais}
+                    onChange={(e) => setPais(e.value)}
+                    appendTo="self"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-estado" className="b1sb">
+                    Estado <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    inputId="fc-estado"
+                    options={ENTIDADES_FEDERATIVAS}
+                    value={estado}
+                    onChange={(e) => setEstado(e.value)}
+                    appendTo="self"
+                  />
+                </div>
+              </div>
+
+              <SndBoton
+                type="button"
+                style={{ marginTop: '1rem' }}
+                onClick={() => {
+                  setIntentoEnvio(true)
+                  if (seccionGeneralesCompleta) {
+                    setAcordeonesActivos([1])
+                    notificar.exito('Datos generales de formalización guardados temporalmente.')
+                  } else {
+                    notificar.alerta('Por favor completa los datos generales obligatorios.')
+                  }
+                }}
+              >
+                <SndIcono nombre="snd-save" tamano={18} />
+                Guardar datos generales
+              </SndBoton>
+            </AccordionTab>
+
+            {/* =====================================================================
+              ACORDEÓN 2: FORMALIZACIÓN DE CONTRATOS (PRESUPUESTO Y FISCAL)
+             ===================================================================== */}
+            <AccordionTab
+              header={
+                <div className="padron-acordeon__cabecera">
+                  <div className="padron-acordeon__titulo-grupo">
+                    <span className="padron-acordeon__icono">
+                      <SndIcono nombre="snd-calendar" tamano={22} />
+                    </span>
+                    <div>
+                      <span className="sh0b" style={{ display: 'block' }}>
+                        2. Formalización de contratos · Importes y Declaración Patrimonial
+                      </span>
+
+                    </div>
+                  </div>
+                  <span className={`pildora pildora--${seccionPresupuestalCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                    <span className="pildora__dot" aria-hidden="true" />
+                    {seccionPresupuestalCompleta ? 'Completado' : 'Por capturar'}
+                  </span>
+                </div>
+              }
+            >
+              <div className="padron-form-grid">
+                <div className="campo">
+                  <label htmlFor="fc-importe-bruto" className="b1sb">
+                    Importe Total Bruto <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="fc-importe-bruto"
+                    value={importeTotalBruto}
+                    invalid={intentoEnvio && !importeTotalBruto.trim()}
+                    onChange={(e) => setImporteTotalBruto(e.target.value)}
+                    placeholder="Ej. 462000.00"
+                  />
+                  {intentoEnvio && !importeTotalBruto.trim() && (
+                    <span className="campo__error">El importe total bruto es obligatorio.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-periodo-d" className="b1sb">
+                    Periodo de pago <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    inputId="fc-periodo-d"
+                    options={OPCIONES_PERIODO}
+                    value={periodoD}
+                    onChange={(e) => setPeriodoD(e.value)}
+                    appendTo="self"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-num-exhibiciones" className="b1sb">
+                    Numero de Exhibiciones <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="fc-num-exhibiciones"
+                    value={numeroExhibiciones}
+                    invalid={intentoEnvio && !numeroExhibiciones.trim()}
+                    onChange={(e) => setNumeroExhibiciones(e.target.value.replace(/\D/g, ''))}
+                    placeholder="Ej. 12"
+                  />
+                  {intentoEnvio && !numeroExhibiciones.trim() && (
+                    <span className="campo__error">El número de exhibiciones es obligatorio.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-monto-exhibiciones" className="b1sb">
+                    Monto po Exhibiciones <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="fc-monto-exhibiciones"
+                    value={montoPorExhibiciones}
+                    invalid={intentoEnvio && !montoPorExhibiciones.trim()}
+                    onChange={(e) => setMontoPorExhibiciones(e.target.value)}
+                    placeholder="Ej. 38500.00"
+                  />
+                  {intentoEnvio && !montoPorExhibiciones.trim() && (
+                    <span className="campo__error">El monto por exhibiciones es obligatorio.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-importe-mensual" className="b1sb">
+                    Importe Mensual <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="fc-importe-mensual"
+                    value={importeMensual}
+                    invalid={intentoEnvio && !importeMensual.trim()}
+                    onChange={(e) => setImporteMensual(e.target.value)}
+                    placeholder="Ej. 38500.00"
+                  />
+                  {intentoEnvio && !importeMensual.trim() && (
+                    <span className="campo__error">El importe mensual es obligatorio.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-partida" className="b1sb">
+                    Partida <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    inputId="fc-partida"
+                    options={OPCIONES_PARTIDA}
+                    value={partida}
+                    onChange={(e) => setPartida(e.value)}
+                    appendTo="self"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-origen" className="b1sb">
+                    Origen <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    inputId="fc-origen"
+                    options={OPCIONES_ORIGEN}
+                    value={origen}
+                    onChange={(e) => setOrigen(e.value)}
+                    appendTo="self"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-articulo-pef" className="b1sb">
+                    Articulo PEF <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    id="fc-articulo-pef"
+                    options={OPCIONES_PEF}
+                    value={articuloPef}
+                    invalid={intentoEnvio && !articuloPef.trim()}
+                    onChange={(e) => setArticuloPef(e.target.value)}
+
+                  />
+                  {intentoEnvio && !articuloPef.trim() && (
+                    <span className="campo__error">El artículo PEF es obligatorio.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-declara-isr" className="b1sb">
+                    Declara ISR
+                  </label>
+                  <Checkbox
+                    inputId="fc-declara-isr"
+                    checked={declaraIsr}
+                    onChange={(e) => setDeclaraIsr(Boolean(e.checked))}
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-declara-patrimonial" className="b1sb">
+                    Declaración Patrimonial
+                  </label>
+                  <Checkbox
+                    inputId="fc-declara-patrimonial"
+                    checked={declaracionPatrimonial}
+                    onChange={(e) => setDeclaracionPatrimonial(Boolean(e.checked))}
+                  />
+                </div>
+
+                <div className="campo padron-form-grid__col-2">
+                  <label htmlFor="fc-motivo-patrimonial" className="b1sb">
+                    Motivo Declaración Patrimonial
+                  </label>
+                  <Dropdown
+                    id="fc-motivo-patrimonial"
+                    value={motivoDeclaracionPatrimonial}
+                    options={OPCIONES_MOT_DECPAT}
+                    onChange={(e) => setMotivoDeclaracionPatrimonial(e.target.value)}
+
+                  />
+                </div>
+              </div>
+
+              <SndBoton
+                type="button"
+                style={{ marginTop: '1rem' }}
+                onClick={() => {
+                  setIntentoEnvio(true)
+                  if (seccionPresupuestalCompleta) {
+                    setAcordeonesActivos([2])
+                    notificar.exito('Importes y Declaración Patrimonial guardados temporalmente.')
+                  } else {
+                    notificar.alerta('Por favor completa los datos de importes y declaración patrimonial obligatorios.')
+                  }
+                }}
+              >
+                <SndIcono nombre="snd-save" tamano={18} />
+                Guardar importes y declaración patrimonial
+              </SndBoton>
+            </AccordionTab>
+
+            {/* =====================================================================
+              ACORDEÓN 3: FORMALIZACIÓN DE CONTRATOS (NORMATIVIDAD, DICTÁMENES Y PLAZA)
+             ===================================================================== */}
+            <AccordionTab
+              header={
+                <div className="padron-acordeon__cabecera">
+                  <div className="padron-acordeon__titulo-grupo">
+                    <span className="padron-acordeon__icono">
+                      <SndIcono nombre="snd-checkmark--filled" tamano={22} />
+                    </span>
+                    <div>
+                      <span className="sh0b" style={{ display: 'block' }}>
+                        3. Formalización de contratos · Normatividad y Disposiciones
+                      </span>
+
+                    </div>
+                  </div>
+                  <span className={`pildora pildora--${seccionNormatividadCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                    <span className="pildora__dot" aria-hidden="true" />
+                    {seccionNormatividadCompleta ? 'Completado' : 'Por capturar'}
+                  </span>
+                </div>
+              }
+            >
+              <div className="padron-form-grid">
+                <div className="campo padron-form-grid__col-3">
+                  <label htmlFor="fc-disposiciones" className="b1sb">
+                    Disposiciones <span className="requerido">*</span>
+                  </label>
+                  <textarea
+                    id="fc-disposiciones"
+                    className={`padron-textarea ${intentoEnvio && !disposiciones.trim() ? 'padron-textarea--invalido' : ''}`}
+                    value={disposiciones}
+                    onChange={(e) => setDisposiciones(e.target.value)}
+                    placeholder="Ej. Disposiciones en las materias de Recursos Humanos"
+                  />
+                  {intentoEnvio && !disposiciones.trim() && (
+                    <span className="campo__error">Las disposiciones son obligatorias.</span>
+                  )}
+                </div>
+
+                <div className="campo padron-form-grid__col-3" >
+                  <label htmlFor="fc-fundamento-legal" className="b1sb">
+                    Fundamento Legal <span className="requerido">*</span>
+                  </label>
+                  <textarea
+                    id="fc-fundamento-legal"
+                    className={`padron-textarea ${intentoEnvio && !disposiciones.trim() ? 'padron-textarea--invalido' : ''}`}
+                    value={fundamentoLegal}
+                    onChange={(e) => setFundamentoLegal(e.target.value)}
+                    placeholder="Ej. Art. 69 LFPRH y Código Civil Federal"
+                  />
+                  {intentoEnvio && !fundamentoLegal.trim() && (
+                    <span className="campo__error">El fundamento legal es obligatorio.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-lugar-trabajo" className="b1sb">
+                    Lugar Trabajo <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="fc-lugar-trabajo"
+                    value={lugarTrabajo}
+                    invalid={intentoEnvio && !lugarTrabajo.trim()}
+                    onChange={(e) => setLugarTrabajo(e.target.value)}
+                    placeholder="Ej. Av. Insurgentes Sur 1735, CDMX"
+                  />
+                  {intentoEnvio && !lugarTrabajo.trim() && (
+                    <span className="campo__error">El lugar de trabajo es obligatorio.</span>
+                  )}
+                </div>
+
+
+
+                <div className="campo">
+                  <label htmlFor="fc-dictamen-presupuestal" className="b1sb">
+                    Autorización o dictamen presupuestal <span className="requerido">*</span>
+                  </label>
+                  <InputText
+                    id="fc-dictamen-presupuestal"
+                    value={autorizacionDictamenPresupuestal}
+                    invalid={intentoEnvio && !autorizacionDictamenPresupuestal.trim()}
+                    onChange={(e) => setAutorizacionDictamenPresupuestal(e.target.value)}
+                    placeholder="Ej. SUF-2026-0312"
+                  />
+                  {intentoEnvio && !autorizacionDictamenPresupuestal.trim() && (
+                    <span className="campo__error">La autorización o dictamen presupuestal es obligatoria.</span>
+                  )}
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-chk-servicio-igual" className="b1sb">
+                    Servicios Iguales
+                  </label>
+                  <Checkbox
+                    inputId="fc-chk-servicio-igual"
+                    checked={chkServicioIgual}
+                    onChange={(e) => setChkServicioIgual(Boolean(e.checked))}
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-oficio-excepcion" className="b1sb">
+                    Numero de Oficio Excepción
+                  </label>
+                  <InputText
+                    id="fc-oficio-excepcion"
+                    value={numeroOficioExcepcion}
+                    onChange={(e) => setNumeroOficioExcepcion(e.target.value)}
+                    placeholder="Ej. OF-EXC-2026-0045"
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="fc-existe-plaza" className="b1sb">
+                    Existe Plaza Estructura
+                  </label>
+                  <Checkbox
+                    inputId="fc-existe-plaza"
+                    checked={existePlazaHon}
+                    onChange={(e) => setExistePlazaHon(Boolean(e.checked))}
+                  />
+                </div>
+
+
+                {/* tabla de exepciones TablaExepciones */}
+                <div className="padron-form-grid__col-3">
+                  <div className="contenedor-tabla" style={{ marginTop: '0.5rem' }}>
+                    <table
+                      style={{
+                        width: '100%',
+                        minWidth: '40rem',
+                        borderCollapse: 'collapse',
+                        fontSize: '0.875rem',
+                        textAlign: 'left',
+                      }}
+                    >
+                      <thead>
+                        <tr style={{ backgroundColor: 'var(--principal, #9B2247)' }}>
+                          <th
+                            style={{
+                              padding: '0.75rem 1rem',
+                              fontWeight: 600,
+                              color: '#fff',
+                              whiteSpace: 'nowrap',
+                              border: '1px solid var(--gama800, #6F1D36)',
+                            }}
+                          >
+                            Id Exepción
+                          </th>
+                          <th
+                            style={{
+                              padding: '0.75rem 1rem',
+                              fontWeight: 600,
+                              color: '#fff',
+                              whiteSpace: 'nowrap',
+                              border: '1px solid var(--gama800, #6F1D36)',
+                            }}
+                          >
+                            Numero de fracción
+                          </th>
+                          <th
+                            style={{
+                              padding: '0.75rem 1rem',
+                              fontWeight: 600,
+                              color: '#fff',
+                              whiteSpace: 'nowrap',
+                              border: '1px solid var(--gama800, #6F1D36)',
+                            }}
+                          >
+                            Descripción
+                          </th>
+                          <th
+                            style={{
+                              padding: '0.75rem 1rem',
+                              fontWeight: 600,
+                              color: '#fff',
+                              whiteSpace: 'nowrap',
+                              border: '1px solid var(--gama800, #6F1D36)',
+                              textAlign: 'center',
+                            }}
+                          >
+                            Acciones
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr style={{ borderBottom: '1px solid var(--neutro400, #dddddd)' }}>
+                          <td
+                            style={{
+                              padding: '0.75rem 1rem',
+                              color: 'var(--neutro800, #333)',
+                              verticalAlign: 'middle',
+                              border: '1px solid var(--neutro400, #dddddd)',
+                            }}
+                          >
+                            EXC-HON-2026-01
+                          </td>
+                          <td
+                            style={{
+                              padding: '0.75rem 1rem',
+                              color: 'var(--neutro800, #333)',
+                              verticalAlign: 'middle',
+                              border: '1px solid var(--neutro400, #dddddd)',
+                            }}
+                          >
+                            Fracción I
+                          </td>
+                          <td
+                            style={{
+                              padding: '0.75rem 1rem',
+                              color: 'var(--neutro800, #333)',
+                              verticalAlign: 'middle',
+                              border: '1px solid var(--neutro400, #dddddd)',
+                            }}
+                          >
+                            Excepción autorizada para contratación de servicios profesionales por honorarios.
+                          </td>
+                          <td
+                            style={{
+                              padding: '0.75rem 1rem',
+                              color: 'var(--neutro800, #333)',
+                              verticalAlign: 'middle',
+                              border: '1px solid var(--neutro400, #dddddd)',
+                              textAlign: 'center',
+                            }}
+                          >
+                            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                              <button
+                                type="button"
+                                style={{
+                                  background: 'none',
+                                  border: '1px solid var(--neutro400, #cccccc)',
+                                  borderRadius: '8px',
+                                  padding: '4px 8px',
+                                  cursor: 'pointer',
+                                  fontSize: '0.8rem',
+                                  color: 'var(--neutro800, #333)',
+                                }}
+                                title="Modificar excepción"
+                              >
+                                Modificar
+                              </button>
+                              <button
+                                type="button"
+                                style={{
+                                  background: 'none',
+                                  border: '1px solid var(--principal, #9B2247)',
+                                  borderRadius: '8px',
+                                  padding: '4px 8px',
+                                  cursor: 'pointer',
+                                  fontSize: '0.8rem',
+                                  color: 'var(--principal, #9B2247)',
+                                }}
+                                title="Agregar excepción"
+                              >
+                                Agregar
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div className="campo">
+                  <label htmlFor="exc-id-excepcion" className="b1sb">
+                    Id Excepción <span className="requerido">*</span>
+                  </label>
+                  <Dropdown
+                    id="exc-id-excepcion"
+                    value={idExcepcion}
+                    options={OPCIONES_HON_EXEPCIONES}
+                    invalid={intentoEnvio && !idExcepcion.trim()}
+                    onChange={(e) => setIdExcepcion(e.target.value.toUpperCase())}
+                    placeholder=""
+                  />
+                  {intentoEnvio && !idExcepcion.trim() && (
+                    <span className="campo__error">El identificador de excepción es obligatorio.</span>
+                  )}
+                </div>
+
+
+              </div>
+
+              <SndBoton
+                type="button"
+                style={{ marginTop: '1rem' }}
+                onClick={() => {
+                  setIntentoEnvio(true)
+                  if (seccionNormatividadCompleta) {
+                    setAcordeonesActivos([3])
+                    notificar.exito('Datos de normatividad y disposiciones guardados temporalmente.')
+                  } else {
+                    notificar.alerta('Por favor completa los datos de normatividad obligatorios.')
+                  }
+                }}
+              >
+                <SndIcono nombre="snd-save" tamano={18} />
+                Guardar normatividad y disposiciones
+              </SndBoton>
+            </AccordionTab>
+
+            {/* =====================================================================
+              ACORDEÓN 4: SERVIDORES PÚBLICOS QUE SUSCRIBEN
+             ===================================================================== */}
+            <AccordionTab
+              header={
+                <div className="padron-acordeon__cabecera">
+                  <div className="padron-acordeon__titulo-grupo">
+                    <span className="padron-acordeon__icono">
+                      <SndIcono nombre="snd-user" tamano={22} />
+                    </span>
+                    <div>
+                      <span className="sh0b" style={{ display: 'block' }}>
+                        4. Formalizacion de contratos · Servidores públicos que suscriben y reciben entregables.
+                      </span>
+
+                    </div>
+                  </div>
+                  <span className={`pildora pildora--${seccionServidoresCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                    <span className="pildora__dot" aria-hidden="true" />
+                    {seccionServidoresCompleta ? 'Completado' : 'Por capturar'}
+                  </span>
+                </div>
+              }
+            >
+              <div className="padron-form-grid">
+                {/* tabla de Servidores publicos que suscriben TablaServidoresPublicos */}
+                <div className="padron-form-grid__col-3">
+                  <div className="contenedor-tabla" style={{ marginTop: '0.5rem' }}>
+                    <table
+                      id="TablaServidoresPublicos"
+                      style={{
+                        width: '100%',
+                        minWidth: '40rem',
+                        borderCollapse: 'collapse',
+                        fontSize: '0.875rem',
+                        textAlign: 'left',
+                      }}
+                    >
+                      <thead>
+                        <tr style={{ backgroundColor: 'var(--principal, #9B2247)' }}>
+                          <th
+                            style={{
+                              padding: '0.75rem 1rem',
+                              fontWeight: 600,
+                              color: '#fff',
+                              whiteSpace: 'nowrap',
+                              border: '1px solid var(--gama800, #6F1D36)',
+                            }}
+                          >
+                            Ordinal
+                          </th>
+                          <th
+                            style={{
+                              padding: '0.75rem 1rem',
+                              fontWeight: 600,
+                              color: '#fff',
+                              whiteSpace: 'nowrap',
+                              border: '1px solid var(--gama800, #6F1D36)',
+                            }}
+                          >
+                            Id RUSP
+                          </th>
+                          <th
+                            style={{
+                              padding: '0.75rem 1rem',
+                              fontWeight: 600,
+                              color: '#fff',
+                              whiteSpace: 'nowrap',
+                              border: '1px solid var(--gama800, #6F1D36)',
+                            }}
+                          >
+                            Nombre del servidor público
+                          </th>
+                          <th
+                            style={{
+                              padding: '0.75rem 1rem',
+                              fontWeight: 600,
+                              color: '#fff',
+                              whiteSpace: 'nowrap',
+                              border: '1px solid var(--gama800, #6F1D36)',
+                              textAlign: 'center',
+                            }}
+                          >
+                            {''}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr style={{ borderBottom: '1px solid var(--neutro400, #dddddd)' }}>
+                          <td
+                            style={{
+                              padding: '0.75rem 1rem',
+                              color: 'var(--neutro800, #333)',
+                              verticalAlign: 'middle',
+                              border: '1px solid var(--neutro400, #dddddd)',
+                            }}
+                          >
+                            1
+                          </td>
+                          <td
+                            style={{
+                              padding: '0.75rem 1rem',
+                              color: 'var(--neutro800, #333)',
+                              verticalAlign: 'middle',
+                              border: '1px solid var(--neutro400, #dddddd)',
+                            }}
+                          >
+                            000004918
+                          </td>
+                          <td
+                            style={{
+                              padding: '0.75rem 1rem',
+                              color: 'var(--neutro800, #333)',
+                              verticalAlign: 'middle',
+                              border: '1px solid var(--neutro400, #dddddd)',
+                            }}
+                          >
+                            Alejandro Morales Domínguez
+                          </td>
+                          <td
+                            style={{
+                              padding: '0.75rem 1rem',
+                              color: 'var(--neutro800, #333)',
+                              verticalAlign: 'middle',
+                              border: '1px solid var(--neutro400, #dddddd)',
+                              textAlign: 'center',
+                            }}
+                          >
+                            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                              <button
+                                type="button"
+                                style={{
+                                  background: 'none',
+                                  border: '1px solid var(--neutro400, #cccccc)',
+                                  borderRadius: '8px',
+                                  padding: '4px 8px',
+                                  cursor: 'pointer',
+                                  fontSize: '0.8rem',
+                                  color: 'var(--neutro800, #333)',
+                                }}
+                                title="Modificar servidor público"
+                              >
+                                Modificar
+                              </button>
+                              <button
+                                type="button"
+                                style={{
+                                  background: 'none',
+                                  border: '1px solid var(--principal, #9B2247)',
+                                  borderRadius: '8px',
+                                  padding: '4px 8px',
+                                  cursor: 'pointer',
+                                  fontSize: '0.8rem',
+                                  color: 'var(--principal, #9B2247)',
+                                }}
+                                title="Agregar servidor público"
+                              >
+                                Agregar
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div
+                  className={`campo ${intentoEnvio && !idServidorPublicoSuscribe.trim() ? 'padron-buscador--invalido' : ''}`}
+                >
+                  <label htmlFor="sp-id-servidor" className="b1sb">
+                    Id Servidores publico que suscribe <span className="requerido">*</span>
+                  </label>
+                  <SndBuscador
+                    variante="principal"
+                    etiqueta="Buscar servidor público que suscribe"
+                    placeholder="Ej. 000004918"
+                    valor={idServidorPublicoSuscribe}
+                    ancho="100%"
+                    onValor={(valor) => setIdServidorPublicoSuscribe(valor.toUpperCase())}
+                    onBuscar={(valor) => {
+                      if (valor.trim()) {
+                        notificar.info(`Buscando servidor público: «${valor}».`)
+                      }
+                    }}
+                  />
+                  {intentoEnvio && !idServidorPublicoSuscribe.trim() && (
+                    <span className="campo__error">
+                      El identificador del servidor público que suscribe es obligatorio.
+                    </span>
+                  )}
+                </div>
+
+                <div className="campo padron-form-grid__col-3">
+                  <label htmlFor="sp-comentario" className="b1sb">
+                    Comentario <span className="requerido">*</span>
+                  </label>
+                  <textarea
+                    id="sp-comentario"
+                    className={`padron-textarea ${intentoEnvio && !comentarioServidorPublico.trim() ? 'padron-textarea--invalido' : ''}`}
+                    value={comentarioServidorPublico}
+                    onChange={(e) => setComentarioServidorPublico(e.target.value)}
+                    placeholder="Ingresa el comentario sobre la suscripción por parte del servidor público..."
+                  />
+                  {intentoEnvio && !comentarioServidorPublico.trim() && (
+                    <span className="campo__error">
+                      El comentario de servidores públicos que suscriben es obligatorio.
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <SndBoton
+                type="button"
+                style={{ marginTop: '1rem' }}
+                onClick={() => {
+                  setIntentoEnvio(true)
+                  if (seccionServidoresCompleta) {
+                    setAcordeonesActivos([4])
+                    notificar.exito('Servidor público que suscribe guardado temporalmente.')
+                  } else {
+                    notificar.alerta('Por favor completa los datos del servidor público que suscribe.')
+                  }
+                }}
+              >
+                <SndIcono nombre="snd-save" tamano={18} />
+                Guardar servidor público
+              </SndBoton>
+            </AccordionTab>
+
+            {/* =====================================================================
+              ACORDEÓN 5: EXCEPCIONES DE CONTRATO
+             ===================================================================== */}
+            <AccordionTab
+              header={
+                <div className="padron-acordeon__cabecera">
+                  <div className="padron-acordeon__titulo-grupo">
+                    <span className="padron-acordeon__icono">
+                      <SndIcono nombre="snd-edit" tamano={22} />
+                    </span>
+                    <div>
+                      <span className="sh0b" style={{ display: 'block' }}>
+                        5. Formalizacion de contratos · Comentarios de contrato y justificación
+                      </span>
+                    </div>
+                  </div>
+                  <span className={`pildora pildora--${seccionExcepcionesCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                    <span className="pildora__dot" aria-hidden="true" />
+                    {seccionExcepcionesCompleta ? 'Completado' : 'Por capturar'}
+                  </span>
+                </div>
+              }
+            >
+              <div className="padron-form-grid">
+
+
+                <div className="campo padron-form-grid__col-3">
+                  <label htmlFor="fc-justificacion-plaza" className="b1sb">
+                    Justificacion Plaza
+                  </label>
+                  <textarea
+                    id="fc-justificacion-plaza"
+                    value={justificacionPlaza}
+                    className={`padron-textarea ${intentoEnvio && !disposiciones.trim() ? 'padron-textarea--invalido' : ''}`}
+                    onChange={(e) => setJustificacionPlaza(e.target.value)}
+                    placeholder="Ej. Actividades temporales sin plaza equivalente vacante"
+                  />
+                </div>
+
+                <div className="campo padron-form-grid__col-3">
+                  <label htmlFor="fc-comentario" className="b1sb">
+                    Comentario <span className="requerido">*</span>
+                  </label>
+                  <textarea
+                    id="fc-comentario"
+                    className={`padron-textarea ${intentoEnvio && !comentarioFormalizacion.trim() ? 'padron-textarea--invalido' : ''}`}
+                    value={comentarioFormalizacion}
+                    onChange={(e) => setComentarioFormalizacion(e.target.value)}
+                    placeholder="Ingresa comentarios adicionales sobre la formalización del contrato..."
+                  />
+                  {intentoEnvio && !comentarioFormalizacion.trim() && (
+                    <span className="campo__error">El comentario de formalización es obligatorio.</span>
+                  )}
+                </div>
+              </div>
+
+              <SndBoton
+                type="button"
+                style={{ marginTop: '1rem' }}
+                onClick={() => {
+                  setIntentoEnvio(true)
+                  if (seccionExcepcionesCompleta) {
+                    notificar.exito('Datos de excepciones de contrato guardados temporalmente.')
+                  } else {
+                    notificar.alerta('Por favor completa los datos de excepciones de contrato.')
+                  }
+                }}
+              >
+                <SndIcono nombre="snd-save" tamano={18} />
+                Guardar excepciones de contrato
+              </SndBoton>
+            </AccordionTab>
+          </Accordion>
+
+          {/* BARRA INFERIOR DE ACCIONES DEL FORMULARIO */}
+          <article className="honorarios-tarjeta" style={{ marginTop: 12 }}>
+            <div className="honorarios-detalle-barra">
+              <span className="sdr" style={{ color: 'var(--neutro600)' }}>
+                Los campos marcados con <span className="requerido">*</span> son obligatorios para concluir la
+                formalización del contrato por honorarios.
+              </span>
+
+              <div className="fila fila--derecha">
+                <SndBoton type="submit">
+                  <SndIcono nombre="snd-save" tamano={20} />
+                  Guardar formalización de contrato
+                </SndBoton>
+                <SndBoton variante="secundario" type="button" onClick={limpiarFormulario}>
+                  <SndIcono nombre="snd-renew" tamano={20} />
+                  Omitir todos los cambios
+                </SndBoton>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        {/* MODAL DE CARGA MASIVA */}
+        <ModalCargaMasiva
+          visible={modalCargaMasivaAbierto}
+          onCerrar={() => setModalCargaMasivaAbierto(false)}
+        />
+      </div>
+        </div>
+      </div>
+      
     </>
   )
 }
