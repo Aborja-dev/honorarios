@@ -203,6 +203,8 @@ export const REGISTROS_POR_SUBMODULO = {
       montoMensual: '$38,500.00',
       estado: 'Vigente',
       tipoPildora: 'exito',
+      completadoTexto: "Autorizado",
+      completadoColor: "exito"
     },
     {
       folio: '0000000849',
@@ -213,16 +215,20 @@ export const REGISTROS_POR_SUBMODULO = {
       montoMensual: '$44,200.00',
       estado: 'En firma electrónica',
       tipoPildora: 'info',
+      completadoTexto: "Pendiente de autorizacion",
+      completadoColor: "alerta"
     },
     {
       folio: '0000000854',
       nombre: 'Roberto Hernández Villalobos',
       unidad: 'GOVL910214MDFZZ000',
       concepto: 'Contrato de Asesoría Especializada en Dictaminación',
-      vigencia: '16/07/2026 - 31/10/2026',
+      vigencia: '16/07/2026 - 31/12/2026',
       montoMensual: '$41,000.00',
       estado: 'Por vencer',
       tipoPildora: 'alerta',
+      completadoTexto: "Rechazado",
+      completadoColor: "error"
     },
     {
       folio: '0000000860',
@@ -233,6 +239,20 @@ export const REGISTROS_POR_SUBMODULO = {
       montoMensual: '$32,500.00',
       estado: 'Observado',
       tipoPildora: 'error',
+      completadoTexto: "Cancelacion anticipado",
+      completadoColor: "purple"
+    },
+    {
+      folio: '0000000861',
+      nombre: 'Ana Sofía Juarez Rivera',
+      unidad: 'DOLA021090DFZZA000',
+      concepto: 'Contrato de Honorarios Asimilados a Salarios',
+      vigencia: '01/08/2026 - 31/12/2026',
+      montoMensual: '$32,500.00',
+      estado: 'Observado',
+      tipoPildora: 'error',
+      completadoTexto: "En proceso",
+      completadoColor: "info"
     },
   ],
   modelo: [

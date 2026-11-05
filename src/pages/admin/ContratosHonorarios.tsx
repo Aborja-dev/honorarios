@@ -18,6 +18,7 @@ import '../../components/honorarios/Honorarios.css'
 import { useTitulo } from '../../hooks'
 import { SUBMODULOS_HONORARIOS, honorariosService, type RegistroSubmodulo } from '../../services'
 import { sinAcentos } from '../../utils'
+import { BotonHome } from '../BotonHome'
 
 const OPCIONES_RAMO = [
   { label: '27 - Anticorrupcíon y Buen Gobierno', value: '27' },
@@ -69,13 +70,11 @@ export default function ContratosHonorarios() {
             Contratos de Honorarios
           </h1>
           <p className="sh0m color--principal" style={{ margin: '4px 0 0' }}>
-            Seguimiento de elaboración de contratos por honorarios
+            Formalizacion de contratos de prestadores de servicios
           </p>
         </div>
         <div className="fila">
-          <SndBotonEnlace variante="secundario" to="/">
-            Volver al menu inicio
-          </SndBotonEnlace>
+          <BotonHome />
         </div>
       </div>
 
@@ -179,17 +178,17 @@ export default function ContratosHonorarios() {
             <SndIcono nombre="snd-search" tamano={18} />
             Buscar
           </SndBoton>
+          <SndBoton variante="secundario" type="button">
+            <SndIcono nombre="snd-checkmark" tamano={18} />
+            Contratos completos
+          </SndBoton>
           <SndBoton variante="fantasma" type="button">
+            <SndIcono nombre="snd-renew" tamano={18} />
             Limpiar formulario
           </SndBoton>
         </div>
       </section>
 
-      <div className="fila" style={{ marginTop: 16 }}>
-        <SndPildoraFiltro activo={soloVigentes} onCambio={setSoloVigentes}>
-          Solo contratos vigentes
-        </SndPildoraFiltro>
-      </div>
 
       {/* Tabla independiente de Contratos de Honorarios */}
       <section className="honorarios-detalle-panel" aria-label={`Registros de ${info.titulo}`}>
@@ -234,14 +233,14 @@ export default function ContratosHonorarios() {
           >
             <Column field="folio" header="Id Contrato" sortable />
             <Column field="nombre" header="Nombre" sortable />
-            <Column field="unidad" header="CURP" sortable />
+            <Column field="vigencia" header="Vigencia" sortable />
             <Column
               field="concepto"
               header="Acciones"
-              headerStyle={{ textAlign: 'center' }}
+              headerStyle={{ textAlign: 'left' }}
               bodyStyle={{ textAlign: 'center' }}
               body={(fila: RegistroSubmodulo) => (
-                <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', gap: '8px' }}>
                   <button
                     type="button"
                     style={{
@@ -251,40 +250,45 @@ export default function ContratosHonorarios() {
                       padding: '4px 8px',
                       cursor: 'pointer',
                       fontSize: '0.8rem',
-                      color: 'var(--neutro800, #333)',
+                      color: ' #004D40',
                     }}
                     title="Modificar registro"
                     onClick={() => notificar.info(`Editando registro ${fila.folio}: ${fila.nombre}`)}
                   >
-                    Modificar
+                    <p style={{ marginRight: 8, display: "inline-block" }}><SndIcono nombre="snd-search" tamano={12} /></p>
+                    Consultar
                   </button>
                   <button
                     type="button"
                     style={{
                       background: 'none',
-                      border: '1px solid var(--principal, #9B2247)',
+                      border: '1px solid var(--neutro400, #cccccc)',
                       borderRadius: '8px',
                       padding: '4px 8px',
                       cursor: 'pointer',
                       fontSize: '0.8rem',
-                      color: 'var(--principal, #9B2247)',
+                      color: ' #846623',
                     }}
                     title="Eliminar registro"
                     onClick={() => notificar.info(`Eliminar registro ${fila.folio}: ${fila.nombre}`)}
                   >
-                    Eliminar
+                    <p style={{ marginRight: 8, display: "inline-block" }}><SndIcono nombre="snd-reading--glasses" tamano={12} /></p>
+                    Revisar
                   </button>
                 </div>
               )}
             />
 
-            <Column
-              field="estado"
-              header="Estatus"
-              sortable
-              body={(fila: RegistroSubmodulo) => <SndPildora tipo={fila.tipoPildora}>{fila.estado}</SndPildora>}
-            />
+
+            <Column field="completadoTexto" header="Estatus" sortable body={(fila: RegistroSubmodulo) => <SndPildora tipo={fila.completadoColor}>{fila.completadoTexto}</SndPildora>} />
+            <Column header="Enviar al TUAF" body={() => <input type="checkbox" />} />
           </DataTable>
+        </div>
+        <div className='fila'>
+          <SndBoton variante="primario" type="button">
+            <SndIcono nombre="snd-document--export" tamano={18} />
+            Enviar al TUAF
+          </SndBoton>
         </div>
       </section>
 
