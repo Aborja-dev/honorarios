@@ -76,7 +76,7 @@ export const TRIMESTRES_HONORARIOS: DatosTrimestre[] = [
     etiqueta: 'quincena 20/2026',
     contratosActivos: 1248,
     porcentajeAvance: 84,
-    presupuestoEjercido: '$129.6 M',
+    presupuestoEjercido: '$129,600,000.25',
     estadisticas: { vigentes: 50, enFirma: 25, enRevision: 15, porVencer: 10, pendientes: 30 },
   },
   {
