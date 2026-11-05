@@ -68,11 +68,11 @@ export default function PadronPrestadores() {
             Padrón de Prestadores de Servicios
           </h1>
           <p className="sh0m color--principal" style={{ margin: '4px 0 0' }}>
-            Administración de información personal
+            Administración del expediente de datos personales.
           </p>
         </div>
         <SndBotonEnlace variante="secundario" to="/">
-          Volver al tablero
+          <span><SndIcono nombre="snd-home" tamano={18} /></span>Menu principal
         </SndBotonEnlace>
       </div>
 
@@ -207,12 +207,6 @@ export default function PadronPrestadores() {
           </SndBoton>
         </div>
       </section>
-
-      <div className="fila" style={{ marginTop: 16 }}>
-        <SndPildoraFiltro activo={soloValidados} onCambio={setSoloValidados}>
-          Prestadores validados
-        </SndPildoraFiltro>
-      </div>
 
       <BandejaSubmodulo
         submodulo={info}

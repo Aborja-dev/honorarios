@@ -24,7 +24,9 @@ export interface RegistroSubmodulo {
   vigencia: string
   montoMensual?: string
   estado: string
-  tipoPildora: TipoPildora
+  tipoPildora: TipoPildora,
+  completadoTexto: string,
+  completadoColor: string
 }
 
 export interface DatosTrimestre {
@@ -135,7 +137,7 @@ export const SUBMODULOS_HONORARIOS: SubmoduloInfo[] = [
   }
 ]
 
-export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]> = {
+export const REGISTROS_POR_SUBMODULO = {
   padron: [
     {
       folio: '000000104',
@@ -147,6 +149,9 @@ export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]
       montoMensual: '$38,500.00',
       estado: 'Expediente validado',
       tipoPildora: 'exito',
+      completadoTexto: "1 de 4 secciones completado",
+      completadoColor: "alerta"
+      
     },
     {
       folio: '000000108',
@@ -158,6 +163,8 @@ export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]
       montoMensual: '$44,200.00',
       estado: 'En revisión',
       tipoPildora: 'info',
+      completadoTexto: "1 de 4 secciones completado",
+      completadoColor: "alerta"
     },
     {
       folio: '000000115',
@@ -169,6 +176,8 @@ export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]
       montoMensual: '$34,000.00',
       estado: 'Expediente validado',
       tipoPildora: 'exito',
+      completadoTexto: "3 de 4 secciones completado",
+      completadoColor: "alerta"
     },
     {
       folio: '000000122',
@@ -180,6 +189,8 @@ export const REGISTROS_POR_SUBMODULO: Record<ClaveSubmodulo, RegistroSubmodulo[]
       montoMensual: '$36,800.00',
       estado: 'Por actualizar constancia',
       tipoPildora: 'alerta',
+      completadoTexto: "Expediente completado",
+      completadoColor: "exito"
     },
   ],
   contratos: [
