@@ -19,6 +19,7 @@ import { CATEGORIAS_OPERATIVAS, UNIDADES_ADMINISTRATIVAS } from '../services'
 import MenuFlotante from '../components/MenuFlotante'
 import { BotonHome } from './BotonHome'
 import './PadronPrestadoresServicio.css'
+import './PrestadoresPage.css'
 const OPCIONES_SI_NO = [
   { label: 'Sí', value: 'SI' },
   { label: 'No', value: 'NO' },
@@ -57,35 +58,35 @@ const SECCIONES: ItemMenuFlotante[] = [
     descripcion: 'CURP y periodo del servicio',
     icono: 'snd-document',
     ancla: 'padron-seccion-curp',
-    tooltip: 'Validación de CURP',
+    tooltip: '1. Formalización de contratos · Datos Generales',
   },
   {
     texto: 'Datos personales',
     descripcion: 'Nombre, apellidos y RFC',
     icono: 'snd-calendar',
     ancla: 'padron-seccion-personal',
-    tooltip: 'Datos personales',
+    tooltip: '2. Formalización de contratos · Importes y Declaración Patrimonial',
   },
   {
     texto: 'Dirección',
     descripcion: 'Domicilio contractual',
     icono: 'snd-checkmark--filled',
     ancla: 'padron-seccion-direccion',
-    tooltip: 'Dirección',
+    tooltip: '3. Formalización de contratos · Normatividad y Disposiciones',
   },
   {
     texto: 'Escolaridad',
     descripcion: 'Grado máximo y cédula',
     icono: 'snd-user',
     ancla: 'padron-seccion-escolaridad',
-    tooltip: 'Escolaridad',
+    tooltip: '4. Formalizacion de contratos · Servidores públicos que suscriben y reciben entregables.',
   },
   {
     texto: 'Experiencia laboral',
     descripcion: 'Trayectoria comprobable',
     icono: 'snd-edit',
     ancla: 'padron-seccion-experiencia',
-    tooltip: 'Experiencia laboral',
+    tooltip: '5. Formalizacion de contratos · Comentarios de contrato y justificación',
   },
 ]
 

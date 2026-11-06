@@ -17,41 +17,42 @@ import { UNIDADES_ADMINISTRATIVAS } from '../services'
 import MenuFlotante, { type ItemMenuFlotante } from '../components/MenuFlotante'
 import { BotonHome } from './BotonHome'
 import './PadronPrestadoresServicio.css'
+import './PrestadoresPage.css'
 const SECCIONES: ItemMenuFlotante[] = [
   {
     texto: 'Validación de CURP',
     descripcion: 'CURP y periodo del servicio',
     icono: 'snd-document',
     ancla: 'padron-seccion-curp',
-    tooltip: 'Validación de CURP',
+    tooltip: '1. Datos Contrato',
   },
   {
     texto: 'Datos personales',
     descripcion: 'Nombre, apellidos y RFC',
     icono: 'snd-edit',
     ancla: 'padron-seccion-personal',
-    tooltip: 'Datos personales',
+    tooltip: '2. Actividades',
   },
   {
     texto: 'Dirección',
     descripcion: 'Domicilio contractual',
     icono: 'snd-checkmark--filled',
     ancla: 'padron-seccion-direccion',
-    tooltip: 'Dirección',
+    tooltip: '3. Entregables',
   },
   {
     texto: 'Escolaridad',
     descripcion: 'Grado máximo y cédula',
     icono: 'snd-user',
     ancla: 'padron-seccion-escolaridad',
-    tooltip: 'Escolaridad',
+    tooltip: '4. Escolaridad',
   },
   {
     texto: 'Experiencia laboral',
     descripcion: 'Trayectoria comprobable',
     icono: 'snd-calendar',
     ancla: 'padron-seccion-experiencia',
-    tooltip: 'Experiencia laboral',
+    tooltip: '5. Experiencia laboral',
   },
 ]
 const OPCIONES_TIPO_MODELO = [
