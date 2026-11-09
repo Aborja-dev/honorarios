@@ -75,7 +75,48 @@ const MARGEN_DESPLAZAMIENTO_PANEL = 16
  * La página posee el estado de los acordeones (modo controlado) para poder
  * abrir la sección destino antes de desplazarse a ella.
  */
+
+interface UiState {
+  menuColapsado: boolean
+  acordeonesActivos: number | number[]
+  anclaActiva?: string,
+  saveDisabled: true,
+}
+
+const UiState = {
+  menuColapsado: true,
+  acordeonesActivos: [0],
+  anclaActiva: SECCIONES[0]?.ancla,
+  saveDisabled: true
+}
+const voidFunction = (_, i) => i
+
+const eventos = (state: UiState) => {
+  return {
+    expandAll: ()=> {
+      state.acordeonesActivos = [0,1,2,3,4,5]
+      return {
+        menuColapsado: true,
+        anclaActivca: SECCIONES[0]?.ancla,
+        acordeonesActivos: [0,1,2,3,4,5]
+      }
+    },
+    collapseAll: ()=> ({
+      ...state,
+       arcordeonesActivos: state.acordeonesActivos = []
+    }),
+    completed : ()=> ({
+      ...state,
+      saveDisabled: false
+    })
+  }
+}
+
+
+
 export const PrestadoresPage = () => {
+  
+  
   /*
     El menú arranca colapsado (solo íconos) para no robar ancho al formulario,
     pero el gatillo permite expandirlo si el usuario prefiere leer los títulos.
