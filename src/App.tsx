@@ -17,6 +17,7 @@ import {
 } from './components/snd'
 
 const Landing = lazy(() => import('./pages/Landing'))
+const LandingV2 = lazy(() => import('./pages/landing/HomePage'))
 const Login = lazy(() => import('./pages/Login'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 const PruebaFiel = lazy(() => import('./pages/PruebaFiel'))

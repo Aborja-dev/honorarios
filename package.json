@@ -20,6 +20,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@apollo/client": "^4.3.7",
     "@recharts/devtools": "^0.0.19",
     "chart.js": "^4.6.1",
     "lucide-react": "^1.61.0",
