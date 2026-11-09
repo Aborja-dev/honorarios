@@ -15,6 +15,7 @@ import {
   useNotificaciones,
   type UsuarioNavbar,
 } from './components/snd'
+import PadronPage from './pages/padron/Page'
 
 const Landing = lazy(() => import('./pages/Landing'))
 const LandingV2 = lazy(() => import('./pages/landing/HomePage'))
@@ -84,10 +85,10 @@ export default function App() {
           <Suspense fallback={<SndCargando />}>
             <Routes>
               {/* Pantalla principal del Módulo de Honorarios */}
-              <Route path="/" element={<Landing />} />
+              <Route path="/" element={<LandingV2 />} />
 
               {/* Submódulos administrativos de Honorarios */}
-              <Route path="/admin/padron" element={<PadronPrestadores />} />
+              <Route path="/admin/padron" element={<PadronPage />} />
               <Route path="/padron-prestadores-servicio" element={<PrestadoresPage />} />
               <Route path="/admin/contratos" element={<ContratosHonorarios />} />
               <Route path="/admin/modelo-contrato" element={<ModeloContrato />} />
