@@ -34,7 +34,7 @@ const OPCIONES_UR = [
 /**
  * Vista dedicada del submódulo "Padrón del prestador de servicios" (`pages/admin/PadronPrestadores.tsx`).
  */
-export function Padron() {
+export default function PadronPrestadores() {
   useTitulo('Padrón del Prestador de Servicios · Honorarios')
   const [busqueda, setBusqueda] = useState('')
   const [soloValidados, setSoloValidados] = useState(false)

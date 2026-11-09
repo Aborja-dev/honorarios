@@ -1,0 +1,435 @@
+/* =========================================================================
+   PADRÓN DE PRESTADORES: MENÚ DE SECCIONES AL LADO DEL FORMULARIO
+   El menú se coloca a la izquierda del formulario y se mantiene visible al
+   desplazarse (`sticky`).
+
+   IMPORTANTE: las clases `menuMain*` también las usa el menú lateral global
+   del SND (SndMenuLateral, en App.tsx). Por eso TODAS las reglas de este
+   archivo van acotadas con el prefijo `.prestadores-layout__menu`: así no
+   alteran el ancho ni la animación del menú lateral de otras pantallas.
+   ========================================================================= */
+
+.prestadores-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 4px;
+  box-sizing: border-box;
+  /* Ocupa todo el ancho disponible del <main> del SND (que es grid item). */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  /*
+    MODO DEFECTO (`VITE_SCROLL=off`): sin altura fija. El layout crece con el
+    formulario y el desplazamiento ocurre en la página (ventana), igual que en
+    el resto de pantallas del SND.
+    El modo con scroll interno vive en `.prestadores-layout--scroll-interno`
+    (más abajo), que se aplica solo cuando la bandera está activa.
+  */
+  height: auto;
+  overflow: visible;
+}
+
+/*
+  MODO SCROLL INTERNO (`VITE_SCROLL=on`, valor por defecto de la app):
+  altura fija al viewport, la página deja de desplazarse y el scroll ocurre
+  dentro del panel del formulario (`.prestadores-layout__contenido`).
+*/
+.prestadores-layout--scroll-interno {
+  height: calc(100vh - var(--snd-alto-encabezado, 100px));
+  overflow: hidden;
+}
+
+.prestadores-layout__menu {
+  flex: 0 0 auto;
+  /* Ancho explícito: sin él, el flex lo comprime a min-content y el menú se ve vacío. */
+  width: 16rem;
+  min-width: 16rem;
+  /*
+    Fijo a la ventana: el menú deja de participar en el flujo del flex, por eso
+    `.prestadores-layout__contenido` reserva el espacio con un margen a la
+    izquierda (más abajo). Se coloca donde estaba: a la izquierda del contenido.
+  */
+  position: fixed;
+  top: 35%;
+  right: 1%;
+  /* Anima el ancho al colapsar y extender; el menú interno siempre mide 100%. */
+  transition: width 220ms ease, min-width 220ms ease;
+  /*
+    Sin `overflow` aquí ni en la tarjeta: el gatillo está en `right: -14px` y
+    cualquier recorte lo cortaría. Al declarar `overflow-y`, el eje X deja de
+    ser `visible`, y eso producía la barra de scroll horizontal.
+  */
+}
+
+/*
+  El menú está fijo a la derecha de la ventana, así que el contenido no reserva
+  espacio por la izquierda; solo se le deja un margen derecho para que la tarjeta
+  del menú no quede encima del formulario en pantallas anchas.
+*/
+.prestadores-layout__contenido {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-left: 0;
+  margin-right: calc(4.5rem + 24px);
+  transition: margin-right 220ms ease;
+  /* Desplazamiento suave para ambos modos (panel o ventana). */
+  scroll-behavior: smooth;
+}
+
+/*
+  MODO SCROLL INTERNO (`VITE_SCROLL=on`): el panel tiene altura fija y el
+  desbordamiento del formulario se desplaza aquí y no en la página.
+  En el modo por defecto (`off`) el panel crece con el contenido y aquí no hay
+  scroll: el desplazamiento lo hace la ventana.
+*/
+.prestadores-layout--scroll-interno .prestadores-layout__contenido {
+  /* 100% de la altura fija del layout, menos su padding. */
+  height: calc(100% - 8px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* En modo page-scroll el panel nunca debe recortar su contenido. */
+.prestadores-layout:not(.prestadores-layout--scroll-interno) .prestadores-layout__contenido {
+  height: auto;
+  overflow: visible;
+}
+
+/*
+  MODO PAGE-SCROLL: el menú sigue fijo a la ventana —así se mantiene visible
+  mientras la página se desplaza— y se le da una altura máxima para que nunca
+  rebase el viewport con su propia barra.
+*/
+.prestadores-layout:not(.prestadores-layout--scroll-interno) .prestadores-layout__menu {
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.45) transparent;
+}
+.prestadores-layout:not(.prestadores-layout--scroll-interno) .prestadores-layout__menu .menuMain {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.45) transparent;
+}
+.prestadores-layout:has(.menuMain:not(.menuMain--colapsado)) .prestadores-layout__contenido {
+  margin-right: calc(16rem + 24px);
+}
+
+/*
+  Barra de desplazamiento del panel del formulario, acorde al estilo del menú:
+  pista clara, pulgar guinda y esquinas redondeadas. Se declaran las dos
+  sintaxis: `scrollbar-*` (Firefox) y `::-webkit-scrollbar` (Chrome, Edge,
+  Safari), que no se heredan entre sí. Solo aplican al modo scroll interno.
+*/
+.prestadores-layout--scroll-interno .prestadores-layout__contenido {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gama300, #c98ea3) transparent;
+}
+.prestadores-layout--scroll-interno .prestadores-layout__contenido::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.prestadores-layout--scroll-interno .prestadores-layout__contenido::-webkit-scrollbar-track {
+  background: transparent;
+}
+.prestadores-layout--scroll-interno .prestadores-layout__contenido::-webkit-scrollbar-thumb {
+  background: var(--gama300, #c98ea3);
+  border-radius: 9999px;
+  /* Deja aire entre el pulgar y los bordes de la pista. */
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.prestadores-layout__contenido::-webkit-scrollbar-thumb:hover {
+  background: var(--principal, #9B2247);
+  background-clip: padding-box;
+}
+/* El menú fijo tampoco muestra barra cuando su contenido no desborda. */
+.prestadores-layout__menu .menuMain {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gama300, #c98ea3) transparent;
+}
+.prestadores-layout__menu .menuMain::-webkit-scrollbar {
+  width: 8px;
+}
+.prestadores-layout__menu .menuMain::-webkit-scrollbar-track {
+  background: transparent;
+}
+.prestadores-layout__menu .menuMain::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* ---------- Tarjeta del menú ---------- */
+.prestadores-layout__menu .menuMain {
+  position: relative;
+  /* El ancho lo gobierna el aside; la tarjeta solo lo acompaña. */
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--neutro400, #dddddd);
+  box-sizing: border-box;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  /* Fondo oscuro del SND (mismo guinda que el menú lateral), declarado aquí para
+     no depender de lo que herede. El contenido usa texto claro. */
+  background: var(--principal, #9B2247);
+  color: #ffffff;
+  /*
+    Sin `overflow` en la tarjeta: el gatillo está en `right: -14px` y cualquier
+    recorte lo cortaría a la mitad. El menú de 5 secciones no desborda la
+    altura del viewport, así que no necesita scroll propio.
+  */
+}
+
+.prestadores-layout__menu .menuMain--colapsado {
+  width: 100%;
+}
+
+/* El ancho colapsado lo aplica el aside, que es quien reserva el espacio. */
+.prestadores-layout__menu:has(.menuMain--colapsado) {
+  width: 4.5rem;
+  min-width: 4.5rem;
+}
+
+/* ---------- Gatillo para colapsar ---------- */
+.prestadores-layout__menu .menuMain__gatillo {
+  position: absolute;
+  right: -14px;
+  top: 16px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  /*
+    Sobre el menú guinda, el gatillo va en guinda oscuro con la flecha blanca:
+    un círculo blanco aquí destacaba demasiado y competía con el menú.
+  */
+  background: var(--gama900, #611232);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 9999px;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease;
+}
+.prestadores-layout__menu .menuMain__gatillo:hover {
+  background: var(--principal, #9B2247);
+  border-color: #ffffff;
+  color: #ffffff;
+}
+.prestadores-layout__menu .menuMain__gatillo:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+.prestadores-layout__menu .menuMain__gatilloIco {
+  transition: transform 220ms ease;
+}
+.prestadores-layout__menu .menuMain--colapsado .menuMain__gatilloIco {
+  transform: rotate(180deg);
+}
+
+/* ---------- Encabezado ---------- */
+.prestadores-layout__menu .menuMain__header {
+  padding: 4px 8px 10px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--neutro300, #eeeeee);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.prestadores-layout__menu .menuMain__headerCont {
+  font-weight: 700;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.prestadores-layout__menu .menuMain--colapsado .menuMain__header {
+  display: none;
+}
+
+/* ---------- Lista de secciones ---------- */
+.prestadores-layout__menu .menuMain__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.prestadores-layout__menu .menuMain__item {
+  width: 100%;
+}
+
+.prestadores-layout__menu .menuMain__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  /* Sin esquinas redondeadas: el renglón es una franja de ancho completo. */
+  border-radius: 0;
+  /* Fondo explícito para que el hover no herede el del SND. */
+  background: transparent;
+  /* Sobre fondo guinda el texto va en blanco. */
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+/* Hover del renglón no activo: se aclara el fondo, el texto sigue blanco. */
+.prestadores-layout__menu .menuMain__link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+/* La descripción acompaña el color del texto para mantener el contraste. */
+.prestadores-layout__menu .menuMain__link:hover .menuMain__desc {
+  color: inherit;
+}
+.prestadores-layout__menu .menuMain__link:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: -2px;
+}
+.prestadores-layout__menu .menuMain__link--active {
+  background: var(--principal, hsl(342, 64%, 4.5rem));
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(155, 34, 71, 0.28);
+}
+.prestadores-layout__menu .menuMain__link--active:hover {
+  background: var(--gama800, #7a1b38);
+  color: #ffffff;
+}
+
+/*
+  La hoja del SND (snd-guinda.css, servida desde el CDN) decora `.menuMain__link`
+  con pseudo-elementos que no están en este proyecto: un filete blanco de 0.5rem
+  pegado al borde izquierdo del renglón activo. Se anula solo dentro de este menú
+  (`.prestadores-layout__menu`); el menú lateral del SND lo conserva porque queda
+  fuera de este prefijo.
+*/
+.prestadores-layout__menu .menuMain__link::before,
+.prestadores-layout__menu .menuMain__link::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  border: 0 !important;
+}
+
+/*
+  ---------- Renglón activo: mismo fondo que el menú lateral del SND ----------
+  El SND pinta el activo con `--gama400` (`--pguinda400` #BA6783 / `--pverde400`
+  #51807A): un guinda *más claro* que el fondo del menú (`--principal`, que es
+  `--pguinda900` #611232). Antes se usaba #9B2247 (`--pguinda600`), más oscuro,
+  y sobre el degradado guinda se perdía: eso era lo que parecía "borrarse".
+
+  Reglas del choque de especificidad:
+  - `--gama400` NO se declara en el repo; viene del CDN. Si la hoja del SND no
+    cargó, el literal cae al respaldo del guinda.
+  - `a:hover`, `a:active` y `a:visited` del SND tienen `!important` en el color y
+    se disparan al tocar el renglón, así que el color del activo también va con
+    `!important`; de lo contrario el texto cambiaba y parecía que el estilo
+    "desaparecía".
+  - Sin barra lateral: el filete blanco del SND queda anulado arriba y no se
+    añade un borde propio, a diferencia del menú lateral.
+  -------------------------------------------------------------------------- */
+.prestadores-layout__menu .menuMain__link.menuMain__link--active,
+.prestadores-layout__menu .menuMain__link[aria-current] {
+  background: var(--gama400, var(--principal, #9B2247)) !important;
+  color: #ffffff !important;
+  /* Sin filete lateral: se neutraliza por si una regla base lo hubiera puesto. */
+  box-shadow: none;
+  border-left: 0;
+}
+.prestadores-layout__menu .menuMain__link.menuMain__link--active:hover,
+.prestadores-layout__menu .menuMain__link.menuMain__link--active:active,
+.prestadores-layout__menu .menuMain__link[aria-current]:hover,
+.prestadores-layout__menu .menuMain__link[aria-current]:active {
+  background: var(--gama400, var(--principal, #9B2247)) !important;
+  color: #ffffff !important;
+}
+/* La descripción y el ícono heredan el blanco para mantener el contraste. */
+.prestadores-layout__menu .menuMain__link.menuMain__link--active .menuMain__desc,
+.prestadores-layout__menu .menuMain__link[aria-current] .menuMain__desc {
+  color: inherit;
+  opacity: 0.85;
+}
+
+.prestadores-layout__menu .menuMain__icono {
+  flex: none;
+  color: currentColor;
+}
+
+.prestadores-layout__menu .menuMain__txt {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.prestadores-layout__menu .menuMain__desc {
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.75;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- Punto de avance ---------- */
+.prestadores-layout__menu .menuMain__estado {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-left: auto;
+  border-radius: 9999px;
+  background: var(--neutro500, #a0a0a0);
+}
+.prestadores-layout__menu .menuMain__estado--ok {
+  background: var(--verde500, #2f8f46);
+}
+.prestadores-layout__menu .menuMain__link--active .menuMain__estado {
+  background: var(--neutro500, #a0a0a0);
+}
+
+/* ---------- Modo colapsado: solo íconos ---------- */
+.prestadores-layout__menu .menuMain--colapsado .menuMain__link {
+  justify-content: center;
+  padding: 10px 0;
+}
+.prestadores-layout__menu .menuMain--colapsado .menuMain__txt,
+.prestadores-layout__menu .menuMain--colapsado .menuMain__estado {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .prestadores-layout {
+    flex-direction: column;
+    padding: 16px;
+  }
+  /* En pantallas angostas el menú vuelve al flujo, arriba del formulario. */
+  .prestadores-layout__menu {
+    position: static;
+    left: auto;
+    width: 100%;
+    min-width: 0;
+    max-height: none;
+    overflow: visible;
+    /* Sin animación de ancho: aquí siempre ocupa la fila completa. */
+    transition: none;
+  }
+  .prestadores-layout__contenido,
+  .prestadores-layout:has(.menuMain--colapsado) .prestadores-layout__contenido {
+    margin-left: 0;
+  }
+  .prestadores-layout__menu .menuMain,
+  .prestadores-layout__menu .menuMain--colapsado {
+    width: 100%;
+  }
+  .prestadores-layout__menu:has(.menuMain--colapsado) {
+    width: 100%;
+    min-width: 0;
+  }
+  /* En pantallas angostas el menú está en el flujo: no necesita altura máxima
+     ni recorte en ninguno de los dos modos. */
+  .prestadores-layout:not(.prestadores-layout--scroll-interno) .prestadores-layout__menu {
+    max-height: none;
+    overflow: visible;
+  }
+}

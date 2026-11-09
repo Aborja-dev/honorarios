@@ -1,9 +1,8 @@
-import React from 'react'
-import { PadronPrestadores } from '../admin'
+import PadronPrestadores from './PadronPrestadores'
 
 const PadronPrestadoresPage = () => {
   return (
-    <PadronPrestadores/>
+    <PadronPrestadores />
   )
 }
 

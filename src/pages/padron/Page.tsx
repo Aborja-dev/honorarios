@@ -1,5 +1,4 @@
-import React from 'react'
-import { Padron } from './Padron'
+import Padron from './Padron'
 
 const PadronPage = () => {
     return (

@@ -17,22 +17,20 @@ import {
 } from './components/snd'
 import PadronPage from './pages/padron/Page'
 
-const Landing = lazy(() => import('./pages/Landing'))
-const LandingV2 = lazy(() => import('./pages/landing/HomePage'))
 const Login = lazy(() => import('./pages/Login'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 const PruebaFiel = lazy(() => import('./pages/PruebaFiel'))
-const ValidarIdentidad = lazy(() => import('./pages/ValidarIdentidad'))
 // Página de prueba de maquetas: fuera del menú, solo por URL.
 const TestExperiencia = lazy(() => import('./pages/TestExperiencia'))
 
-// Submódulos administrativos de Honorarios (pages/admin/)
-const PadronPrestadores = lazy(() => import('./pages/admin/PadronPrestadores'))
-const PrestadoresPage = lazy(() => import('./pages/PrestadoresPage'))
-const ContratosHonorarios = lazy(() => import('./pages/admin/ContratosHonorarios'))
-const ModeloContrato = lazy(() => import('./pages/admin/ModeloContrato'))
-const AltaModelosContratos = lazy(() => import('./pages/AltaModelosContratos'))
-const FormalizacionContratos = lazy(() => import('./pages/FormalizacionContratos'))
+// Submódulos administrativos de Honorarios (cada carpeta: Page.tsx + interfaz)
+const LandingV2 = lazy(() => import('./pages/landing/Page'))
+const PrestadoresPage = lazy(() => import('./pages/padron-prestadores/Page'))
+const ContratosHonorarios = lazy(() => import('./pages/contrato/Page'))
+const ModeloContrato = lazy(() => import('./pages/modelos/page'))
+const AltaModelosContratos = lazy(() => import('./pages/alta-modelos/Page'))
+const FormalizacionContratos = lazy(() => import('./pages/formalizacion-contrato/Page'))
+const ValidarIdentidad = lazy(() => import('./pages/validacion/Page'))
 
 // Vistas del prestador de servicios (pages/user/)
 const PortalPrestador = lazy(() => import('./pages/user/PortalPrestador'))
