@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import type { FormEvent } from 'react'
 import { Accordion, AccordionTab } from 'primereact/accordion'
 import { Calendar } from 'primereact/calendar'
 import { Dropdown } from 'primereact/dropdown'
@@ -6,18 +6,17 @@ import { InputText } from 'primereact/inputtext'
 import {
   ModalCargaMasiva,
   SndBoton,
-  SndBotonEnlace,
   SndIcono,
   SndMensaje,
   useNotificaciones,
 } from '../../components'
 import '../../components/honorarios/Honorarios.css'
 import { useTitulo } from '../../hooks'
-import { UNIDADES_ADMINISTRATIVAS } from '../../services'
 import MenuFlotante, { type ItemMenuFlotante } from '../../components/MenuFlotante'
 import { BotonHome } from './BotonHome'
 import '../PadronPrestadoresServicio.css'
 import '../PrestadoresPage.css'
+import './style.css'
 const SECCIONES: ItemMenuFlotante[] = [
   {
     texto: 'Validación de CURP',
@@ -55,454 +54,136 @@ const SECCIONES: ItemMenuFlotante[] = [
     tooltip: '5. Experiencia laboral',
   },
 ]
-const OPCIONES_TIPO_MODELO = [
-  { label: 'Honorarios Capítulo 1000 (Persona Física)', value: 'CAP_1000' },
-  { label: 'Honorarios Asimilados a Salarios (Art. 94 LISR)', value: 'ASIMILADOS' },
-  { label: 'Servicios Profesionales Capítulo 3000', value: 'CAP_3000' },
-  { label: 'Prestación de Servicios por Obra Determinada', value: 'OBRA_DETERMINADA' },
-  { label: 'Convenio Modificatorio de Monto / Plazo', value: 'CONVENIO_MODIFICATORIO' },
-]
+import { usePageContext } from './context'
+import { useForm, aMayusculas, comoFecha, soloDigitos } from './useForm'
+import {
+  DATOS_INICIALES,
+  ACTIVIDADES_INICIALES,
+  ENTREGABLES_INICIALES,
+  ESCOLARIDAD_INICIALES,
+  EXPERIENCIA_INICIALES,
+} from './data'
+import { FormValidators } from './validations'
+import {
+  OPCIONES_AREA_ESPECIFICA,
+  OPCIONES_ESTATUS_ESTUDIOS,
+  OPCIONES_FORMATO_ENTREGA,
+  OPCIONES_IMPACTO,
+  OPCIONES_MODALIDAD,
+  OPCIONES_NIVEL_ESTUDIOS,
+  OPCIONES_PERIODICIDAD_ACTIVIDAD,
+  OPCIONES_SECTOR_LABORAL,
+  OPCIONES_TIPO_ENTREGABLE,
+} from './data'
 
-const OPCIONES_PARTIDA = [
-  { label: '12101 - Honorarios', value: '12101' },
-  { label: '33101 - Asesorías asociadas a convenios o tratados', value: '33101' },
-  { label: '33901 - Subcontratación de servicios con terceros', value: '33901' },
-]
+// ---------------------------------------------------------------------------
+// Formas y validaciones: viven en `data.ts` (valores iniciales) y
+// `validations.ts` (reglas + avisos). Aquí solo se instancian en `useForm`.
+// ---------------------------------------------------------------------------
 
-const OPCIONES_PERIODICIDAD_PAGO = [
-  { label: 'Mensual (mes vencido)', value: 'MENSUAL' },
-  { label: 'Quincenal', value: 'QUINCENAL' },
-  { label: 'Contra entrega de producto dictaminado', value: 'CONTRA_ENTREGABLE' },
-]
-
-const OPCIONES_MODALIDAD = [
-  { label: 'Presencial en sede institucional', value: 'PRESENCIAL' },
-  { label: 'Híbrida (presencial y remota)', value: 'HIBRIDA' },
-  { label: 'A distancia / Remota', value: 'REMOTA' },
-]
-
-const OPCIONES_PERIODICIDAD_ACTIVIDAD = [
-  { label: 'Mensual', value: 'MENSUAL' },
-  { label: 'Quincenal', value: 'QUINCENAL' },
-  { label: 'Bimestral', value: 'BIMESTRAL' },
-  { label: 'Trimestral', value: 'TRIMESTRAL' },
-  { label: 'Permanente durante la vigencia', value: 'PERMANENTE' },
-]
-
-const OPCIONES_NIVEL_HOMOLOGACION = [
-  { label: 'Enlace / Operativo Especializado', value: 'ENLACE' },
-  { label: 'Jefe de Departamento Homologado', value: 'JEFE_DEPTO' },
-  { label: 'Subdirección de Área Homologada', value: 'SUBDIRECCION' },
-  { label: 'Dirección de Área / Especialista Senior', value: 'DIRECCION' },
-  { label: 'Asesoría Técnica / Jurídica Especializada', value: 'ASESORIA' },
-]
-
-const OPCIONES_TIPO_ENTREGABLE = [
-  { label: 'Informe mensual de actividades firmado', value: 'INFORME_MENSUAL' },
-  { label: 'Dictamen técnico o jurídico', value: 'DICTAMEN' },
-  { label: 'Expediente documental integrado', value: 'EXPEDIENTE' },
-  { label: 'Base de datos / Reporte estadístico', value: 'BASE_DATOS' },
-  { label: 'Manual, guía o proyecto normativo', value: 'DOCUMENTO_NORMATIVO' },
-]
-
-const OPCIONES_FORMATO_ENTREGA = [
-  { label: 'Digital PDF firmado con e.firma (FIEL)', value: 'PDF_EFIRMA' },
-  { label: 'Impreso con firma autógrafa y respaldo digital', value: 'IMPRESO_DIGITAL' },
-  { label: 'Carga en repositorio institucional SABG', value: 'REPOSITORIO' },
-]
-
-const OPCIONES_IMPACTO = [
-  { label: 'D1', value: '1' },
-  { label: 'I2', value: '2' },
-  { label: 'C3', value: '3' },
-]
-
-const OPCIONES_NIVEL_ESTUDIOS = [
-  { label: 'Bachillerato / Equivalente', value: 'BACHILLERATO' },
-  { label: 'Técnico Superior Universitario', value: 'TSU' },
-  { label: 'Licenciatura / Ingeniería', value: 'LICENCIATURA' },
-  { label: 'Especialidad', value: 'ESPECIALIDAD' },
-  { label: 'Maestría', value: 'MAESTRIA' },
-  { label: 'Doctorado', value: 'DOCTORADO' },
-]
-
-const OPCIONES_ESTATUS_ESTUDIOS = [
-  { label: 'Titulado(a) con Cédula', value: 'TITULADO' },
-  { label: 'En trámite de titulación', value: 'TRAMITE' },
-  { label: 'Pasante / Carta de pasante', value: 'PASANTE' },
-  { label: 'Certificado total de estudios', value: 'CERTIFICADO' },
-]
-
-const OPCIONES_DOCUMENTO_ACADEMICO = [
-  { label: 'Cédula Profesional Electrónica', value: 'CEDULA' },
-  { label: 'Título Profesional', value: 'TITULO' },
-  { label: 'Acta de Examen Profesional', value: 'ACTA' },
-  { label: 'Constancia Oficial de Estudios', value: 'CONSTANCIA' },
-]
-
-const OPCIONES_SECTOR_LABORAL = [
-  { label: 'Sector Público Federal (APF)', value: 'PUBLICO_FEDERAL' },
-  { label: 'Sector Público Estatal / Municipal', value: 'PUBLICO_LOCAL' },
-  { label: 'Sector Privado', value: 'PRIVADO' },
-  { label: 'Académico / Investigación', value: 'ACADEMICO' },
-  { label: 'Organismo Autónomo / Social', value: 'AUTONOMO' },
-]
-
-const OPCIONES_AREA_ESPECIFICA = [
-  { label: 'Jurídico, Normatividad y Contratos', value: 'JURIDICO' },
-  { label: 'Administración, Presupuesto y Finanzas', value: 'FINANZAS' },
-  { label: 'Recursos Humanos y Servicio Profesional', value: 'RECURSOS_HUMANOS' },
-  { label: 'Tecnologías de la Información y Sistemas', value: 'TI' },
-  { label: 'Auditoría, Fiscalización y Control Interno', value: 'AUDITORIA' },
-  { label: 'Contrataciones Públicas y Adquisiciones', value: 'CONTRATACIONES' },
-]
-
-const ESTILOS_ACORDEON_MODELO = `
-  .padron-form-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px 20px;
-  }
-  .padron-form-grid__col-2 {
-    grid-column: span 2;
-  }
-  .padron-form-grid__col-3 {
-    grid-column: 1 / -1;
-  }
-  .padron-acordeon .p-accordion-tab {
-    margin-bottom: 14px;
-    border-radius: 16px;
-    border: 1px solid var(--neutro400, #dddddd);
-    background: var(--neutro100, #ffffff);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-    overflow: hidden;
-  }
-  .padron-acordeon .p-accordion-header .p-accordion-header-link {
-    padding: 18px 22px;
-    background: var(--neutro200, #f9f9f9);
-    color: var(--neutro800, #222222);
-    border: 0;
-    border-radius: 0;
-    transition: background-color 150ms ease, color 150ms ease;
-    text-decoration: none;
-  }
-  .padron-acordeon .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link {
-    background: var(--gama100, #f9ebf0);
-    color: var(--gama900, #611232);
-    border-bottom: 1px solid var(--gama300, var(--neutro400));
-  }
-  .padron-acordeon .p-accordion-header:not(.p-disabled) .p-accordion-header-link:hover {
-    background: var(--gama100, #f9ebf0);
-    color: var(--principal, #9B2247);
-  }
-  .padron-acordeon .p-accordion-header:not(.p-disabled) .p-accordion-header-link:focus-visible {
-    box-shadow: inset 0 0 0 2px var(--principal, #9B2247);
-    outline: none;
-  }
-  .padron-acordeon .p-accordion-content {
-    padding: 22px 24px;
-    background: var(--neutro100, #ffffff);
-    border: 0;
-  }
-  .padron-acordeon__cabecera {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    width: 100%;
-    flex-wrap: wrap;
-  }
-  .padron-acordeon__titulo-grupo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .padron-acordeon__icono {
-    display: inline-grid;
-    place-items: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    background: var(--principal, #9B2247);
-    color: #ffffff;
-    flex: none;
-  }
-  .padron-textarea {
-    width: 100%;
-    min-height: 92px;
-    padding: 10px 12px;
-    font-family: inherit;
-    font-size: 1rem;
-    border: 1px solid var(--neutro600, #767676);
-    border-radius: 8px;
-    color: var(--neutro800, #222222);
-    background: var(--neutro100, #ffffff);
-    resize: vertical;
-  }
-  .padron-textarea:focus {
-    border-color: var(--principal, #9B2247);
-    outline: none;
-  }
-  .padron-textarea--invalido {
-    border-color: var(--rojo500, #9B0F15);
-    box-shadow: 0 0 0 1px var(--rojo500, #9B0F15);
-  }
-  @media (max-width: 960px) {
-    .padron-form-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .padron-form-grid__col-2 {
-      grid-column: 1 / -1;
-    }
-  }
-  @media (max-width: 640px) {
-    .padron-form-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-`
-
-const UIState = {
-  tabs: [
-    {
-      id: 1,
-      collapse: false,
-      complete: false,
-
-    },
-    {
-      id: 2,
-      collapse: false,
-      complete: false,
-
-    },
-    {
-      id: 3,
-      collapse: false,
-      complete: false,
-
-    },
-    {
-      id: 4,
-      collapse: false,
-      complete: false,
-
-    },
-    {
-      id: 5,
-      collapse: false,
-      complete: false,
-
-    },
-  ],
-  openModal: false,
-  modal: "carga masiva",
-  allowed: {
-    save: false,
-  }
-}
-
-
-const events = (state: typeof UIState) => ({
-  expandirTodo: (): typeof UIState => ({
-    ...state,
-    tabs: state.tabs.map((t) => ({ ...t, collapse: false })),
-  }),
-  colapsarTodo: (): typeof UIState => ({
-    ...state,
-    tabs: state.tabs.map((t) => ({ ...t, collapse: true })),
-  }),
-  abrirTab: (id: number): typeof UIState => ({
-    ...state,
-    tabs: state.tabs.map((t) => (t.id === id ? { ...t, collapse: false } : t)),
-  }),
-  abrirModal: (): typeof UIState => ({
-    ...state,
-    openModal: true
-  }),
-  guardar: (): typeof UIState => ({
-    ...state,
-    allowed: { ...state.allowed, save: true }
-  }),
-  limpiar: (): typeof UIState => ({
-    ...state,
-  }),
-})
-
-
-
-export default function AltaModelosContratos() {
+export default function AltaModelosContratos({ initialValues = DATOS_INICIALES }: { initialValues?: typeof DATOS_INICIALES }) {
   useTitulo('Alta de Modelos de Contratos · Módulo de Honorarios')
   const notificar = useNotificaciones()
-  const [uiState, setUIState] = useState(UIState)
-  // Control de pestañas abiertas en el acordeón (permite abrir una o varias secciones)
-  const [acordeonesActivos, setAcordeonesActivos] = useState<number | number[]>([0])
-  const [intentoEnvio, setIntentoEnvio] = useState(false)
-  const [folioGenerado, setFolioGenerado] = useState<string | null>(null)
-  const [modalCargaMasivaAbierto, setModalCargaMasivaAbierto] = useState(false)
+  const {
+    state,
+    // Valores calculados / derivados que entrega el contexto
+    acordeonesActivos,
+    completed,
+    intentoEnvio,
+    folioGenerado,
+    modalAbierto,
+    // Acciones de la página
+    expandirTodo,
+    colapsarTodo,
+    handleCambiarAcordeon,
+    abrirModal,
+    cerrarModal,
+    reiniciar,
+    avanzar,
+    abrirPendientes,
+  } = usePageContext()
 
-  // 1. Estado: Datos Contrato
-  const [claveModelo, setClaveModelo] = useState('')
-  const [nombreModelo, setNombreModelo] = useState('')
-  const [tipoContrato, setTipoContrato] = useState<string | null>('CAP_1000')
-  const [unidadAdministrativa, setUnidadAdministrativa] = useState<string | null>(
-    UNIDADES_ADMINISTRATIVAS[0],
-  )
-  const [partidaPresupuestal, setPartidaPresupuestal] = useState<string | null>('12101')
-  const [montoBrutoMensual, setMontoBrutoMensual] = useState('')
-  const [periodicidadPago, setPeriodicidadPago] = useState<string | null>('MENSUAL')
-  const [fechaInicioVigencia, setFechaInicioVigencia] = useState<Date | null>(null)
-  const [fechaFinVigencia, setFechaFinVigencia] = useState<Date | null>(null)
-  const [oficioDictamen, setOficioDictamen] = useState('')
-  const [objetoContrato, setObjetoContrato] = useState('')
+  // 1. Datos Contrato
+  const contratoForm = useForm({
+    initialValues: initialValues,
+    ...FormValidators.contrato,
+    guardar: () => {
+      avanzar(0)
+    },
+    notificar,
+  })
 
-  // 2. Estado: Actividades
-  const [claveActividad, setClaveActividad] = useState('')
-  const [funcionPrincipal, setFuncionPrincipal] = useState('')
-  const [periodicidadActividad, setPeriodicidadActividad] = useState<string | null>('MENSUAL')
-  const [modalidadServicio, setModalidadServicio] = useState<string | null>('PRESENCIAL')
-  const [nivelHomologacion, setNivelHomologacion] = useState<string | null>('SUBDIRECCION')
-  const [areaSupervisora, setAreaSupervisora] = useState('')
-  const [descripcionActividades, setDescripcionActividades] = useState('')
+  // 2. Actividades
+  const actividadesForm = useForm({
+    initialValues: ACTIVIDADES_INICIALES,
+    ...FormValidators.actividades,
+    guardar: () => {
+      avanzar(1)
+    },
+    notificar,
+  })
 
-  // 3. Estado: Entregables
-  const [nombreEntregable, setNombreEntregable] = useState('')
-  const [tipoEntregable, setTipoEntregable] = useState<string | null>('INFORME_MENSUAL')
-  const [periodicidadEntregable, setPeriodicidadEntregable] = useState<string | null>('MENSUAL')
-  const [formatoEntrega, setFormatoEntrega] = useState<string | null>('PDF_EFIRMA')
-  const [diaCorteEntrega, setDiaCorteEntrega] = useState('')
-  const [cargoReceptor, setCargoReceptor] = useState('')
-  const [criteriosAceptacion, setCriteriosAceptacion] = useState('')
+  // 3. Entregables
+  const entregablesForm = useForm({
+    initialValues: ENTREGABLES_INICIALES,
+    ...FormValidators.entregables,
+    guardar: () => {
+      avanzar(2)
+    },
+    notificar,
+  })
 
-  // 4. Estado: Escolaridad
-  const [nivelEstudios, setNivelEstudios] = useState<string | null>('LICENCIATURA')
-  const [carreraRequerida, setCarreraRequerida] = useState('')
-  const [estatusEstudios, setEstatusEstudios] = useState<string | null>('TITULADO')
-  const [documentoComprobatorio, setDocumentoComprobatorio] = useState<string | null>('CEDULA')
-  const [numeroCertificado, setNumeroCertificado] = useState('')
+  // 4. Escolaridad
+  const escolaridadForm = useForm({
+    initialValues: ESCOLARIDAD_INICIALES,
+    ...FormValidators.escolaridad,
+    guardar: () => {
+      avanzar(3)
+    },
+    notificar,
+  })
 
-  // 5. Estado: Experiencia Laboral
-  const [areaGeneralExperiencia, setAreaGeneralExperiencia] = useState<string | null>('PUBLICO_FEDERAL')
-  const [areaEspecificaExperiencia, setAreaEspecificaExperiencia] = useState<string | null>('JURIDICO')
-  const [aniosExperiencia, setAniosExperiencia] = useState('')
-  const [comentariosExperiencia, setComentariosExperiencia] = useState('')
+  // 5. Experiencia Laboral
+  const experienciaForm = useForm({
+    initialValues: EXPERIENCIA_INICIALES,
+    ...FormValidators.experiencia,
+    guardar: () => {
+      avanzar(4)
+    },
+    notificar,
+  })
 
-  // Validaciones por cada una de las 5 secciones
-  const seccionDatosContratoCompleta = Boolean(
-    claveModelo.trim() &&
-    nombreModelo.trim() &&
-    tipoContrato &&
-    unidadAdministrativa &&
-    partidaPresupuestal &&
-    montoBrutoMensual.trim() &&
-    fechaInicioVigencia &&
-    fechaFinVigencia &&
-    objetoContrato.trim(),
-  )
+  // Valores del formulario desestructurados para el JSX
+  const datos = contratoForm.valores
+  const actividades = actividadesForm.valores
+  const entregables = entregablesForm.valores
+  const escolaridad = escolaridadForm.valores
+  const experiencia = experienciaForm.valores
 
-  const seccionActividadesCompleta = Boolean(
-    funcionPrincipal.trim() &&
-    periodicidadActividad &&
-    areaSupervisora.trim() &&
-    descripcionActividades.trim(),
-  )
+  const { cambiarTexto, crearCambioValor } = contratoForm
 
-  const seccionEntregablesCompleta = Boolean(
-    nombreEntregable.trim() &&
-    tipoEntregable &&
-    periodicidadEntregable &&
-    diaCorteEntrega.trim() &&
-    cargoReceptor.trim() &&
-    criteriosAceptacion.trim(),
-  )
-
-  const seccionEscolaridadCompleta = Boolean(
-    nivelEstudios && carreraRequerida.trim() && estatusEstudios,
-  )
-
-  const seccionExperienciaCompleta = Boolean(
-    areaGeneralExperiencia &&
-    areaEspecificaExperiencia &&
-    aniosExperiencia.trim() &&
-    comentariosExperiencia.trim(),
-  )
-
-  const totalSeccionesCompletas = [
-    seccionDatosContratoCompleta,
-    seccionActividadesCompleta,
-    seccionEntregablesCompleta,
-    seccionEscolaridadCompleta,
-    seccionExperienciaCompleta,
-  ].filter(Boolean).length
-
-  const expandirTodo = () => setUIState(events(uiState).expandirTodo())
-  const colapsarTodo = () => setAcordeonesActivos([])
-
-
-  const limpiarFormulario = () => {
-    setClaveModelo('')
-    setNombreModelo('')
-    setTipoContrato('CAP_1000')
-    setUnidadAdministrativa(UNIDADES_ADMINISTRATIVAS[0])
-    setPartidaPresupuestal('12101')
-    setMontoBrutoMensual('')
-    setPeriodicidadPago('MENSUAL')
-    setFechaInicioVigencia(null)
-    setFechaFinVigencia(null)
-    setOficioDictamen('')
-    setObjetoContrato('')
-
-    setClaveActividad('')
-    setFuncionPrincipal('')
-    setPeriodicidadActividad('MENSUAL')
-    setModalidadServicio('PRESENCIAL')
-    setNivelHomologacion('SUBDIRECCION')
-    setAreaSupervisora('')
-    setDescripcionActividades('')
-
-    setNombreEntregable('')
-    setTipoEntregable('INFORME_MENSUAL')
-    setPeriodicidadEntregable('MENSUAL')
-    setFormatoEntrega('PDF_EFIRMA')
-    setDiaCorteEntrega('')
-    setCargoReceptor('')
-    setCriteriosAceptacion('')
-
-    setNivelEstudios('LICENCIATURA')
-    setCarreraRequerida('')
-    setEstatusEstudios('TITULADO')
-    setDocumentoComprobatorio('CEDULA')
-    setNumeroCertificado('')
-
-    setAreaGeneralExperiencia('PUBLICO_FEDERAL')
-    setAreaEspecificaExperiencia('JURIDICO')
-    setAniosExperiencia('')
-    setComentariosExperiencia('')
-
-    setIntentoEnvio(false)
-    setFolioGenerado(null)
-    setAcordeonesActivos([0])
-    notificar.info('Formulario reiniciado correctamente.')
-  }
+  // Validaciones por sección (fuente única: `validations.ts`)
+  const seccionDatosContratoCompleta = FormValidators.contrato.validar(datos)
+  const seccionActividadesCompleta = FormValidators.actividades.validar(actividades)
+  const seccionEntregablesCompleta = FormValidators.entregables.validar(entregables)
+  const seccionEscolaridadCompleta = FormValidators.escolaridad.validar(escolaridad)
+  const seccionExperienciaCompleta = FormValidators.experiencia.validar(experiencia)
 
   const guardarModeloContrato = (e: FormEvent) => {
     e.preventDefault()
-    setIntentoEnvio(true)
+    const seccionesIncompletas = [
+      seccionDatosContratoCompleta,
+      seccionActividadesCompleta,
+      seccionEntregablesCompleta,
+      seccionEscolaridadCompleta,
+      seccionExperienciaCompleta,
+    ]
 
-    if (
-      !seccionDatosContratoCompleta ||
-      !seccionActividadesCompleta ||
-      !seccionEntregablesCompleta ||
-      !seccionEscolaridadCompleta ||
-      !seccionExperienciaCompleta
-    ) {
-      const pendientes: number[] = []
-      if (!seccionDatosContratoCompleta) pendientes.push(0)
-      if (!seccionActividadesCompleta) pendientes.push(1)
-      if (!seccionEntregablesCompleta) pendientes.push(2)
-      if (!seccionEscolaridadCompleta) pendientes.push(3)
-      if (!seccionExperienciaCompleta) pendientes.push(4)
-      setAcordeonesActivos(pendientes)
+    if (seccionesIncompletas.some((completa) => !completa)) {
+      const pendientes = seccionesIncompletas
+        .map((completa, index) => (completa ? -1 : index))
+        .filter((index) => index !== -1)
+      abrirPendientes(pendientes)
       notificar.error(
         'Por favor completa los campos obligatorios marcados con asterisco (*) en las cinco secciones.',
         'Campos pendientes',
@@ -511,16 +192,47 @@ export default function AltaModelosContratos() {
     }
 
     const nuevoFolio = `MOD-HON-2026-${Math.floor(1000 + Math.random() * 9000)}`
-    setFolioGenerado(nuevoFolio)
+    // Avanzar desde el último índice cierra y completa todas las secciones
+    avanzar(state.tabs.length, nuevoFolio)
     notificar.exito(
-      `El modelo de contrato "${nombreModelo}" fue registrado con el folio ${nuevoFolio}.`,
+      `El modelo de contrato "${datos.nombreModelo}" fue registrado con el folio ${nuevoFolio}.`,
       'Alta de Modelo Exitosa',
     )
   }
-  const colapsarHandler = () => {}
+
+  // ---------------------------------------------------------------------------
+  // Handlers de eventos de la interfaz
+  // ---------------------------------------------------------------------------
+
+  const handleSubmitFormulario = (e: FormEvent<HTMLFormElement>) => guardarModeloContrato(e)
+  const handleColapsarMenu = () => colapsarTodo()
+  const handleAbrirCargaMasiva = () => abrirModal()
+  const handleCerrarCargaMasiva = () => cerrarModal()
+  const handleOmitir = () => {
+    reiniciar()
+    contratoForm.limpiarFormulario()
+    actividadesForm.limpiarFormulario()
+    entregablesForm.limpiarFormulario()
+    escolaridadForm.limpiarFormulario()
+    experienciaForm.limpiarFormulario()
+    notificar.info('Se borraron las secciones de escolaridad y experiencia laboral.')
+  }
+
+  // Sección 1: Datos Contrato (los cambios los resuelve `cambiarTexto`/`crearCambioValor`)
+  const handleGuardarDatosContrato = () => contratoForm.guardarFormulario()
+
+  // Sección 2: Actividades
+  const handleGuardarActividades = () => actividadesForm.guardarFormulario()
+  // Sección 3: Entregables (el guardar es genérico, reutiliza `cambiarTexto`)
+  const handleGuardarEntregables = () => entregablesForm.guardarFormulario()
+  // Sección 4: Escolaridad
+  const handleGuardarEscolaridad = () => escolaridadForm.guardarFormulario()
+  // Sección 5: Experiencia Laboral
+  const handleGuardarExperienciaLaboral = () => experienciaForm.guardarFormulario()
+  
+
   return (
     <>
-
       <aside
         className="prestadores-layout__menu"
       >
@@ -529,14 +241,12 @@ export default function AltaModelosContratos() {
           items={SECCIONES}
           activa={""}
           colapsado={true}
-          onColapsar={() => { }}
+          onColapsar={handleColapsarMenu}
         />
       </aside>
       <div className="prestadores-layout">
         <div className="prestadores-layout__contenido">
           <div className="contenedor">
-            <style>{ESTILOS_ACORDEON_MODELO}</style>
-
             {/* ENCABEZADO INSTITUCIONAL DE LA PANTALLA */}
             <div className="honorarios-encabezado-seccion">
               <div>
@@ -557,9 +267,9 @@ export default function AltaModelosContratos() {
               <div className="honorarios-detalle-barra">
                 <div className="fila">
                   <span className="b1sb color--principal">Avance de captura:</span>
-                  <span className={`pildora pildora--${totalSeccionesCompletas === 5 ? 'exito' : 'info'} snd-pildora`}>
+                  <span className={`pildora pildora--${completed === 5 ? 'exito' : 'info'} snd-pildora`}>
                     <span className="pildora__dot" aria-hidden="true" />
-                    {totalSeccionesCompletas} de 5 secciones completas
+                    {completed} de 5 secciones completas
                   </span>
                   {folioGenerado && (
                     <span className="pildora pildora--exito snd-pildora">
@@ -573,7 +283,7 @@ export default function AltaModelosContratos() {
                   <SndBoton
                     variante="secundario"
                     type="button"
-                    onClick={() => setModalCargaMasivaAbierto(true)}
+                    onClick={handleAbrirCargaMasiva}
                   >
                     <SndIcono nombre="snd-document" tamano={18} />
                     Carga masiva
@@ -594,7 +304,7 @@ export default function AltaModelosContratos() {
                   <p>
                     <strong>El Modelo de Contrato ({folioGenerado}) ha sido guardado correctamente.</strong> Los datos del
                     contrato, actividades, entregables, escolaridad y experiencia laboral de{' '}
-                    <strong>{nombreModelo}</strong> han quedado registrados y listos para su uso en la formalización de
+                    <strong>{datos.nombreModelo}</strong> han quedado registrados y listos para su uso en la formalización de
                     contratos.
                   </p>
                 </SndMensaje>
@@ -602,11 +312,11 @@ export default function AltaModelosContratos() {
             )}
 
             {/* FORMULARIO CON LOS CINCO ACORDEONES */}
-            <form onSubmit={guardarModeloContrato} noValidate style={{ marginTop: 20 }}>
+            <form onSubmit={handleSubmitFormulario} noValidate style={{ marginTop: 20 }}>
               <Accordion
                 multiple
                 activeIndex={acordeonesActivos}
-                onTabChange={(e) => setAcordeonesActivos(e.index)}
+                onTabChange={handleCambiarAcordeon}
                 className="padron-acordeon"
               >
                 {/* =====================================================================
@@ -629,9 +339,9 @@ export default function AltaModelosContratos() {
                           </span>
                         </div>
                       </div>
-                      <span className={`pildora pildora--${seccionDatosContratoCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                      <span className={`pildora pildora--${state.tabs[0].complete ? 'exito' : 'alerta'} snd-pildora`}>
                         <span className="pildora__dot" aria-hidden="true" />
-                        {seccionDatosContratoCompleta ? 'Completado' : 'Por capturar'}
+                        {state.tabs[0].complete ? 'Completado' : 'Por capturar'}
                       </span>
                     </div>
                   }
@@ -643,12 +353,12 @@ export default function AltaModelosContratos() {
                       </label>
                       <InputText
                         id="dc-clave"
-                        value={claveModelo}
-                        invalid={intentoEnvio && !claveModelo.trim()}
-                        onChange={(e) => setClaveModelo(e.target.value.toUpperCase())}
+                        value={datos.claveModelo}
+                        invalid={intentoEnvio && !datos.claveModelo.trim()}
+                        onChange={cambiarTexto('claveModelo', aMayusculas)}
                         placeholder="Ej. 000000001"
                       />
-                      {intentoEnvio && !claveModelo.trim() && (
+                      {intentoEnvio && !datos.claveModelo.trim() && (
                         <span className="campo__error">La clave del modelo es obligatoria.</span>
                       )}
                     </div>
@@ -659,22 +369,15 @@ export default function AltaModelosContratos() {
                       </label>
                       <InputText
                         id="dc-nombre"
-                        value={nombreModelo}
-                        invalid={intentoEnvio && !nombreModelo.trim()}
-                        onChange={(e) => setNombreModelo(e.target.value)}
+                        value={datos.nombreModelo}
+                        invalid={intentoEnvio && !datos.nombreModelo.trim()}
+                        onChange={cambiarTexto('nombreModelo')}
                         placeholder="Ej. Modelo Estándar Capítulo 1000 (Persona Física)"
                       />
-                      {intentoEnvio && !nombreModelo.trim() && (
+                      {intentoEnvio && !datos.nombreModelo.trim() && (
                         <span className="campo__error">El nombre del modelo de contrato es obligatorio.</span>
                       )}
                     </div>
-
-
-
-
-
-
-
 
                     <div className="campo">
                       <label htmlFor="dc-oficio" className="b1sb">
@@ -682,8 +385,8 @@ export default function AltaModelosContratos() {
                       </label>
                       <InputText
                         id="dc-oficio"
-                        value={oficioDictamen}
-                        onChange={(e) => setOficioDictamen(e.target.value)}
+                        value={datos.oficioDictamen}
+                        onChange={cambiarTexto('oficioDictamen')}
                         placeholder="Ej. Proyecto para servicios profesionales"
                       />
                     </div>
@@ -694,15 +397,15 @@ export default function AltaModelosContratos() {
                       </label>
                       <Calendar
                         inputId="dc-fecha-inicio"
-                        value={fechaInicioVigencia}
-                        invalid={intentoEnvio && !fechaInicioVigencia}
-                        onChange={(e) => setFechaInicioVigencia((e.value as Date | null) ?? null)}
+                        value={datos.fechaInicioVigencia}
+                        invalid={intentoEnvio && !datos.fechaInicioVigencia}
+                        onChange={crearCambioValor('fechaInicioVigencia', comoFecha)}
                         dateFormat="dd/mm/yy"
                         placeholder="dd/mm/aaaa"
                         showIcon
                         appendTo="self"
                       />
-                      {intentoEnvio && !fechaInicioVigencia && (
+                      {intentoEnvio && !datos.fechaInicioVigencia && (
                         <span className="campo__error">Selecciona la fecha de inicio de vigencia.</span>
                       )}
                     </div>
@@ -713,15 +416,15 @@ export default function AltaModelosContratos() {
                       </label>
                       <Calendar
                         inputId="dc-fecha-fin"
-                        value={fechaFinVigencia}
-                        invalid={intentoEnvio && !fechaFinVigencia}
-                        onChange={(e) => setFechaFinVigencia((e.value as Date | null) ?? null)}
+                        value={datos.fechaFinVigencia}
+                        invalid={intentoEnvio && !datos.fechaFinVigencia}
+                        onChange={crearCambioValor('fechaFinVigencia', comoFecha)}
                         dateFormat="dd/mm/yy"
                         placeholder="dd/mm/aaaa"
                         showIcon
                         appendTo="self"
                       />
-                      {intentoEnvio && !fechaFinVigencia && (
+                      {intentoEnvio && !datos.fechaFinVigencia && (
                         <span className="campo__error">Selecciona la fecha de término de vigencia.</span>
                       )}
                     </div>
@@ -732,12 +435,12 @@ export default function AltaModelosContratos() {
                       </label>
                       <textarea
                         id="dc-objeto"
-                        className={`padron-textarea ${intentoEnvio && !objetoContrato.trim() ? 'padron-textarea--invalido' : ''}`}
-                        value={objetoContrato}
-                        onChange={(e) => setObjetoContrato(e.target.value)}
+                        className={`padron-textarea ${intentoEnvio && !datos.objetoContrato.trim() ? 'padron-textarea--invalido' : ''}`}
+                        value={datos.objetoContrato}
+                        onChange={cambiarTexto('objetoContrato')}
                         placeholder="Comentario adiciónal al modelo de contrato..."
                       />
-                      {intentoEnvio && !objetoContrato.trim() && (
+                      {intentoEnvio && !datos.objetoContrato.trim() && (
                         <span className="campo__error">El objeto del contrato es obligatorio.</span>
                       )}
                     </div>
@@ -746,15 +449,7 @@ export default function AltaModelosContratos() {
                   <SndBoton
                     type="button"
                     style={{ marginTop: '1rem' }}
-                    onClick={() => {
-                      setIntentoEnvio(true)
-                      if (seccionDatosContratoCompleta) {
-                        setAcordeonesActivos([1])
-                        notificar.exito('Datos del contrato guardados correctamente.')
-                      } else {
-                        notificar.alerta('Por favor completa los datos obligatorios del contrato.')
-                      }
-                    }}
+                    onClick={handleGuardarDatosContrato}
                   >
                     <SndIcono nombre="snd-save" tamano={18} />
                     Guardar datos contrato
@@ -780,9 +475,9 @@ export default function AltaModelosContratos() {
                           </span>
                         </div>
                       </div>
-                      <span className={`pildora pildora--${seccionActividadesCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                      <span className={`pildora pildora--${state.tabs[1].complete ? 'exito' : 'alerta'} snd-pildora`}>
                         <span className="pildora__dot" aria-hidden="true" />
-                        {seccionActividadesCompleta ? 'Completado' : 'Por capturar'}
+                        {state.tabs[1].complete ? 'Completado' : 'Por capturar'}
                       </span>
                     </div>
                   }
@@ -799,8 +494,8 @@ export default function AltaModelosContratos() {
                       <Dropdown
                         inputId="act-periodicidad"
                         options={OPCIONES_PERIODICIDAD_ACTIVIDAD}
-                        value={periodicidadActividad}
-                        onChange={(e) => setPeriodicidadActividad(e.value)}
+                        value={actividades.periodicidadActividad}
+                        onChange={actividadesForm.crearCambioValor('periodicidadActividad')}
                         appendTo="self"
                       />
                     </div>
@@ -813,46 +508,46 @@ export default function AltaModelosContratos() {
                       <Dropdown
                         inputId="act-modalidad"
                         options={OPCIONES_MODALIDAD}
-                        value={modalidadServicio}
-                        onChange={(e) => setModalidadServicio(e.value)}
+                        value={actividades.modalidadServicio}
+                        onChange={actividadesForm.crearCambioValor('modalidadServicio')}
                         appendTo="self"
                       />
                     </div>
 
                     <div className="campo">
-                      <label htmlFor="dc-fecha-inicio" className="b1sb">
+                      <label htmlFor="act-fecha-inicio" className="b1sb">
                         Fecha de Inicio<span className="requerido">*</span>
                       </label>
                       <Calendar
-                        inputId="dc-fecha-inicio"
-                        value={fechaInicioVigencia}
-                        invalid={intentoEnvio && !fechaInicioVigencia}
-                        onChange={(e) => setFechaInicioVigencia((e.value as Date | null) ?? null)}
+                        inputId="act-fecha-inicio"
+                        value={datos.fechaInicioVigencia}
+                        invalid={intentoEnvio && !datos.fechaInicioVigencia}
+                        onChange={crearCambioValor('fechaInicioVigencia', comoFecha)}
                         dateFormat="dd/mm/yy"
                         placeholder="dd/mm/aaaa"
                         showIcon
                         appendTo="self"
                       />
-                      {intentoEnvio && !fechaInicioVigencia && (
+                      {intentoEnvio && !datos.fechaInicioVigencia && (
                         <span className="campo__error">Selecciona la fecha de inicio de vigencia.</span>
                       )}
                     </div>
 
                     <div className="campo">
-                      <label htmlFor="dc-fecha-fin" className="b1sb">
+                      <label htmlFor="act-fecha-fin" className="b1sb">
                         Fecha de Fin <span className="requerido">*</span>
                       </label>
                       <Calendar
-                        inputId="dc-fecha-fin"
-                        value={fechaFinVigencia}
-                        invalid={intentoEnvio && !fechaFinVigencia}
-                        onChange={(e) => setFechaFinVigencia((e.value as Date | null) ?? null)}
+                        inputId="act-fecha-fin"
+                        value={datos.fechaFinVigencia}
+                        invalid={intentoEnvio && !datos.fechaFinVigencia}
+                        onChange={crearCambioValor('fechaFinVigencia', comoFecha)}
                         dateFormat="dd/mm/yy"
                         placeholder="dd/mm/aaaa"
                         showIcon
                         appendTo="self"
                       />
-                      {intentoEnvio && !fechaFinVigencia && (
+                      {intentoEnvio && !datos.fechaFinVigencia && (
                         <span className="campo__error">Selecciona la fecha de término de vigencia.</span>
                       )}
                     </div>
@@ -866,12 +561,12 @@ export default function AltaModelosContratos() {
                       </label>
                       <textarea
                         id="act-descripcion"
-                        className={`padron-textarea ${intentoEnvio && !descripcionActividades.trim() ? 'padron-textarea--invalido' : ''}`}
-                        value={descripcionActividades}
-                        onChange={(e) => setDescripcionActividades(e.target.value)}
+                        className={`padron-textarea ${intentoEnvio && !actividades.descripcionActividades.trim() ? 'padron-textarea--invalido' : ''}`}
+                        value={actividades.descripcionActividades}
+                        onChange={actividadesForm.cambiarTexto('descripcionActividades')}
                         placeholder="Describe la actividad específica que integrarán el contrato..."
                       />
-                      {intentoEnvio && !descripcionActividades.trim() && (
+                      {intentoEnvio && !actividades.descripcionActividades.trim() && (
                         <span className="campo__error">La descripción de actividades es obligatoria.</span>
                       )}
                     </div>
@@ -880,15 +575,7 @@ export default function AltaModelosContratos() {
                   <SndBoton
                     type="button"
                     style={{ marginTop: '1rem' }}
-                    onClick={() => {
-                      setIntentoEnvio(true)
-                      if (seccionActividadesCompleta) {
-                        setAcordeonesActivos([2])
-                        notificar.exito('Actividades del modelo guardadas temporalmente.')
-                      } else {
-                        notificar.alerta('Por favor completa los datos obligatorios de actividades.')
-                      }
-                    }}
+                    onClick={handleGuardarActividades}
                   >
                     <SndIcono nombre="snd-save" tamano={18} />
                     Guardar actividades
@@ -914,9 +601,9 @@ export default function AltaModelosContratos() {
                           </span>
                         </div>
                       </div>
-                      <span className={`pildora pildora--${seccionEntregablesCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                      <span className={`pildora pildora--${state.tabs[2].complete ? 'exito' : 'alerta'} snd-pildora`}>
                         <span className="pildora__dot" aria-hidden="true" />
-                        {seccionEntregablesCompleta ? 'Completado' : 'Por capturar'}
+                        {state.tabs[2].complete ? 'Completado' : 'Por capturar'}
                       </span>
                     </div>
                   }
@@ -928,31 +615,31 @@ export default function AltaModelosContratos() {
                       </label>
                       <InputText
                         id="ent-nombre"
-                        value={nombreEntregable}
-                        invalid={intentoEnvio && !nombreEntregable.trim()}
-                        onChange={(e) => setNombreEntregable(e.target.value)}
+                        value={entregables.nombreEntregable}
+                        invalid={intentoEnvio && !entregables.nombreEntregable.trim()}
+                        onChange={entregablesForm.cambiarTexto('nombreEntregable')}
                         placeholder="Ej. Informe mensual de actividades y relación de expedientes"
                       />
-                      {intentoEnvio && !nombreEntregable.trim() && (
+                      {intentoEnvio && !entregables.nombreEntregable.trim() && (
                         <span className="campo__error">El nombre del entregable es obligatorio.</span>
                       )}
                     </div>
                     <div className="campo">
-                      <label htmlFor="dc-fecha-fin" className="b1sb">
+                      <label htmlFor="ent-fecha" className="b1sb">
                         Fecha entregable <span className="requerido">*</span>
                       </label>
                       <Calendar
-                        inputId="dc-fecha-fin"
-                        value={fechaFinVigencia}
-                        invalid={intentoEnvio && !fechaFinVigencia}
-                        onChange={(e) => setFechaFinVigencia((e.value as Date | null) ?? null)}
+                        inputId="ent-fecha"
+                        value={entregables.fechaEntregable}
+                        invalid={intentoEnvio && !entregables.fechaEntregable}
+                        onChange={entregablesForm.crearCambioValor('fechaEntregable', comoFecha)}
                         dateFormat="dd/mm/yy"
                         placeholder="dd/mm/aaaa"
                         showIcon
                         appendTo="self"
                       />
-                      {intentoEnvio && !fechaFinVigencia && (
-                        <span className="campo__error">Selecciona la fecha de término de vigencia.</span>
+                      {intentoEnvio && !entregables.fechaEntregable && (
+                        <span className="campo__error">Selecciona la fecha de entrega del entregable.</span>
                       )}
                     </div>
 
@@ -963,8 +650,8 @@ export default function AltaModelosContratos() {
                       <Dropdown
                         inputId="ent-tipo"
                         options={OPCIONES_TIPO_ENTREGABLE}
-                        value={tipoEntregable}
-                        onChange={(e) => setTipoEntregable(e.value)}
+                        value={entregables.tipoEntregable}
+                        onChange={entregablesForm.crearCambioValor('tipoEntregable')}
                         placeholder="Selecciona tipo de entregable"
                         appendTo="self"
                       />
@@ -977,8 +664,8 @@ export default function AltaModelosContratos() {
                       <Dropdown
                         inputId="ent-periodicidad"
                         options={OPCIONES_PERIODICIDAD_ACTIVIDAD}
-                        value={periodicidadEntregable}
-                        onChange={(e) => setPeriodicidadEntregable(e.value)}
+                        value={entregables.periodicidadEntregable}
+                        onChange={entregablesForm.crearCambioValor('periodicidadEntregable')}
                         appendTo="self"
                       />
                     </div>
@@ -990,8 +677,8 @@ export default function AltaModelosContratos() {
                       <Dropdown
                         inputId="ent-formato"
                         options={OPCIONES_FORMATO_ENTREGA}
-                        value={formatoEntrega}
-                        onChange={(e) => setFormatoEntrega(e.value)}
+                        value={entregables.formatoEntrega}
+                        onChange={entregablesForm.crearCambioValor('formatoEntrega')}
                         appendTo="self"
                       />
                     </div>
@@ -999,14 +686,14 @@ export default function AltaModelosContratos() {
 
 
                     <div className="campo">
-                      <label htmlFor="ent-formato" className="b1sb">
+                      <label htmlFor="ent-impacto" className="b1sb">
                         Impacto
                       </label>
                       <Dropdown
-                        inputId="ent-formato"
+                        inputId="ent-impacto"
                         options={OPCIONES_IMPACTO}
-                        value={formatoEntrega}
-                        onChange={(e) => setFormatoEntrega(e.value)}
+                        value={entregables.impacto}
+                        onChange={entregablesForm.crearCambioValor('impacto')}
                         appendTo="self"
                       />
                     </div>
@@ -1019,12 +706,12 @@ export default function AltaModelosContratos() {
                       </label>
                       <textarea
                         id="ent-criterios"
-                        className={`padron-textarea ${intentoEnvio && !criteriosAceptacion.trim() ? 'padron-textarea--invalido' : ''}`}
-                        value={criteriosAceptacion}
-                        onChange={(e) => setCriteriosAceptacion(e.target.value)}
+                        className={`padron-textarea ${intentoEnvio && !entregables.criteriosAceptacion.trim() ? 'padron-textarea--invalido' : ''}`}
+                        value={entregables.criteriosAceptacion}
+                        onChange={entregablesForm.cambiarTexto('criteriosAceptacion')}
                         placeholder="Especifica la descripción del entregable..."
                       />
-                      {intentoEnvio && !criteriosAceptacion.trim() && (
+                      {intentoEnvio && !entregables.criteriosAceptacion.trim() && (
                         <span className="campo__error">Los criterios de aceptación son obligatorios.</span>
                       )}
                     </div>
@@ -1033,15 +720,7 @@ export default function AltaModelosContratos() {
                   <SndBoton
                     type="button"
                     style={{ marginTop: '1rem' }}
-                    onClick={() => {
-                      setIntentoEnvio(true)
-                      if (seccionEntregablesCompleta) {
-                        setAcordeonesActivos([3])
-                        notificar.exito('Entregables del modelo guardados temporalmente.')
-                      } else {
-                        notificar.alerta('Por favor completa los datos obligatorios de entregables.')
-                      }
-                    }}
+                    onClick={handleGuardarEntregables}
                   >
                     <SndIcono nombre="snd-save" tamano={18} />
                     Guardar entregables
@@ -1067,9 +746,9 @@ export default function AltaModelosContratos() {
                           </span>
                         </div>
                       </div>
-                      <span className={`pildora pildora--${seccionEscolaridadCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                      <span className={`pildora pildora--${state.tabs[3].complete ? 'exito' : 'alerta'} snd-pildora`}>
                         <span className="pildora__dot" aria-hidden="true" />
-                        {seccionEscolaridadCompleta ? 'Completado' : 'Por capturar'}
+                        {state.tabs[3].complete ? 'Completado' : 'Por capturar'}
                       </span>
                     </div>
                   }
@@ -1082,8 +761,8 @@ export default function AltaModelosContratos() {
                       <Dropdown
                         inputId="esc-nivel"
                         options={OPCIONES_NIVEL_ESTUDIOS}
-                        value={nivelEstudios}
-                        onChange={(e) => setNivelEstudios(e.value)}
+                        value={escolaridad.nivelEstudios}
+                        onChange={escolaridadForm.crearCambioValor('nivelEstudios')}
                         placeholder="Selecciona nivel académico"
                         appendTo="self"
                       />
@@ -1095,12 +774,12 @@ export default function AltaModelosContratos() {
                       </label>
                       <InputText
                         id="esc-carrera"
-                        value={carreraRequerida}
-                        invalid={intentoEnvio && !carreraRequerida.trim()}
-                        onChange={(e) => setCarreraRequerida(e.target.value)}
+                        value={escolaridad.carreraRequerida}
+                        invalid={intentoEnvio && !escolaridad.carreraRequerida.trim()}
+                        onChange={escolaridadForm.cambiarTexto('carreraRequerida')}
                         placeholder="Ej. Licenciatura en Derecho / Ingeniería en Sistemas"
                       />
-                      {intentoEnvio && !carreraRequerida.trim() && (
+                      {intentoEnvio && !escolaridad.carreraRequerida.trim() && (
                         <span className="campo__error">La carrera o área de conocimiento es obligatoria.</span>
                       )}
                     </div>
@@ -1112,8 +791,8 @@ export default function AltaModelosContratos() {
                       <Dropdown
                         inputId="esc-estatus"
                         options={OPCIONES_ESTATUS_ESTUDIOS}
-                        value={estatusEstudios}
-                        onChange={(e) => setEstatusEstudios(e.value)}
+                        value={escolaridad.estatusEstudios}
+                        onChange={escolaridadForm.crearCambioValor('estatusEstudios')}
                         appendTo="self"
                       />
                     </div>
@@ -1127,8 +806,8 @@ export default function AltaModelosContratos() {
                       <InputText
                         id="esc-cedula"
                         maxLength={10}
-                        value={numeroCertificado}
-                        onChange={(e) => setNumeroCertificado(e.target.value.replace(/\D/g, ''))}
+                        value={escolaridad.numeroCertificado}
+                        onChange={escolaridadForm.cambiarTexto('numeroCertificado', soloDigitos)}
                         placeholder="Ej. 08945123"
                       />
                     </div>
@@ -1137,15 +816,7 @@ export default function AltaModelosContratos() {
                   <SndBoton
                     type="button"
                     style={{ marginTop: '1rem' }}
-                    onClick={() => {
-                      setIntentoEnvio(true)
-                      if (seccionEscolaridadCompleta) {
-                        setAcordeonesActivos([4])
-                        notificar.exito('Datos de escolaridad guardados temporalmente.')
-                      } else {
-                        notificar.alerta('Por favor completa los datos de escolaridad obligatorios.')
-                      }
-                    }}
+                    onClick={handleGuardarEscolaridad}
                   >
                     <SndIcono nombre="snd-save" tamano={18} />
                     Guardar escolaridad
@@ -1171,9 +842,9 @@ export default function AltaModelosContratos() {
                           </span>
                         </div>
                       </div>
-                      <span className={`pildora pildora--${seccionExperienciaCompleta ? 'exito' : 'alerta'} snd-pildora`}>
+                      <span className={`pildora pildora--${state.tabs[4].complete ? 'exito' : 'alerta'} snd-pildora`}>
                         <span className="pildora__dot" aria-hidden="true" />
-                        {seccionExperienciaCompleta ? 'Completado' : 'Por capturar'}
+                        {state.tabs[4].complete ? 'Completado' : 'Por capturar'}
                       </span>
                     </div>
                   }
@@ -1186,8 +857,8 @@ export default function AltaModelosContratos() {
                       <Dropdown
                         inputId="exp-area-general"
                         options={OPCIONES_SECTOR_LABORAL}
-                        value={areaGeneralExperiencia}
-                        onChange={(e) => setAreaGeneralExperiencia(e.value)}
+                        value={experiencia.areaGeneralExperiencia}
+                        onChange={experienciaForm.crearCambioValor('areaGeneralExperiencia')}
                         appendTo="self"
                       />
                     </div>
@@ -1199,8 +870,8 @@ export default function AltaModelosContratos() {
                       <Dropdown
                         inputId="exp-area-especifica"
                         options={OPCIONES_AREA_ESPECIFICA}
-                        value={areaEspecificaExperiencia}
-                        onChange={(e) => setAreaEspecificaExperiencia(e.value)}
+                        value={experiencia.areaEspecificaExperiencia}
+                        onChange={experienciaForm.crearCambioValor('areaEspecificaExperiencia')}
                         appendTo="self"
                       />
                     </div>
@@ -1212,12 +883,12 @@ export default function AltaModelosContratos() {
                       <InputText
                         id="exp-anios"
                         maxLength={2}
-                        value={aniosExperiencia}
-                        invalid={intentoEnvio && !aniosExperiencia.trim()}
-                        onChange={(e) => setAniosExperiencia(e.target.value.replace(/\D/g, ''))}
+                        value={experiencia.aniosExperiencia}
+                        invalid={intentoEnvio && !experiencia.aniosExperiencia.trim()}
+                        onChange={experienciaForm.cambiarTexto('aniosExperiencia', soloDigitos)}
                         placeholder="Ej. 4"
                       />
-                      {intentoEnvio && !aniosExperiencia.trim() && (
+                      {intentoEnvio && !experiencia.aniosExperiencia.trim() && (
                         <span className="campo__error">Indica los años de experiencia comprobable requeridos.</span>
                       )}
                     </div>
@@ -1228,12 +899,12 @@ export default function AltaModelosContratos() {
                       </label>
                       <textarea
                         id="exp-comentarios"
-                        className={`padron-textarea ${intentoEnvio && !comentariosExperiencia.trim() ? 'padron-textarea--invalido' : ''}`}
-                        value={comentariosExperiencia}
-                        onChange={(e) => setComentariosExperiencia(e.target.value)}
+                        className={`padron-textarea ${intentoEnvio && !experiencia.comentariosExperiencia.trim() ? 'padron-textarea--invalido' : ''}`}
+                        value={experiencia.comentariosExperiencia}
+                        onChange={experienciaForm.cambiarTexto('comentariosExperiencia')}
                         placeholder="Describe las actividades técnicas, administrativas o profesionales requeridas para el modelo de contrato..."
                       />
-                      {intentoEnvio && !comentariosExperiencia.trim() && (
+                      {intentoEnvio && !experiencia.comentariosExperiencia.trim() && (
                         <span className="campo__error">
                           La descripción de experiencia requerida es obligatoria para el modelo.
                         </span>
@@ -1244,14 +915,7 @@ export default function AltaModelosContratos() {
                   <SndBoton
                     type="button"
                     style={{ marginTop: '1rem' }}
-                    onClick={() => {
-                      setIntentoEnvio(true)
-                      if (seccionExperienciaCompleta) {
-                        notificar.exito('Datos de experiencia laboral guardados temporalmente.')
-                      } else {
-                        notificar.alerta('Por favor completa los datos de experiencia laboral obligatorios.')
-                      }
-                    }}
+                    onClick={handleGuardarExperienciaLaboral}
                   >
                     <SndIcono nombre="snd-save" tamano={18} />
                     Guardar experiencia laboral
@@ -1272,7 +936,7 @@ export default function AltaModelosContratos() {
                       <SndIcono nombre="snd-save" tamano={20} />
                       Guardar modelo de contrato
                     </SndBoton>
-                    <SndBoton variante="secundario" type="button" onClick={limpiarFormulario}>
+                    <SndBoton variante="secundario" type="button" onClick={handleOmitir}>
                       <SndIcono nombre="snd-renew" tamano={20} />
                       Omitir todos los cambios
                     </SndBoton>
@@ -1283,8 +947,8 @@ export default function AltaModelosContratos() {
 
             {/* MODAL DE CARGA MASIVA */}
             <ModalCargaMasiva
-              visible={modalCargaMasivaAbierto}
-              onCerrar={() => setModalCargaMasivaAbierto(false)}
+              visible={modalAbierto}
+              onCerrar={handleCerrarCargaMasiva}
             />
           </div>
         </div>
