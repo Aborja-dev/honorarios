@@ -1,5 +1,6 @@
 import React from 'react'
-import { SndBotonEnlace, SndIcono } from '../../components'
+import { SndBotonEnlace, SndIcono } from './snd'
+
 
 export const BotonHome = () => {
     return (

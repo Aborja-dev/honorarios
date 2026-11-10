@@ -1,5 +1,5 @@
 import { formInicial } from './data'
-import type { useForm } from './useForm'
+import type { useForm } from '../../lib/useForm'
 
 type OpcionesValidacion<Forma extends object> = Pick<
   Parameters<typeof useForm<Forma>>[0],

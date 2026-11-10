@@ -1,7 +1,6 @@
 import { useMemo, useReducer } from 'react'
 import AltaModelo from './AltaModelo'
-import { PageContext } from './context'
-import { initialState, reducer, type Action, type UITab, type UIState } from './reducer'
+import { initialState, reducer, type Action, type UITab, type UIState } from '../../lib/pageReducer'
 
 // ---------------------------------------------------------------------------
 // Procesamiento de la página: aquí se calcula QUÉ estado resulta de cada
@@ -94,7 +93,7 @@ const AltaModeloPage = () => {
 
   const handler = useMemo(() => crearHandler(state), [state])
 
-  const value = useMemo(() => {
+  const props = useMemo(() => {
     const { tabs, intentoEnvio, folioGenerado, openModal } = state
 
     // Despacha la lista de tabs ya calculada (mismo helper que usa el componente)
@@ -127,11 +126,7 @@ const AltaModeloPage = () => {
     }
   }, [state, dispatch, handler])
 
-  return (
-    <PageContext.Provider value={value}>
-      <AltaModelo />
-    </PageContext.Provider>
-  )
+  return <AltaModelo {...props} />
 }
 
 export default AltaModeloPage

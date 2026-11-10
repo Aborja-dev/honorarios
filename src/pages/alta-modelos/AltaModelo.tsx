@@ -13,7 +13,7 @@ import {
 import '../../components/honorarios/Honorarios.css'
 import { useTitulo } from '../../hooks'
 import MenuFlotante, { type ItemMenuFlotante } from '../../components/MenuFlotante'
-import { BotonHome } from './BotonHome'
+
 import '../PadronPrestadoresServicio.css'
 import '../PrestadoresPage.css'
 import './style.css'
@@ -54,8 +54,7 @@ const SECCIONES: ItemMenuFlotante[] = [
     tooltip: '5. Experiencia laboral',
   },
 ]
-import { usePageContext } from './context'
-import { useForm, aMayusculas, comoFecha, soloDigitos } from './useForm'
+import { useForm, aMayusculas, comoFecha, soloDigitos } from '../../lib/useForm'
 import {
   DATOS_INICIALES,
   ACTIVIDADES_INICIALES,
@@ -64,6 +63,7 @@ import {
   EXPERIENCIA_INICIALES,
 } from './data'
 import { FormValidators } from './validations'
+import type { UIState } from '../../lib/pageReducer'
 import {
   OPCIONES_AREA_ESPECIFICA,
   OPCIONES_ESTATUS_ESTUDIOS,
@@ -75,33 +75,52 @@ import {
   OPCIONES_SECTOR_LABORAL,
   OPCIONES_TIPO_ENTREGABLE,
 } from './data'
+import { BotonHome } from '../../components/BotonHome'
 
 // ---------------------------------------------------------------------------
 // Formas y validaciones: viven en `data.ts` (valores iniciales) y
 // `validations.ts` (reglas + avisos). Aquí solo se instancian en `useForm`.
 // ---------------------------------------------------------------------------
 
-export default function AltaModelosContratos({ initialValues = DATOS_INICIALES }: { initialValues?: typeof DATOS_INICIALES }) {
+export interface AltaModeloProps {
+  // Estado de la página
+  state: UIState
+  // Acciones de la página
+  expandirTodo: () => void
+  colapsarTodo: () => void
+  handleCambiarAcordeon: (e: { index: number | number[] }) => void
+  abrirModal: () => void
+  cerrarModal: () => void
+  reiniciar: () => void
+  avanzar: (tabIndex: number, folio?: string | null) => void
+  abrirPendientes: (pendientes: number[]) => void
+  // Valores calculados / derivados del estado
+  acordeonesActivos: number[]
+  completed: number
+  intentoEnvio: boolean
+  folioGenerado: string | null
+  modalAbierto: boolean
+}
+
+export default function AltaModelosContratos({
+  initialValues = DATOS_INICIALES,
+  state,
+  acordeonesActivos,
+  completed,
+  intentoEnvio,
+  folioGenerado,
+  modalAbierto,
+  expandirTodo,
+  colapsarTodo,
+  handleCambiarAcordeon,
+  abrirModal,
+  cerrarModal,
+  reiniciar,
+  avanzar,
+  abrirPendientes,
+}: AltaModeloProps & { initialValues?: typeof DATOS_INICIALES }) {
   useTitulo('Alta de Modelos de Contratos · Módulo de Honorarios')
   const notificar = useNotificaciones()
-  const {
-    state,
-    // Valores calculados / derivados que entrega el contexto
-    acordeonesActivos,
-    completed,
-    intentoEnvio,
-    folioGenerado,
-    modalAbierto,
-    // Acciones de la página
-    expandirTodo,
-    colapsarTodo,
-    handleCambiarAcordeon,
-    abrirModal,
-    cerrarModal,
-    reiniciar,
-    avanzar,
-    abrirPendientes,
-  } = usePageContext()
 
   // 1. Datos Contrato
   const contratoForm = useForm({
@@ -220,7 +239,6 @@ export default function AltaModelosContratos({ initialValues = DATOS_INICIALES }
 
   // Sección 1: Datos Contrato (los cambios los resuelve `cambiarTexto`/`crearCambioValor`)
   const handleGuardarDatosContrato = () => contratoForm.guardarFormulario()
-
   // Sección 2: Actividades
   const handleGuardarActividades = () => actividadesForm.guardarFormulario()
   // Sección 3: Entregables (el guardar es genérico, reutiliza `cambiarTexto`)
