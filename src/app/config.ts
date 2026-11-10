@@ -17,6 +17,7 @@ export const OPCIONES_MENU_USUARIO: OpcionUsuario[] = [
   { texto: 'Portal del Prestador', icono: 'snd-user--avatar', ruta: '/user/portal' },
   { texto: 'Validar Identidad', icono: 'snd-user', ruta: '/validar-identidad' },
   { texto: 'Prueba e.firma (FIEL)', icono: 'snd-edit', ruta: '/prueba-fiel' },
+  { texto: 'Cambiar tema', icono: 'snd-color-palette', ruta: '' }
 ]
 
 /**

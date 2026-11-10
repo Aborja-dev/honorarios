@@ -52,9 +52,8 @@ export function SndMenuUsuario({ nombre, rol, opciones = [], onCerrarSesion }: S
       <div className="usrperfil__opcionCol">{o.texto}</div>
     </>
   )
-
   return (
-    <div className="snd-menu-usuario">
+    <div className="snd-menu-usuario" style={{transform: 'translate(10px, 10px)'}}>
       <details ref={detalles} className="usrperfil__details detailsClickOut">
         <summary className="usrperfil__summary">
           <span className="usrperfil__summaryCol1">

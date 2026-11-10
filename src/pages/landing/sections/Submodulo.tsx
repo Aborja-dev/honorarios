@@ -49,25 +49,12 @@ export const Submodulo = ({submoduloActivo, landingTextos, submodulos, onSelecci
                 <div className="honorarios-submodulo__pie">
 
                   <div className="fila" style={{ gap: 8 }}>
-                    <SndBoton
-                      style={{
-                        fontSize: "0.8rem",
-                        padding: "1rem 0.8rem"
-                      }}
-                      variante={true ? 'primario' : 'secundario'}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        onSeleccionarSubmodulo(sub.id)
-                      }}
-                    >
-                      {true ? landingTextos.botonCargaMasiva : ''}
-                    </SndBoton>
                     <SndBotonEnlace
                       style={{
                         fontSize: "0.8rem",
                         padding: "1rem 0.8rem"
                       }}
-                      variante="secundario"
+                      variante="primario"
                       to={sub.rutaDedicada}
                       onClick={(e) => e.stopPropagation()}
                     >

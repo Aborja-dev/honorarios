@@ -54,7 +54,7 @@ export function SndNavbar({
           </nav>
         </details>
 
-        <SndSelectorTema />
+        {/* <SndSelectorTema /> */}
 
         {usuario ? (
           <SndMenuUsuario
