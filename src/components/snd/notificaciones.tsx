@@ -42,7 +42,8 @@ function Item({ notificacion, onCerrar }: ItemProps) {
   const { id, tipo, titulo, detalle, saliendo } = notificacion
 
   useEffect(() => {
-    if (pausado || saliendo) return
+    // Sin temporizador activo: el efecto no devuelve nada que limpiar.
+    if (pausado || saliendo) return undefined
     const temporizador = setTimeout(() => onCerrar(id), VIDA_MS)
     return () => clearTimeout(temporizador)
   }, [pausado, saliendo, id, onCerrar])

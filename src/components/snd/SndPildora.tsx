@@ -6,7 +6,7 @@ import {useNotificaciones } from './notificaciones'
 export type TipoPildora = 'exito' | 'error' | 'alerta' | 'info' | 'neutro' | 'naranja' | 'purple' | 'inactivo'
 
 export interface SndPildoraProps {
-  tipo?: TipoPildora
+  tipo?: any
   punto?: boolean
   children: ReactNode
 }
@@ -26,7 +26,7 @@ export interface SndPildoraFiltroProps {
   children: ReactNode
 }
 
-export function SndPildoraFiltro({ activo, onCambio, children }: SndPildoraFiltroProps) {
+export function SndPildoraFiltro({ children }: SndPildoraFiltroProps) {
   const {info} = useNotificaciones()
   return (
     <span className="snd-pildora-filtro">

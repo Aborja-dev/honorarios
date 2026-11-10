@@ -16,7 +16,7 @@ import {
 import '../../components/honorarios/Honorarios.css'
 import { useTitulo } from '../../hooks'
 import { CATEGORIAS_OPERATIVAS, UNIDADES_ADMINISTRATIVAS } from '../../services'
-import MenuFlotante from '../../components/MenuFlotante'
+import MenuFlotante, { type ItemMenuFlotante } from '../../components/MenuFlotante'
 import { BotonHome } from './BotonHome'
 import '../PadronPrestadoresServicio.css'
 import '../PrestadoresPage.css'

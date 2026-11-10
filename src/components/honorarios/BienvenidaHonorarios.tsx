@@ -2,19 +2,19 @@ import { landingTextos } from '../../pages/LandingTextos'
 import { SndIcono } from '../snd'
 
 export interface BienvenidaHonorariosProps {
-  etiquetaPeriodo: string
+  etiquetaPeriodo?: string
 }
 
 /**
  * Bloque de bienvenida institucional del Módulo de Honorarios.
  */
-export function BienvenidaHonorarios({ etiquetaPeriodo }: BienvenidaHonorariosProps) {
+export function BienvenidaHonorarios({ etiquetaPeriodo = 'Ejercicio Fiscal 2026' }: BienvenidaHonorariosProps) {
   return (
     <section className="honorarios-bienvenida" aria-label="Bienvenida al módulo">
       <div className="honorarios-bienvenida__contenido">
         <span className="honorarios-bienvenida__etiqueta b1sb">
           <SndIcono nombre="snd-checkmark--filled" tamano={16} />
-          Ejercicio Fiscal 2026 · SABG
+          {etiquetaPeriodo} · SABG
         </span>
         <h1 className="h2b patria honorarios-bienvenida__titulo">
           {landingTextos.tituloPrincipal}

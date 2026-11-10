@@ -324,7 +324,7 @@ export const honorariosService = {
   obtenerTrimestres(): DatosTrimestre[] {
     return TRIMESTRES_HONORARIOS
   },
-  obtenerRegistrosPorSubmodulo(submodulo: ClaveSubmodulo): RegistroSubmodulo[] {
+  obtenerRegistrosPorSubmodulo(submodulo: ClaveSubmodulo): any[] {
     return REGISTROS_POR_SUBMODULO[submodulo] ?? []
   },
 }

@@ -21,9 +21,6 @@ export interface CifrasYEstadisticasProps {
  */
 export function CifrasYEstadisticas({
   datosTrimestre,
-  indiceTrimestre,
-  totalTrimestres,
-  onCambiarTrimestre,
 
 }: CifrasYEstadisticasProps) {
   const { vigentes, enFirma, enRevision, porVencer,pendientes: conPEndientes } = datosTrimestre.estadisticas

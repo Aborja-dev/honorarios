@@ -35,7 +35,7 @@ export const Informes = ({categoriasActivas, onAlternarCategoria, landingTextos}
                     maxWidth: "200px",
                     padding: "1rem 0.8rem"
                   }}
-                  onClick={(e) => {}}
+                  onClick={() => {}}
                 >
                   Generar reporte dinamico
                 </SndBoton>

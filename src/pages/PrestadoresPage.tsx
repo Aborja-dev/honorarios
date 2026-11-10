@@ -146,7 +146,7 @@ export const PrestadoresPage = () => {
   const [anclaPendiente, setAnclaPendiente] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!anclaPendiente) return
+    if (!anclaPendiente) return undefined
 
     // Se espera un cuadro para que PrimeReact termine de montar/animar el panel
     // antes de medir posiciones; sin esto el cálculo de `top` queda desfasado.
@@ -198,7 +198,7 @@ export const PrestadoresPage = () => {
    */
   useEffect(() => {
     const raiz = SCROLL_INTERNO_PADRON ? refContenido.current : null
-    if (SCROLL_INTERNO_PADRON && !raiz) return
+    if (SCROLL_INTERNO_PADRON && !raiz) return undefined
 
     const observer = new IntersectionObserver(
       (entradas) => {

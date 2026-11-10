@@ -21,7 +21,7 @@ export const Submodulo = ({submoduloActivo, landingTextos, submodulos, onSelecci
 
       <div className="honorarios-submodulos-layout">
         <div className="honorarios-submodulos-grid">
-          {submodulos.map((sub, index) => {
+          {submodulos.map((sub) => {
             const esActivo = submoduloActivo === sub.id
 
             return (

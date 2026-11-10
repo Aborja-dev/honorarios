@@ -38,7 +38,7 @@ export function PanelSubmodulos({
 
       <div className="honorarios-submodulos-layout">
         <div className="honorarios-submodulos-grid">
-          {submodulos.map((sub, index) => {
+          {submodulos.map((sub) => {
             const esActivo = submoduloActivo === sub.id
 
             return (
@@ -128,7 +128,7 @@ export function PanelSubmodulos({
                 maxWidth: "200px",
                 padding: "1rem 0.8rem"
               }}
-              onClick={(e) => {}}
+              onClick={() => {}}
             >
               Generar reporte dinamico
             </SndBoton>
