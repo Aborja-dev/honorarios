@@ -22,7 +22,6 @@ export interface MenuFlotanteProps {
   items: ItemMenuFlotante[]
   titulo?: string
   etiqueta?: string
-  
   activa: string | undefined
   colapsado: boolean
   onColapsar: (colapsado: boolean) => void
