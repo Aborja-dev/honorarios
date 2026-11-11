@@ -21,7 +21,6 @@ const Login = lazy(() => import('./pages/Login'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 const PruebaFiel = lazy(() => import('./pages/PruebaFiel'))
 // Página de prueba de maquetas: fuera del menú, solo por URL.
-const TestExperiencia = lazy(() => import('./pages/TestExperiencia'))
 
 // Submódulos administrativos de Honorarios (cada carpeta: Page.tsx + interfaz)
 const LandingV2 = lazy(() => import('./pages/landing/Page'))
@@ -101,9 +100,6 @@ export default function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/prueba-fiel" element={<PruebaFiel />} />
               <Route path="/validar-identidad" element={<ValidarIdentidad />} />
-
-              {/* Maquetas de secciones, aisladas del flujo del Padrón */}
-              <Route path="/test/experiencia" element={<TestExperiencia />} />
 
               {/* Ruta no encontrada */}
               <Route path="*" element={<NotFound />} />

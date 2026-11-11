@@ -17,6 +17,7 @@ import {
   type ClaveSubmodulo,
 } from '../services'
 import { sinAcentos } from '../utils'
+import { useApi } from '../lib/service'
 
 /**
  * Pantalla principal (`Landing.tsx`) del Módulo de Honorarios.
@@ -68,7 +69,7 @@ export default function Landing() {
       sinAcentos(`${r.folio} ${r.nombre} ${r.unidad} ${r.concepto} ${r.estado}`).includes(q),
     )
   }, [submoduloActivo, busqueda])
-
+  const {guardarModelo, validarCompatibilidad} = useApi()
   return (
     <div className="contenedor">
       <div className="honorarios-tablero">
@@ -103,7 +104,7 @@ export default function Landing() {
 
         {/* DIVISIÓN VERTICAL CENTRAL */}
         <div className="honorarios-divisor" role="separator" aria-orientation="vertical" />
-
+        
         {/* COLUMNA DERECHA: Opciones de Submódulos, Acciones Rápidas y Cumplimiento */}
         <PanelSubmodulos
           submodulos={SUBMODULOS_HONORARIOS}

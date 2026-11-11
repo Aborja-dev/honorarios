@@ -15,21 +15,8 @@ import '../../components/honorarios/Honorarios.css'
 import { useTitulo } from '../../hooks'
 import { SUBMODULOS_HONORARIOS, honorariosService } from '../../services'
 import { sinAcentos } from '../../utils'
+import { OPCIONES_RAMO, OPCIONES_UR } from '../../services/honorarios.service'
 
-const OPCIONES_RAMO = [
-  { label: '27 - Anticorrupcíon y Buen Gobierno', value: '27' },
-  { label: '06 - Hacienda y Crédito Público', value: '06' },
-  { label: '04 - Gobernación', value: '04' },
-  { label: '11 - Educación Pública', value: '11' },
-  { label: '12 - Salud', value: '12' },
-]
-
-const OPCIONES_UR = [
-  { label: '027 - Secretaria Anticorrupcíon  y Buen Gobierno', value: '27' },
-  { label: '006 - Secretaria Hacienda y Crédito Público', value: '06' },
-  { label: '004 - Secretaria Gobernación', value: '04' },
-
-]
 
 /**
  * Vista dedicada del submódulo "Padrón del prestador de servicios" (`pages/admin/PadronPrestadores.tsx`).
@@ -41,7 +28,7 @@ export default function PadronPrestadores() {
   const [modalAbierto, setModalAbierto] = useState(false)
 
   // Estados de la sección de búsqueda
-  const [ramoBusqueda, setRamoBusqueda] = useState<string | null>(null)
+  const [ramoBusqueda, setRamoBusqueda] = useState<string | null>('27')
   const [institucionBusqueda, setInstitucionBusqueda] = useState('')
   const [nombreBusqueda, setNombreBusqueda] = useState('')
   const [primerApellidoBusqueda, setPrimerApellidoBusqueda] = useState('')

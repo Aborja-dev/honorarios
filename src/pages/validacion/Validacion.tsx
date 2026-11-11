@@ -4,6 +4,8 @@ import { InputText } from 'primereact/inputtext'
 import { SndBoton, SndBotonEnlace, SndIcono, SndMensaje, SndPildora, useNotificaciones } from '../../components'
 import '../../components/honorarios/Honorarios.css'
 import { useTitulo } from '../../hooks'
+import { Dropdown } from 'primereact/dropdown'
+import { OPCIONES_RAMO, OPCIONES_UR } from '../../services/honorarios.service'
 
 /**
  * Pantalla de validación de identidad (`ValidarIdentidad.tsx`) para prestadores de servicios.
@@ -13,26 +15,26 @@ export default function ValidarIdentidad() {
   const notificar = useNotificaciones()
 
   const [curp, setCurp] = useState('')
-
+  const [ramoBusqueda, setRamoBusqueda] = useState<string | null>('dsadsad')
+  const [institucionBusqueda, setInstitucionBusqueda] = useState('')
   const [fechaInicio, setFechaInicio] = useState<Date | null>(null)
   const [fechaFin, setFechaFin] = useState<Date | null>(null)
-  const [validado, setValidado] = useState(false)
   const [error, setError] = useState(false)
-
+  const [message, setMessage] = useState(null)
   const verificar = (e: FormEvent) => {
     e.preventDefault()
-    if (!curp.trim() ) {
+    if (!curp.trim()) {
       setError(true)
       return
     }
-    setValidado(true)
+    
     notificar.exito('Identidad verificada con RENAPO y padrón fiscal.', 'Validación exitosa')
   }
-const estados = {
-  "TIENE_COMPATIBILIDAD": (curp: string)=>`El prestador con CURP de ${curp} tiene compatibilidad y no presenta conflictos para el ejercicio de sus funciones`,
-  "ACTIVO_RUSP": (curp: string)=>`El prestador con CURP de ${curp} no tiene compatibilidad y se encuentra en RUSP`,
-  "CON CONTRATO": (curp: string)=>`El prestador con CURP de ${curp} tiene contrato `,
-}
+  const estados = {
+    "TIENE_COMPATIBILIDAD": (curp: string) => `El prestador con CURP de ${curp} tiene compatibilidad y no presenta conflictos para el ejercicio de sus funciones`,
+    "ACTIVO_RUSP": (curp: string) => `El prestador con CURP de ${curp} no tiene compatibilidad y se encuentra en RUSP`,
+    "CON CONTRATO": (curp: string) => `El prestador con CURP de ${curp} tiene contrato `,
+  }
   return (
     <div className="contenedor">
       <h1 className="h1b patria">Validar Compatibilidad del Prestador</h1>
@@ -46,8 +48,46 @@ const estados = {
 
             </div>
 
-            <form className="formulario" style={{maxWidth:700}} onSubmit={verificar} noValidate>
-              <div className="campo">
+            <form className="formulario" style={{ maxWidth: 700 }} onSubmit={verificar} noValidate>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                  gap: '16px 20px',
+                }}
+              >
+                <div className="campo">
+                  <label htmlFor="busq-ramo" className="b1sb">
+                    Ramo
+                  </label>
+                  <Dropdown
+                    inputId="busq-ramo"
+                    options={OPCIONES_RAMO}
+                    value={ramoBusqueda}
+                    onChange={(e) => setRamoBusqueda(e.value)}
+                    placeholder="27 - Anticorrupcíon y Buen Gobierno"
+                    appendTo="self"
+                    disabled
+                  />
+                </div>
+
+                <div className="campo">
+                  <label htmlFor="busq-institucion" className="b1sb">
+                    Institución
+                  </label>
+                  <Dropdown
+                    inputId="busq-institucion"
+                    options={OPCIONES_UR}
+                    value={institucionBusqueda}
+                    onChange={(e) => setInstitucionBusqueda(e.value)}
+                    placeholder="027 - Secretaria Anticorrupcíon  y Buen Gobierno"
+                    appendTo="self"
+                    disabled
+                    
+                  />
+                </div>
+              </div>
+              <article className="campo">
                 <label htmlFor="val-curp" className="b1sb">
                   CURP (18 caracteres){' '}
                   <span className="requerido" aria-hidden="true">
@@ -62,7 +102,23 @@ const estados = {
                   onFocus={() => setError(false)}
                   placeholder="Ej. LORM880412MDFRRL09"
                 />
-              </div>
+              </article>
+              <article className="campo">
+                <label htmlFor="val-curp" className="b1sb">
+                  CURP (18 caracteres){' '}
+                  <span className="requerido" aria-hidden="true">
+                    *
+                  </span>
+                </label>
+                <InputText
+                  id="val-curp"
+                  value={curp}
+                  invalid={error && !curp.trim()}
+                  onChange={(e) => setCurp(e.target.value.toUpperCase())}
+                  onFocus={() => setError(false)}
+                  placeholder="Ej. LORM880412MDFRRL09"
+                />
+              </article>
 
 
               <div className="campo">
@@ -103,19 +159,19 @@ const estados = {
                 <SndBoton type="submit">
                   <span><SndIcono nombre="snd-checkmark" tamano={20} /></span>
                   Validar compatibilidad
-                  </SndBoton>
+                </SndBoton>
                 <SndBotonEnlace variante="secundario" to="/admin/padron">
-                <span><SndIcono nombre="snd-arrow--left" tamano={20} /></span>
+                  <span><SndIcono nombre="snd-arrow--left" tamano={20} /></span>
                   Ir al padrón de prestadores
                 </SndBotonEnlace>
                 <SndBoton variante="fantasma">
-                <span><SndIcono nombre="snd-document" tamano={18} /></span>
+                  <span><SndIcono nombre="snd-document" tamano={18} /></span>
                   Carga masiva
                 </SndBoton>
               </div>
             </form>
           </article>
-          <SndMensaje tipo='alerta'>{`El prestador con CURP de ${curp} tiene compatibilidad y no presenta conflictos para el ejercicio de sus funciones`}</SndMensaje>
+          {message && (<SndMensaje tipo='alerta'>{message}</SndMensaje>)}
         </div>
 
         <div className="columna__6">

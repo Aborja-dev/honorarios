@@ -328,3 +328,18 @@ export const honorariosService = {
     return REGISTROS_POR_SUBMODULO[submodulo] ?? []
   },
 }
+
+export const OPCIONES_RAMO = [
+  { label: '27 - Anticorrupcíon y Buen Gobierno', value: '27' },
+  { label: '06 - Hacienda y Crédito Público', value: '06' },
+  { label: '04 - Gobernación', value: '04' },
+  { label: '11 - Educación Pública', value: '11' },
+  { label: '12 - Salud', value: '12' },
+]
+
+export const OPCIONES_UR = [
+  { label: '027 - Secretaria Anticorrupcíon  y Buen Gobierno', value: '27' },
+  { label: '006 - Secretaria Hacienda y Crédito Público', value: '06' },
+  { label: '004 - Secretaria Gobernación', value: '04' },
+
+]

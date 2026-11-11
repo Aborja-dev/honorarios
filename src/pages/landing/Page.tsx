@@ -9,6 +9,7 @@ import { sinAcentos } from '../../utils'
 import { useTitulo } from '../../hooks'
 import { useSearchParams } from 'react-router-dom'
 import { landingTextos } from '../LandingTextos'
+import { useApi } from '../../lib/service'
 
 const HomePage = () => {
   useTitulo('Módulo de Honorarios · SABG')
@@ -51,6 +52,7 @@ const HomePage = () => {
       sinAcentos(`${r.folio} ${r.nombre} ${r.unidad} ${r.concepto} ${r.estado}`).includes(q),
     )
   }, [submoduloActivo, busqueda])
+    const {guardarModelo, validarCompatibilidad} = useApi()
   return (
     <main className="contenedor">
       <div className="honorarios-tablero">
@@ -79,6 +81,8 @@ const HomePage = () => {
 
         {/* COLUMNA DERECHA: Opciones de Submódulos, Acciones Rápidas y Cumplimiento */}
         <section className="honorarios-columna">
+          <button onClick={()=>validarCompatibilidad()}>Dar cklcik</button>
+          <button onClick={()=>guardarModelo('MX')}>Dar cklcik</button>
           <Submodulo 
             submodulos={SUBMODULOS_HONORARIOS}
             submoduloActivo={submoduloActivo}
