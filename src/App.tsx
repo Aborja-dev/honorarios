@@ -5,7 +5,7 @@ import {
   MENU_SUPERIOR_HONORARIOS,
   OPCIONES_MENU_USUARIO,
   USUARIO_INICIAL,
-} from './app/index'
+} from './lib/app'
 import {
   SndCargando,
   SndEncabezado,
@@ -15,25 +15,17 @@ import {
   useNotificaciones,
   type UsuarioNavbar,
 } from './components/snd'
-import PadronPage from './pages/padron/Page'
+const NotFound = lazy(() => import('./_pages/NotFound'))
 
-const Login = lazy(() => import('./pages/Login'))
-const NotFound = lazy(() => import('./pages/NotFound'))
-const PruebaFiel = lazy(() => import('./pages/PruebaFiel'))
-// Página de prueba de maquetas: fuera del menú, solo por URL.
-
-// Submódulos administrativos de Honorarios (cada carpeta: Page.tsx + interfaz)
-const LandingV2 = lazy(() => import('./pages/landing/Page'))
-const PrestadoresPage = lazy(() => import('./pages/padron-prestadores/Page'))
-const ContratosHonorarios = lazy(() => import('./pages/contrato/Page'))
-const ModeloContrato = lazy(() => import('./pages/modelos/page'))
-const AltaModelosContratos = lazy(() => import('./pages/alta-modelos/Page'))
-const FormalizacionContratos = lazy(() => import('./pages/formalizacion-contrato/Page'))
-const ValidarIdentidad = lazy(() => import('./pages/validacion/Page'))
-
-// Vistas del prestador de servicios (pages/user/)
-const PortalPrestador = lazy(() => import('./pages/user/PortalPrestador'))
-const MisEntregables = lazy(() => import('./pages/user/MisEntregables'))
+// Submódulos administrativos de Honorarios
+const Inicio = lazy(() => import('./pages/Inicio'))
+const PadronPage = lazy(() => import('./pages/PadronPage'))
+const PrestadoresPage = lazy(() => import('./pages/PrestadoresPage'))
+const ContratosHonorarios = lazy(() => import('./pages/ContratosHonorarios'))
+const ModeloContrato = lazy(() => import('./pages/ModeloContrato'))
+const AltaModelosContratos = lazy(() => import('./pages/AltaModelosContratos'))
+const FormalizacionContratos = lazy(() => import('./pages/FormalizacionContratos'))
+const ValidarIdentidad = lazy(() => import('./_pages/validacion/Page'))
 
 /**
  * Estructura principal de la aplicación del Módulo de Honorarios (`App.tsx`).
@@ -82,7 +74,7 @@ export default function App() {
           <Suspense fallback={<SndCargando />}>
             <Routes>
               {/* Pantalla principal del Módulo de Honorarios */}
-              <Route path="/" element={<LandingV2 />} />
+              <Route path="/" element={<Inicio />} />
 
               {/* Submódulos administrativos de Honorarios */}
               <Route path="/admin/padron" element={<PadronPage />} />
@@ -92,13 +84,6 @@ export default function App() {
               <Route path="/alta-modelos-contratos" element={<AltaModelosContratos />} />
               <Route path="/formalizacion-contratos" element={<FormalizacionContratos />} />
 
-              {/* Vistas del prestador de servicios */}
-              <Route path="/user/portal" element={<PortalPrestador />} />
-              <Route path="/user/entregables" element={<MisEntregables />} />
-
-              {/* Acceso, firma electrónica e identidad */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/prueba-fiel" element={<PruebaFiel />} />
               <Route path="/validar-identidad" element={<ValidarIdentidad />} />
 
               {/* Ruta no encontrada */}

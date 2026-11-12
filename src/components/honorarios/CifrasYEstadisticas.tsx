@@ -1,9 +1,9 @@
 import { SndBoton, SndTooltip } from '../snd'
-import type { DatosTrimestre } from '../../services'
+import type { DatosTrimestre } from '../../lib/honorarios.service'
 import CardRUSP from './CardRUSP'
 import ChartAsignacion from './chart/ChartAsignacion'
 import ChartEstatus, { COLORES_ESTATUS } from './chart/ChartEstatus'
-import { landingTextos } from '../../pages/LandingTextos'
+import { landingTextos } from '../../_pages/LandingTextos'
 
 export interface CifrasYEstadisticasProps {
   datosTrimestre: DatosTrimestre

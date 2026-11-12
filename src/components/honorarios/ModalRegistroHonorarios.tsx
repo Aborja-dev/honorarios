@@ -6,7 +6,7 @@ import { InputText } from 'primereact/inputtext'
 import { Stepper } from 'primereact/stepper'
 import { StepperPanel } from 'primereact/stepperpanel'
 import { SndBoton, SndMensaje, useNotificaciones } from '../snd'
-import { UNIDADES_ADMINISTRATIVAS } from '../../services'
+import { UNIDADES_ADMINISTRATIVAS } from '../../lib/honorarios.service'
 
 export interface ModalRegistroHonorariosProps {
   modalTipo: 'padron' | 'contratos' | 'modelo' | null

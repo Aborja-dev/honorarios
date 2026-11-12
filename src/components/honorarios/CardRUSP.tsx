@@ -1,4 +1,4 @@
-import { landingTextos } from '../../pages/LandingTextos'
+import { landingTextos } from '../../_pages/LandingTextos'
 import { SndBoton, SndIcono, SndPildora } from '../snd'
 
 const CardRUSP = () => {

@@ -9,15 +9,14 @@ import { PrimeReactProvider } from 'primereact/api'
 import 'primereact/resources/themes/lara-light-blue/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
-import './lib/primereact/snd-prime.css'
+import './lib/snd-prime.css'
 import './components/snd/snd.css'
 import './index.css'
 
 import App from './App'
 import { NotificacionesProvider } from './components/snd'
-import { TemaProvider } from './hooks'
-import { registrarLocaleEs } from './lib'
-import { SectionProvider } from './components/personalizados/SectionProvider'
+import { TemaProvider } from './lib/hooks'
+import { registrarLocaleEs } from './lib/localeEs'
 
 registrarLocaleEs()
 
@@ -27,9 +26,7 @@ createRoot(document.getElementById('root')!).render(
       <TemaProvider>
         <NotificacionesProvider>
           <BrowserRouter>
-            <SectionProvider>
               <App />
-            </SectionProvider>
           </BrowserRouter>
         </NotificacionesProvider>
       </TemaProvider>

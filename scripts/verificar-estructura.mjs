@@ -9,15 +9,9 @@ import { resolve } from 'node:path'
 const CARPETAS_REQUERIDAS = [
   'public',
   'scripts',
-  'src/apollo',
-  'src/app',
   'src/components',
-  'src/hooks',
   'src/lib',
   'src/pages',
-  'src/pages/admin',
-  'src/pages/user',
-  'src/services',
   'src/utils',
 ]
 

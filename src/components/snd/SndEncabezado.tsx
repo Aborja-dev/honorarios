@@ -1,5 +1,5 @@
 import type { MouseEvent, ReactNode } from 'react'
-import { useMovil } from '../../hooks/useMovil'
+import { useMovil } from '../../lib/useMovil'
 import { SndIcono } from './SndIcono'
 
 export interface SndEncabezadoProps {

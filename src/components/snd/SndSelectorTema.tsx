@@ -1,4 +1,4 @@
-import { useTema } from '../../hooks/useTema'
+import { useTema } from '../../lib/useTema'
 import { SndIcono } from './SndIcono'
 
 export function SndSelectorTema() {
