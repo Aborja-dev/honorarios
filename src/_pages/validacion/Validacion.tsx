@@ -27,7 +27,7 @@ export default function ValidarIdentidad() {
       setError(true)
       return
     }
-    
+
     notificar.exito('Identidad verificada con RENAPO y padrón fiscal.', 'Validación exitosa')
   }
   const estados = {
@@ -53,9 +53,11 @@ export default function ValidarIdentidad() {
                 style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                  gap: '16px 20px',
+                  gap: '16px 10px',
+                  maxWidth: 700 
                 }}
               >
+
                 <div className="campo">
                   <label htmlFor="busq-ramo" className="b1sb">
                     Ramo
@@ -83,9 +85,10 @@ export default function ValidarIdentidad() {
                     placeholder="027 - Secretaria Anticorrupcíon  y Buen Gobierno"
                     appendTo="self"
                     disabled
-                    
+
                   />
                 </div>
+
               </div>
               <article className="campo">
                 <label htmlFor="val-curp" className="b1sb">
