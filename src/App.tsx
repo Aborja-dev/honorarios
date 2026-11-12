@@ -20,7 +20,7 @@ const NotFound = lazy(() => import('./_pages/NotFound'))
 // Submódulos administrativos de Honorarios
 const Inicio = lazy(() => import('./pages/Inicio'))
 const PadronPage = lazy(() => import('./pages/PadronPage'))
-const PrestadoresPage = lazy(() => import('./pages/PrestadoresPage'))
+const PrestadoresPage = lazy(() => import('./_pages/PrestadoresPage'))
 const ContratosHonorarios = lazy(() => import('./pages/ContratosHonorarios'))
 const ModeloContrato = lazy(() => import('./pages/ModeloContrato'))
 const AltaModelosContratos = lazy(() => import('./pages/AltaModelosContratos'))
