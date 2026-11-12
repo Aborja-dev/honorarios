@@ -18,9 +18,11 @@ export const CardSubModulo = ({titulo, detalle, descripcion, ruta, icono, id}:{
             </div>
             <div className="honorarios-submodulo__ilustracion">
                 <div>
-                    <span className="b1sb color--principal" style={{ display: 'block' }}>
-                        {detalle}
-                    </span>
+                    {detalle && (
+                        <span className="b1sb color--principal" style={{ display: 'block' }}>
+                            {detalle}
+                        </span>
+                    )}
                     <span className="sdr">{descripcion}</span>
                 </div>
                 <SndIcono nombre={icono} tamano={36} className="color--principal" />

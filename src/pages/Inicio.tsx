@@ -6,13 +6,13 @@ import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
 import { Stepper } from 'primereact/stepper'
 import { StepperPanel } from 'primereact/stepperpanel'
+import { Download } from 'lucide-react'
+import { CardSubModulo } from '../components/CardSubModulo'
 import {
 	SndBoton,
-	SndBotonEnlace,
 	SndBuscador,
 	SndIcono,
 	SndMensaje,
-	SndPildoraFiltro,
 	useNotificaciones,
 } from '../components/snd'
 import { Graficas } from '../_pages/landing/sections/Graficas'
@@ -277,114 +277,36 @@ export default function Inicio() {
 
 					<div className="honorarios-submodulos-layout">
 						<div className="honorarios-submodulos-grid">
-							<article
-								key={'validacion'}
-								className={`honorarios-submodulo`}
-							>
-								<div className="honorarios-tarjeta__encabezado">
-									<h3 className="honorarios-tarjeta__titulo">Validador de Compatibilidad</h3>
-								</div>
-								<div className="honorarios-submodulo__ilustracion">
-									<div>
-
-										<span className="sdr">Valida mediante CURP si el prestador cuenta con posible compatibilidad.</span>
-									</div>
-									<SndIcono nombre='snd-edit' tamano={36} className="color--principal" />
-								</div>
-								<div className="honorarios-submodulo__pie">
-									<div className="fila" style={{ gap: 8 }}>
-										<SndBotonEnlace
-											style={{ fontSize: '0.8rem', padding: '1rem 0.8rem', display: 'block', width: '100%' }}
-											variante="primario"
-											to='/validar-identidad'
-										>
-											Ingresar
-										</SndBotonEnlace>
-									</div>
-								</div>
-							</article>
-							<article
-								key={'padron'}
-								className={`honorarios-submodulo`}
-							>
-								<div className="honorarios-tarjeta__encabezado">
-									<h3 className="honorarios-tarjeta__titulo">Padrón de Prestadores</h3>
-								</div>
-								<div className="honorarios-submodulo__ilustracion">
-									<div>
-										<span className="b1sb color--principal" style={{ display: 'block' }}>
-											1,420 Prestadores activos
-										</span>
-										<span className="sdr">Administra el padrón de prestadores de servicios profesionales por honorarios activos en el ejercicio fiscal 2026</span>
-									</div>
-									<SndIcono nombre='snd-user--avatar' tamano={36} className="color--principal" />
-								</div>
-								<div className="honorarios-submodulo__pie">
-									<div className="fila" style={{ gap: 8 }}>
-										<SndBotonEnlace
-											style={{ fontSize: '0.8rem', padding: '1rem 0.8rem', display: 'block', width: '100%' }}
-											variante="primario"
-											to='/padron-prestadores-servicio'
-										>
-											Ingresar
-										</SndBotonEnlace>
-									</div>
-								</div>
-							</article>
-							<article
-								key={'modelo'}
-								className={`honorarios-submodulo`}
-							>
-								<div className="honorarios-tarjeta__encabezado">
-									<h3 className="honorarios-tarjeta__titulo">Modelo de contrato</h3>
-								</div>
-								<div className="honorarios-submodulo__ilustracion">
-									<div>
-
-										<span className="sdr">Actividades, entregables y datos generales del contrato.</span>
-									</div>
-									<SndIcono nombre='snd-edit' tamano={36} className="color--principal" />
-								</div>
-								<div className="honorarios-submodulo__pie">
-									<div className="fila" style={{ gap: 8 }}>
-										<SndBotonEnlace
-											style={{ fontSize: '0.8rem', padding: '1rem 0.8rem', display: 'block', width: '100%' }}
-											variante="primario"
-											to='/alta-modelos-contratos'
-										>
-											Ingresar
-										</SndBotonEnlace>
-									</div>
-								</div>
-							</article>
-							<article
-								key={'contratos'}
-								className={`honorarios-submodulo`}
-							>
-								<div className="honorarios-tarjeta__encabezado">
-									<h3 className="honorarios-tarjeta__titulo">Formalización de contratos</h3>
-								</div>
-								<div className="honorarios-submodulo__ilustracion">
-									<div>
-										<span className="b1sb color--principal" style={{ display: 'block' }}>
-											248 contratos autorizados
-										</span>
-										<span className="sdr">Contratos autorizados y/o cancelados anticipadamente en el ejercicio fiscal 2026</span>
-									</div>
-									<SndIcono nombre='snd-document' tamano={36} className="color--principal" />
-								</div>
-								<div className="honorarios-submodulo__pie">
-									<div className="fila" style={{ gap: 8 }}>
-										<SndBotonEnlace
-											style={{ fontSize: '0.8rem', padding: '1rem 0.8rem', display: 'block', width: '100%' }}
-											variante="primario"
-											to='/formalizacion-contratos'
-										>
-											Ingresar
-										</SndBotonEnlace>
-									</div>
-								</div>
-							</article>
+							<CardSubModulo
+								id="validacion"
+								titulo="Validador de Compatibilidad"
+								descripcion="Valida mediante CURP si el prestador cuenta con posible compatibilidad."
+								ruta="/validar-identidad"
+								icono="snd-edit"
+							/>
+							<CardSubModulo
+								id="padron"
+								titulo="Padrón de Prestadores"
+								detalle="1,420 Prestadores activos"
+								descripcion="Administra el padrón de prestadores de servicios profesionales por honorarios activos en el ejercicio fiscal 2026"
+								ruta="/padron-prestadores-servicio"
+								icono="snd-user--avatar"
+							/>
+							<CardSubModulo
+								id="modelo"
+								titulo="Modelo de contrato"
+								descripcion="Actividades, entregables y datos generales del contrato."
+								ruta="/alta-modelos-contratos"
+								icono="snd-edit"
+							/>
+							<CardSubModulo
+								id="contratos"
+								titulo="Formalización de contratos"
+								detalle="248 contratos autorizados"
+								descripcion="Contratos autorizados y/o cancelados anticipadamente en el ejercicio fiscal 2026"
+								ruta="/formalizacion-contratos"
+								icono="snd-document"
+							/>
 						</div>
 					</div>
 
@@ -398,13 +320,18 @@ export default function Inicio() {
 							</div>
 							<div className="honorarios-pildoras-grid">
 								{CATEGORIAS_OPERATIVAS.map((categoria) => (
-									<SndPildoraFiltro
-										key={categoria}
-										activo={categoriasActivas.includes(categoria)}
-										onCambio={(activo) => alternarCategoria(categoria, activo)}
-									>
-										<span>{categoria}</span>
-									</SndPildoraFiltro>
+									<span className="snd-pildora-filtro" key={categoria}>
+										<button
+											type="button"
+											className="pildoraFiltro"
+											style={{display: 'flex', justifyContent: 'space-between'}}
+											aria-pressed={categoriasActivas.includes(categoria)}
+											onClick={() => alternarCategoria(categoria, !categoriasActivas.includes(categoria))}
+										>
+											<Download size={24} />
+											<span style={{textAlign: 'center', flexGrow: 1}}>{categoria}</span>
+										</button>
+									</span>
 								))}
 								<SndBoton
 									style={{ fontSize: '0.8rem', width: '100%', maxWidth: '200px', padding: '1rem 0.8rem' }}
