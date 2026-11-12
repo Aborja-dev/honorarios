@@ -51,10 +51,10 @@ export default function ValidarIdentidad() {
             <form className="formulario" style={{ maxWidth: 700 }} onSubmit={verificar} noValidate>
               <div
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                  gap: '16px 10px',
-                  maxWidth: 700 
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: '12px'
                 }}
               >
 
@@ -90,22 +90,7 @@ export default function ValidarIdentidad() {
                 </div>
 
               </div>
-              <article className="campo">
-                <label htmlFor="val-curp" className="b1sb">
-                  CURP (18 caracteres){' '}
-                  <span className="requerido" aria-hidden="true">
-                    *
-                  </span>
-                </label>
-                <InputText
-                  id="val-curp"
-                  value={curp}
-                  invalid={error && !curp.trim()}
-                  onChange={(e) => setCurp(e.target.value.toUpperCase())}
-                  onFocus={() => setError(false)}
-                  placeholder="Ej. LORM880412MDFRRL09"
-                />
-              </article>
+
               <article className="campo">
                 <label htmlFor="val-curp" className="b1sb">
                   CURP (18 caracteres){' '}
