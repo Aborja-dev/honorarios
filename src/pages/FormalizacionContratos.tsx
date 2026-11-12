@@ -14,12 +14,12 @@ import {
   useNotificaciones,
 } from '../components'
 import '../components/honorarios/Honorarios.css'
-import { useTitulo } from '../hooks'
-import { CATEGORIAS_OPERATIVAS, UNIDADES_ADMINISTRATIVAS } from '../services'
+import { useTitulo } from '../lib/hooks'
+import { CATEGORIAS_OPERATIVAS, UNIDADES_ADMINISTRATIVAS } from '../lib/honorarios.service'
 import MenuFlotante, { type ItemMenuFlotante } from '../components/MenuFlotante'
-import { BotonHome } from './BotonHome'
-import './PadronPrestadoresServicio.css'
-import './PrestadoresPage.css'
+import { BotonHome } from '../_pages/BotonHome'
+import '../_pages/PadronPrestadoresServicio.css'
+import '../_pages/PrestadoresPage.css'
 const OPCIONES_SI_NO = [
   { label: 'Sí', value: 'SI' },
   { label: 'No', value: 'NO' },

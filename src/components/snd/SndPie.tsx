@@ -1,4 +1,4 @@
-import { useMovil } from '../../hooks/useMovil'
+import { useMovil } from '../../lib/useMovil'
 import { SndIcono } from './SndIcono'
 
 interface Enlace {

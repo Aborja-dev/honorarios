@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { useMovil } from '../../hooks/useMovil'
+import { useMovil } from '../../lib/useMovil'
 import { SndMenuUsuario, type OpcionUsuario } from './SndMenuUsuario'
 import { SndSelectorTema } from './SndSelectorTema'
 

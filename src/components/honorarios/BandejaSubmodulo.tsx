@@ -1,7 +1,7 @@
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
 import { SndBoton, SndBuscador, SndIcono, SndPildora, useNotificaciones } from '../snd'
-import type { RegistroSubmodulo, SubmoduloInfo } from '../../services'
+import type { RegistroSubmodulo, SubmoduloInfo } from '../../lib/honorarios.service'
 
 export interface BandejaSubmoduloProps {
   submodulo: SubmoduloInfo
