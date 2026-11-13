@@ -103,15 +103,14 @@ export const PrestadorInfo = ({ prestador = PRESTADOR_DEMO, mensaje, estado }: P
                     estado == 'ACTUALIZACION'
                 ) &&
                 (
-                    <div>
+                    <div style={{display: 'flex', justifyContent:'end'}}>
                         <SndBotonEnlace  to={'/padron-prestadores-servicio'} >
-                            <span><SndIcono nombre="snd-arrow--left" tamano={20} /></span>
-                            Ir al padron</SndBotonEnlace>
+                            Ir al padron
+                            <span><SndIcono nombre="snd-arrow--right" tamano={20} /></span>
+                            </SndBotonEnlace>
                     </div>
                 )
-
             }
-
         </article>
     )
 }
