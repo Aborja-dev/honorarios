@@ -89,7 +89,7 @@ export default function ValidarIdentidad() {
                     options={OPCIONES_UR}
                     value={institucionBusqueda}
                     onChange={(e) => setInstitucionBusqueda(e.value)}
-                    placeholder="027 - Secretaria Anticorrupcíon  y Buen Gobierno"
+                    placeholder="000 - Secretaria Anticorrupcíon y Buen Gobierno"
                     appendTo="self"
                     disabled
 
