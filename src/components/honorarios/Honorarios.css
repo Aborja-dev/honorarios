@@ -571,6 +571,39 @@
   gap: 16px;
 }
 
+/* ---------- Ficha del Prestador ---------- */
+.honorarios-prestador__nombre {
+  margin: 0;
+  color: var(--neutro800, #1f1f1f);
+}
+
+.honorarios-prestador__datos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px 24px;
+  margin: 0;
+}
+
+.honorarios-prestador__dato {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.honorarios-prestador__etiqueta {
+  color: var(--neutro700, #5a5a5a);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.honorarios-prestador__valor {
+  margin: 0;
+  color: var(--neutro800, #1f1f1f);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
 .snd-document-landing {
   transform: translate(-75px, 0px) scale(1.5);
 }
