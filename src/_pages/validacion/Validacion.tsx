@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import React, { useState, type FormEvent } from 'react'
 import { Calendar } from 'primereact/calendar'
 import { InputText } from 'primereact/inputtext'
 import { SndBoton, SndBotonEnlace, SndIcono, SndMensaje, SndPildora, useNotificaciones } from '../../components'
@@ -15,20 +15,27 @@ export default function ValidarIdentidad() {
   const notificar = useNotificaciones()
 
   const [curp, setCurp] = useState('')
-  const [ramoBusqueda, setRamoBusqueda] = useState<string | null>('dsadsad')
-  const [institucionBusqueda, setInstitucionBusqueda] = useState('')
+  const [ramoBusqueda, setRamoBusqueda] = useState<string | null>('27')
+  const [institucionBusqueda, setInstitucionBusqueda] = useState('000')
   const [fechaInicio, setFechaInicio] = useState<Date | null>(null)
   const [fechaFin, setFechaFin] = useState<Date | null>(null)
   const [error, setError] = useState(false)
   const [message, setMessage] = useState(null)
-  const verificar = (e: FormEvent) => {
+  const [compatibilidad, setCompatibilidaed] = useState('')
+  const tieneCompatibilidad = () => {
+    setRamoBusqueda('27 - Anticorrupcíon y Buen Gobierno')
+    setInstitucionBusqueda('')
+  }
+  const handleValidar = (e) => {
     e.preventDefault()
-    if (!curp.trim()) {
-      setError(true)
-      return
+    const formValues = {
+      ramo: ramoBusqueda,
+      ur: institucionBusqueda,
+      fechaInicio: fechaInicio,
+      fechaFin: fechaFin,
+      curp: curp
     }
-
-    notificar.exito('Identidad verificada con RENAPO y padrón fiscal.', 'Validación exitosa')
+    console.log(formValues)
   }
   const estados = {
     "TIENE_COMPATIBILIDAD": (curp: string) => `El prestador con CURP de ${curp} tiene compatibilidad y no presenta conflictos para el ejercicio de sus funciones`,
@@ -41,14 +48,14 @@ export default function ValidarIdentidad() {
       {/* <p className="sh0m color--principal">Verificación de CURP, RFC y No Inhabilitación</p> */}
 
       <div className="reticulaGrid__12 gapy--16" style={{ marginTop: 16 }}>
-        <div className="columna__6">
+        <section className="columna__6">
           <article className="honorarios-tarjeta">
             <div className="honorarios-tarjeta__encabezado">
               <h2 className="sh0b honorarios-tarjeta__titulo">Consulta de Identidad</h2>
 
             </div>
 
-            <form className="formulario" style={{ maxWidth: 700 }} onSubmit={verificar} noValidate>
+            <form className="formulario" style={{ maxWidth: 700 }} onSubmit={handleValidar} noValidate>
               <div
                 style={{
                   display: 'flex',
@@ -160,8 +167,24 @@ export default function ValidarIdentidad() {
             </form>
           </article>
           {message && (<SndMensaje tipo='alerta'>{message}</SndMensaje>)}
-        </div>
-
+          <div className='fila'>
+             <SndBoton type="button" onClick={()=>{setCompatibilidaed('si')}}>
+                  Simular compatibilidad
+                </SndBoton>
+                 <SndBoton type="button" onClick={()=>{setCompatibilidaed('no')}}>
+                  Simular no compatibilidad
+                </SndBoton>
+                 <SndBoton type="button" onClick={()=>{setCompatibilidaed('noEncontrado')}}>
+                  Simular no encontrado en RUSP                
+                  </SndBoton>
+          </div>
+          {compatibilidad === 'si' && <SndMensaje tipo='alerta'>El prestador de servicios tiene posible compatibilidad</SndMensaje>}
+          {compatibilidad === 'noEncontrado' && <SndMensaje tipo='alerta'>La persona con CURP no esta registrada en RUSP </SndMensaje>}
+          {compatibilidad === 'no' && <SndMensaje tipo='error'>El prestador de servicios labora en otra institucion y no es posible tener compatibilidad</SndMensaje>}
+          
+          
+          
+        </section>
         <div className="columna__6">
         </div>
       </div>
